@@ -1,7 +1,7 @@
 {
-  "name": "binary-upload-boom",
+  "name": "safe-route",
   "version": "1.0.0",
-  "description": "100Devs Social Network",
+  "description": "2025A Cohort Project",
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
