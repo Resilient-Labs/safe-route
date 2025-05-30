@@ -52,7 +52,7 @@ module.exports = {
       await Post.findOneAndUpdate(
         { _id: req.params.id },
         {
-          $inc: { likes: 1 },
+          $inc: { upVotes: 1 },
         }
       );
       console.log("Likes +1");
