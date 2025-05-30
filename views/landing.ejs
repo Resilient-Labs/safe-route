@@ -1,0 +1,51 @@
+<%- include('partials/header') -%>
+
+<main class="container">
+  
+  <!-- NOTE: This is the Landing Page view; will be renamed to landing.ejs once routing updates -->
+
+  <!-- Hero Section/Main Content w Background Map Image and TWo Buttons -->
+
+  <section>
+    <div>
+      <!-- This will become the background image later w Tailwind -->
+    <img src="/imgs/static-map-landing.png" alt="Map background with pins" />
+
+      <h1>SafeRoute</h1>
+      <p>Designed to Make Communities Safer, More Walkable, and Accessible for All</p>
+
+      <!-- Add button class names later w Tailwind -->
+      <div>
+        <a href="/map">View Map</a>
+        <a href="/signup">Sign Up</a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- Core Feature Blocks -->
+
+  <section>
+
+    <div>
+        <h2>Alert Reporting</h2>
+        <p>Make your neighborhood safer by reporting harassment, hazards, and accessibility barriers in real time.</p>
+    </div>
+
+    <div>
+      <h2>Interactive Map</h2>
+      <p>Browse safety and accessibility alerts posted by neighbors on an interactive map.</p>
+    </div>
+
+    <div>
+      <h2>Community</h2>
+      <p>Find local safety tips, support helplines, and city resources focused on accessibility and care.</p>
+    </div>
+
+  </section>
+
+</main>
+    
+
+<%- include('partials/footer') -%>
