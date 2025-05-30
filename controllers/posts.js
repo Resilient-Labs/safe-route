@@ -41,7 +41,10 @@ module.exports = {
       return redirect('/map');
     };
     try {
-      const postData = { ...req.body };
+      const postData = { 
+        ...req.body,
+        postedBy: req.user.id
+      };
       let result = null;
       if (req.file) {
         result = await cloudinary.uploader.upload(req.file.path, { asset_folder: 'safeRouteImages', public_id_prefix: 'post'  });
