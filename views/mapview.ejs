@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SafeRoute - Map View</title>
+
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="/safe-route/public/css/mapView.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">SafeRoute</div>
+      <nav class="nav-menu">
+        <a href="/" class="<%= currentPage === 'home' ? 'active' : '' %>"
+          >Home</a
+        >
+        <a href="/map" class="<%= currentPage === 'map' ? 'active' : '' %>"
+          >Map</a
+        >
+        <a href="/alert" class="<%= currentPage === 'alert' ? 'active' : '' %>"
+          >Alert</a
+        >
+        <a
+          href="/resources"
+          class="<%= currentPage === 'resources' ? 'active' : '' %>"
+          >Resources</a
+        >
+        <% if (user) { %>
+        <span>Welcome, <%= user.name %></span>
+        <button class="sign-in-btn" onclick="location.href='/logout'">
+          Sign Out
+        </button>
+        <% } else { %>
+        <button class="sign-up-btn" onclick="location.href='/signup'">
+          Sign Up
+        </button>
+        <button class="sign-in-btn" onclick="location.href='/signin'">
+          Sign In
+        </button>
+        <% } %>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <h2>Map View Page - Left</h2>
+
+        <!-- View Nearby Alerts Section -->
+        <section class="section">
+          <h3>View Nearby Alerts</h3>
+          <p>No Sign-In Needed</p>
+          <div class="form-group">
+            <input
+              type="text"
+              placeholder="Enter Address or Zip Code"
+              id="searchLocation" />
+          </div>
+          <button class="submit-btn" onclick="searchAlerts()">Submit</button>
+        </section>
+
+        <!-- Submit an Alert Section -->
+        <section class="section">
+          <h3>Submit an Alert</h3>
+          <p>Click the Map or Use the Form Below to Submit an Alert</p>
+
+          <form id="alertForm">
+            <div class="form-group">
+              <label for="incidentType">Incident Type</label>
+              <select id="incidentType" name="incidentType">
+                <option value="">Select Type</option>
+                <% const incidentTypes = locals.incidentTypes || [ { value:
+                'accessibility', label: 'Accessibility Issue' }, { value:
+                'safety', label: 'Safety Concern' }, { value: 'lighting', label:
+                'Poor Lighting' }, { value: 'maintenance', label: 'Maintenance
+                Needed' }, { value: 'other', label: 'Other' } ]; %> <%
+                incidentTypes.forEach(type => { %>
+                <option value="<%= type.value %>"><%= type.label %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                placeholder="Enter Address" />
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Enter Incident Details"></textarea>
+            </div>
+
+            <div class="checkbox-group">
+              <input type="checkbox" id="uploadImage" name="uploadImage" />
+              <label for="uploadImage">Upload Image</label>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Alert</button>
+          </form>
+        </section>
+      </aside>
+
+      <!-- Map Container -->
+      <div class="map-container">
+        <h1 class="map-title">Your Neighborhood Safety Map</h1>
+        <div id="map"></div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-left">
+        <div class="footer-title">SafeRoute</div>
+        <div class="footer-text">
+          Our vision is to help you move through<br />
+          your city with awareness and agency.<br />
+          Get help.<br />
+          <br />
+          ©2025 SafeRoute. All rights reserved.
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/map">Map</a>
+        <a href="/alerts">Alerts</a>
+        <a href="/resources">Resources</a>
+        <a href="/privacy">Privacy & Policy</a>
+        <a href="/terms">Terms & Condition</a>
+      </div>
+    </footer>
+
+    window.serverData = { mapCenter: <%- JSON.stringify(locals.mapCenter) %>,
+    markers: <%- JSON.stringify(locals.markers) %> };
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Your main JavaScript file -->
+    <script src="/safe-route/public/mapView(main).js"></script>
+    <script
+      src="https://kit.fontawesome.com/f8ec983be8.js"
+      crossorigin="anonymous"></script>
+  </body>
+</html>
