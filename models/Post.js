@@ -13,7 +13,7 @@ const PostSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  caption: {
+  description: {
     type: String,
     required: true,
   },
@@ -21,7 +21,7 @@ const PostSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  user: {
+  postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
@@ -29,6 +29,54 @@ const PostSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  address: String,
+  latitude: String,
+  longitude: String,
+  time: Date,
+  city: String,
+  isResolved: Boolean,
+  isHidden: Boolean,
+  isAnonymous: Boolean,
+  isVerified: Boolean,
+  type: AlertSchema,
+  upvotes: {
+    type: Number,
+    default: 0,
+  },
+  downvotes: {
+    type: Number,
+    default: 0,
+  }
 });
 
-module.exports = mongoose.model("Post", PostSchema);
+PostSchema.methods.generateUserHash = function (userId) {
+  return userId + String(this._id);
+}
+
+const UserPostSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+  post: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post"
+  },
+  _id: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+})
+
+const PostUserDownvotesSchema = new mongoose.Schema(UserPostSchema);
+
+const PostUserUpvotesSchema = new mongoose.Schema(UserPostSchema);
+
+
+module.exports = {
+  Post: mongoose.model("Post", PostSchema),
+  PostUserDownvoteSchema: mongoose.model("PostUserDownvote", PostUserDownvotesSchema),
+  PostUserUpvoteSchema: mongoose.model("PostUserUpvote", PostUserUpvotesSchema),
+  UserPostSchema,
+};
