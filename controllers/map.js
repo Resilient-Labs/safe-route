@@ -3,4 +3,3 @@ module.exports = {
       res.render("mapView.ejs"); // TODO: change to right view
     },
   };
-  
