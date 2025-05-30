@@ -1,5 +1,5 @@
 const cloudinary = require("../middleware/cloudinary");
-const Post = require("../models/Post");
+const { Post, PostUserDownvoteSchema, PostUserUpvoteSchema } = require("../models/Post");
 const Comment = require("../models/Comment");
 
 module.exports = {
@@ -13,8 +13,16 @@ module.exports = {
   },
   getFeed: async (req, res) => {
     try {
-      // const posts = await Post.find().sort({ createdAt: "desc" }).lean(); // Removed logic, rendering bare page
-      res.render("feed.ejs") // , { posts: posts });
+      const filters = {
+        isHidden: false,
+        isResolved: false,
+      };
+      if (req.body.type) {
+        filters[type] = req.body.type;
+      };
+      const posts = await Post.find(filters).lean();
+      console.log(posts);
+      res.render("feed.ejs", { posts, user: req.user });
     } catch (err) {
       console.log(err);
     }
@@ -29,20 +37,22 @@ module.exports = {
     }
   },
   createPost: async (req, res) => {
+    if (!req.user) {
+      return redirect('/map');
+    };
     try {
-      // Upload image to cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path);
+      const postData = { ...req.body };
+      let result = null;
+      if (req.file) {
+        result = await cloudinary.uploader.upload(req.file.path, { asset_folder: 'safeRouteImages', public_id_prefix: 'post'  });
+        postData['image'] = result.secure_url;
+        postData['cloudinaryId'] = result.public_id
+      }
 
-      await Post.create({
-        title: req.body.title,
-        image: result.secure_url,
-        cloudinaryId: result.public_id,
-        caption: req.body.caption,
-        likes: 0,
-        user: req.user.id,
-      });
+      const post = await Post.create({ ...postData });
       console.log("Post has been added!");
-      res.redirect("/profile");
+      console.log(post);
+      res.redirect("back");
     } catch (err) {
       console.log(err);
     }
