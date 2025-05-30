@@ -1,5 +1,5 @@
 module.exports = {
     getMap: (req, res) => {
-      res.render("index.ejs"); // TODO: change to right view
+      res.render("mapView.ejs"); // TODO: change to right view
     },
   };
