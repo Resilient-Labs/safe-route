@@ -1,5 +1,5 @@
 module.exports = {
-  getLanding: (req, res) => {
+  getIndex: (req, res) => {
     res.status(200).render("landing.ejs");
   },
 };
