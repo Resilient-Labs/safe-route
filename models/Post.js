@@ -7,12 +7,15 @@ const PostSchema = new mongoose.Schema({
   },
   image: {
     type: String,
+    default: null
   },
   cloudinaryId: {
     type: String,
+    default: null
   },
   description: {
     type: String,
+    default: null
   },
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -22,16 +25,46 @@ const PostSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  address: String,
-  latitude: String,
-  longitude: String,
-  time: Date,
-  city: String,
-  isResolved: Boolean,
-  isHidden: Boolean,
-  isAnonymous: Boolean,
-  isVerified: Boolean,
-  type: AlertSchema,
+  address: {
+    type: String,
+    default: null
+  },
+  latitude: {
+    type: String,
+    default: null
+  },
+  longitude: {
+    type: String,
+    default: null
+  },
+  time: {
+    type: Date,
+    default: Date.now
+  },
+  city: {
+    type: String,
+    default: null
+  },
+  isResolved: {
+    type: Boolean,
+    default: false
+  },
+  isHidden: {
+    type: Boolean,
+    default: false
+  },
+  isAnonymous: {
+    type: Boolean,
+    default: false
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  type: {
+    type: String,
+    default: null
+  },
   upvotes: {
     type: Number,
     default: 0,
@@ -44,7 +77,7 @@ const PostSchema = new mongoose.Schema({
 
 PostSchema.methods.generateUserHash = function (userId) {
   return userId + String(this._id);
-}
+};
 
 const UserPostSchema = new mongoose.Schema({
   user: {
@@ -57,10 +90,9 @@ const UserPostSchema = new mongoose.Schema({
   },
   _id: {
     type: String,
-    unique: true,
     required: true,
   },
-})
+});
 
 const PostUserDownvotesSchema = new mongoose.Schema(UserPostSchema);
 
