@@ -41,13 +41,13 @@ module.exports = {
       return redirect('/map');
     };
     try {
-      const postData = { 
+      const postData = {
         ...req.body,
         postedBy: req.user.id
       };
       let result = null;
       if (req.file) {
-        result = await cloudinary.uploader.upload(req.file.path, { asset_folder: 'safeRouteImages', public_id_prefix: 'post'  });
+        result = await cloudinary.uploader.upload(req.file.path, { asset_folder: 'safeRouteImages', public_id_prefix: 'post' });
         postData['image'] = result.secure_url;
         postData['cloudinaryId'] = result.public_id
       }
@@ -60,21 +60,21 @@ module.exports = {
       console.log(err);
     }
   },
-  likePost: async (req, res) => {
+  upvotePost: async (req, res) => {
     try {
       await Post.findOneAndUpdate(
         { _id: req.params.id },
         {
-          $inc: { upVotes: 1 },
+          $inc: { upvotes: 1 },
         }
       );
-      console.log("Likes +1");
+      console.log("Upvote +1");
       res.redirect(`/post/${req.params.id}`);
     } catch (err) {
       console.log(err);
     }
   },
-  downVotePost: async (req, res) => {
+  downvotePost: async (req, res) => {
     try {
       // to make sure a user can only vote once: needs post and user defined, check and see if the post and user exist (if !post)
       // should the upvote be defined here too? 
@@ -82,17 +82,26 @@ module.exports = {
       // if the user has already downVoted (.pull(userid)) [this will "remove" downvote & not allow a duplicate?]
       // if the user has upvoted (.pull(userid)
       //  then .push downvote
-      
+
       await Post.findOneAndUpdate(
         { _id: req.params.id },
         {
-          $inc: {likes: 1},
+          $inc: { downvotes: 1 },
         }
       )
-      console.log("Likes -1");
+      console.log("Downvote +1");
       res.redirect(`/post/${req.params.id}`);
     } catch (err) {
       console.log(err);
+    }
+  },
+  bookmarkPost: async (req, res) => {
+    try {
+      // TODO: implement actual bookmark logic
+      console.log(`Bookmark placeholder hit for post ID: ${req.params.id}`);
+      res.redirect(`/post/${req.params.id}`);
+    } catch (err) {
+      console.error(err);
     }
   },
   deletePost: async (req, res) => {
