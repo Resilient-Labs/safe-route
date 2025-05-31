@@ -9,7 +9,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// Define custom icons
+// Defined custom icons for each incident type
 const accessibilityIcon = L.divIcon({
     className: 'custom-div-icon',
     html: '<svg width="40" height="50" viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg"><path d="M20 0C8.95 0 0 8.95 0 20c0 15 20 30 20 30s20-15 20-30c0-11.05-8.95-20-20-20z" fill="#3182ce"/><circle cx="20" cy="20" r="15" fill="white"/><path d="M20 10c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4zm0 10c3.31 0 6 2.69 6 6v2h-4v-2c0-1.1-.9-2-2-2s-2 .9-2 2v2h-4v-2c0-3.31 2.69-6 6-6z" fill="#3182ce"/></svg>',
@@ -85,7 +85,80 @@ document.getElementById('alertForm').addEventListener('submit', function(e) {
         uploadImage: document.getElementById('uploadImage').checked
     };
 
-    // In production, send this data to your server
+    // Validate required fields
+    if (!formData.incidentType || !formData.address) {
+        alert('Please fill in all required fields (Incident Type and Address).');
+        return;
+    }
+
+    // Geocode the address and place a marker
+    const geocoder = L.Control.Geocoder.nominatim({
+        geocodingQueryParams: {
+            countrycodes: 'us',
+            limit: 1
+        }
+    });
+
+    geocoder.geocode(formData.address, function(results) {
+        if (results && results.length > 0) {
+            const result = results[0];
+            const lat = result.center.lat;
+            const lng = result.center.lng;
+
+            // Validate that result is within U.S. bounds
+            if (!isWithinUSBounds(lat, lng)) {
+                alert('Please enter a valid U.S. address. International locations are not supported.');
+                return;
+            }
+
+            // Select appropriate icon based on incident type
+            let icon;
+            switch (formData.incidentType) {
+                case 'accessibility':
+                    icon = accessibilityIcon;
+                    break;
+                case 'safety':
+                case 'lighting':
+                    icon = warningIcon;
+                    break;
+                case 'maintenance':
+                    icon = cautionIcon;
+                    break;
+                default:
+                    icon = infoIcon;
+                    break;
+            }
+
+            // Add marker to map
+            const newMarker = L.marker([lat, lng], { icon: icon })
+                .addTo(map)
+                .bindPopup(`
+                    <strong>${formData.incidentType.charAt(0).toUpperCase() + formData.incidentType.slice(1)}</strong><br/>
+                    ${formData.address}<br/>
+                    ${formData.description ? formData.description : 'No description provided'}
+                `);
+
+            // Center map on the new marker
+            map.setView([lat, lng], 16);
+
+            // Open the popup
+            newMarker.openPopup();
+
+            console.log('Alert submitted:', formData);
+            alert('Alert submitted successfully and marker added to map!');
+
+            // Reset form
+            document.getElementById('alertForm').reset();
+
+        } else {
+            alert('Could not find the specified address. Please check the address and try again.');
+        }
+    }, function(error) {
+        console.error('Geocoding error:', error);
+        alert('Error finding address location. Please try again.');
+    });
+
+    // In production, also send this data to your server
     // Example using fetch:
     /*
     fetch('/api/alerts', {
@@ -97,47 +170,102 @@ document.getElementById('alertForm').addEventListener('submit', function(e) {
     })
     .then(response => response.json())
     .then(data => {
-        alert('Alert submitted successfully!');
-        this.reset();
+        // Handle server response
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error submitting alert. Please try again.');
     });
     */
-
-    console.log('Alert submitted:', formData);
-    alert('Alert submitted successfully!');
-
-    // Reset form
-    this.reset();
 });
 
-// Search alerts function
+// U.S. zip code validation function
+function isValidUSZipCode(input) {
+    // Match 5-digit or 9-digit (ZIP+4) U.S. zip codes
+    const zipRegex = /^\d{5}(-\d{4})?$/;
+    return zipRegex.test(input.trim());
+}
+
+// Check if coordinates are within U.S. bounds
+function isWithinUSBounds(lat, lng) {
+    // Continental U.S., Alaska, and Hawaii bounds
+    const continentalUS = lat >= 25.0 && lat <= 49.0 && lng >= -125.0 && lng <= -66.9;
+    const alaska = lat >= 51.0 && lat <= 71.5 && lng >= -179.0 && lng <= -129.0;
+    const hawaii = lat >= 18.9 && lat <= 28.5 && lng >= -178.0 && lng <= -154.0;
+    const puertoRico = lat >= 17.8 && lat <= 18.5 && lng >= -67.3 && lng <= -65.2;
+    
+    return continentalUS || alaska || hawaii || puertoRico;
+}
+
+// Search alerts function using Leaflet Control Geocoder
 function searchAlerts() {
-    const location = document.getElementById('searchLocation').value;
+    const location = document.getElementById('searchLocation').value.trim();
 
-    if (location) {
-        // In production, geocode the address and center map
-        // Example using a geocoding service:
-        /*
-        fetch(`/api/geocode?address=${encodeURIComponent(location)}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.lat && data.lng) {
-                    map.setView([data.lat, data.lng], 15);
-                    // Load alerts for this area
-                    loadAlertsNearLocation(data.lat, data.lng);
-                }
-            })
-            .catch(error => {
-                console.error('Geocoding error:', error);
-            });
-        */
-
-        console.log('Searching alerts near:', location);
-        alert('Searching for alerts near: ' + location);
+    if (!location) {
+        alert('Please enter an address or zip code.');
+        return;
     }
+
+    // Validate if it's a zip code
+    if (isValidUSZipCode(location)) {
+        // For zip codes, add country code to ensure U.S. results
+        const searchQuery = `${location}, United States`;
+        performGeocode(searchQuery, location);
+    } else {
+        // For addresses, search as-is but validate results
+        performGeocode(location, location);
+    }
+}
+
+// Perform geocoding using Leaflet Control Geocoder
+function performGeocode(query, originalInput) {
+    const geocoder = L.Control.Geocoder.nominatim({
+        geocodingQueryParams: {
+            countrycodes: 'us', // Restrict to United States
+            limit: 1
+        }
+    });
+
+    console.log('Searching alerts near:', originalInput);
+
+    geocoder.geocode(query, function(results) {
+        if (results && results.length > 0) {
+            const result = results[0];
+            const lat = result.center.lat;
+            const lng = result.center.lng;
+
+            // Validate that result is within U.S. bounds
+            if (!isWithinUSBounds(lat, lng)) {
+                alert('Please enter a valid U.S. address or zip code. International locations are not supported.');
+                return;
+            }
+
+            // Center map on the searched location
+            map.setView([lat, lng], 15);
+            
+            // Added a temporary marker to show the searched location
+            if (window.searchMarker) {
+                map.removeLayer(window.searchMarker);
+            }
+            window.searchMarker = L.marker([lat, lng], {
+                icon: L.divIcon({
+                    className: 'custom-div-icon',
+                    html: '<svg width="40" height="50" viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg"><path d="M20 0C8.95 0 0 8.95 0 20c0 15 20 30 20 30s20-15 20-30c0-11.05-8.95-20-20-20z" fill="#ff6b6b"/><circle cx="20" cy="20" r="15" fill="white"/><path d="M20 10c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5z" fill="#ff6b6b"/></svg>',
+                    iconSize: [40, 50],
+                    iconAnchor: [20, 50]
+                })
+            }).addTo(map).bindPopup(`Searched: ${result.name}`);
+
+        } else {
+            if (isValidUSZipCode(originalInput)) {
+                alert('Zip code not found. Please check the zip code and try again.');
+            } else {
+                alert('Location not found. Please try a different address.');
+            }
+        }
+    }, function(error) {
+        console.error('Geocoding error:', error);
+        alert('Error searching for location. Please try again.');
+    });
 }
 
 
