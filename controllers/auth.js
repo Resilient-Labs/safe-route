@@ -4,7 +4,7 @@ const User = require("../models/User");
 
 exports.getLogin = (req, res) => {
   if (req.user) {
-    return res.redirect("/profile");
+    return res.redirect("/map");
   }
   res.render("signin", {
     title: "Signin",
@@ -39,7 +39,7 @@ exports.postLogin = (req, res, next) => {
         return next(err);
       }
       req.flash("success", { msg: "Success! You are logged in." });
-      res.redirect(req.session.returnTo || "/profile");
+      res.redirect(req.session.returnTo || "/map");
     });
   })(req, res, next);
 };
@@ -58,7 +58,7 @@ exports.logout = (req, res) => {
 
 exports.getSignup = (req, res) => {
   if (req.user) {
-    return res.redirect("/profile");
+    return res.redirect("/map");
   }
   res.render("signup", {
     title: "Create Account",
@@ -69,13 +69,17 @@ exports.postSignup = (req, res, next) => {
   const validationErrors = [];
   if (!validator.isEmail(req.body.email))
     validationErrors.push({ msg: "Please enter a valid email address." });
+  if (validator.isEmpty(req.body.firstName))
+    validationErrors.push({ msg: "First name cannot be blank." });
+  if (validator.isEmpty(req.body.lastName))
+    validationErrors.push({ msg: "Last name cannot be blank." });
   if (!validator.isLength(req.body.password, { min: 8 }))
     validationErrors.push({
       msg: "Password must be at least 8 characters long",
     });
   if (req.body.password !== req.body.confirmPassword)
     validationErrors.push({ msg: "Passwords do not match" });
-
+  
   if (validationErrors.length) {
     req.flash("errors", validationErrors);
     return res.redirect("../signup");
@@ -85,24 +89,25 @@ exports.postSignup = (req, res, next) => {
   });
 
   const user = new User({
-    userName: req.body.userName,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
   });
 
   User.findOne(
-    { $or: [{ email: req.body.email }, { userName: req.body.userName }] }
+    { email: req.body.email }
   ).then(existingUser => {
     if (existingUser) {
       req.flash("errors", {
-        msg: "Account with that email address or username already exists.",
+        msg: "Account with that email address already exists.",
       });
       return res.redirect("../signup");
     }
     user.save()
       .then(newUser => {
         req.logIn(newUser, (err) => {
-          res.redirect("/profile");
+          res.redirect("/map");
         });
       }).catch((err) => {
         if (err) {
