@@ -1,7 +1,7 @@
 const cloudinary = require("../middleware/cloudinary");
 const { Post, PostUserDownvoteSchema, PostUserUpvoteSchema } = require("../models/Post");
 const Comment = require("../models/Comment");
-const Pin = require("../models/Pin");
+const Bookmark = require("../models/Bookmark");
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -121,42 +121,45 @@ module.exports = {
       res.redirect("/profile");
     }
   },
-// Pending post pin 
+// Pending post bookmark
 
-  // The pin/un pin
-  userPostPin: async (req, res) => {
+  // The pin/un bookmark
+  userPostBookmark: async (req, res) => {
     // Extract post and user IDs from request parameters
     const { postID, userID } = req.params;
 
     try {
-      // Check if a pin for this user and post already exists
-      let existingPin = await db.collection('pins').findOne({
+      // Check if a bookmark for this user and post already exists
+      let existingBookmark = await db.collection('bookmarks').findOne({
         user_id: userID,
         post_id: postID
       });
 
-      // If a pin exists, delete it (toggling the pin off)
-      if (existingPin) {
-        // Assuming 'Pin' is a Mongoose model, use findOneAndDelete for clarity
-        await Pin.findOneAndDelete({
+      // If a bookmark exists, delete it (toggling the bookmark off)
+      if (existingBookmark) {
+        // Assuming 'Bookmark' is a Mongoose model, use findOneAndDelete for clarity
+        await Bookmark.findOneAndDelete({
           user_id: userID,
           post_id: postID
         });
-        console.log('Pin successfully deleted.');
+        console.log('Bookmark successfully deleted.');
+
+        res.status(200).json({message: "Bookmark was removed succesfully.", bookmarked: false})
 
       } else {
-        // If no pin exists, create a new one (toggling the pin on)
-        let newPin = new Pin({
+        // If no bookmark exists, create a new one (toggling the bookmark on)
+        let newBookmark = new Bookmark({
           user: userID,
           post: postID
         });
 
-        let savedPin = await newPin.save();
-        console.log('New pin saved:', savedPin);
+        let savedBookmark = await newBookmark.save();
+        console.log('New bookmark saved:', savedBookmark);
+        res.status(200).json({message: "Bookmark added sucessfully", bookmarked: true, bookmark: newBookmark})
       }
 
     } catch (err) {
-      console.error('Error updating pin status:', err);
+      console.error('Error updating bookmark status:', err);
       res.redirect('/profile'); // Redirect on error
     }
   }
