@@ -5,17 +5,16 @@ const postsController = require("../controllers/posts");
 const { ensureAuth, ensureGuest } = require("../middleware/auth");
 
 //Post Routes - simplified for now
-router.get("/:id", ensureAuth, postsController.getPost);
+router.get("/:id", postsController.getPost);
 
-router.post("/newPost", upload.single("file"), postsController.createPost);
+router.post("/newPost", ensureAuth, upload.single("file"), postsController.createPost);
 
 router.put("/:id/upvote", ensureAuth, postsController.upvotePost);
 
 router.put("/:id/downvote", ensureAuth, postsController.downvotePost);
 
-router.delete("/:id/bookmark", postsController.bookmarkPost);
+router.put("/:id/bookmark", ensureAuth, postsController.bookmarkPost);
 
-router.delete("/:id/deletePost", postsController.deletePost);
-
+router.delete("/:id/deletePost", ensureAuth, postsController.deletePost);
 
 module.exports = router;
