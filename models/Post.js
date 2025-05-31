@@ -7,21 +7,17 @@ const PostSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    require: true,
+    default: null
   },
   cloudinaryId: {
     type: String,
-    require: true,
+    default: null
   },
-  caption: {
+  description: {
     type: String,
-    required: true,
+    default: null
   },
-  likes: {
-    type: Number,
-    required: true,
-  },
-  user: {
+  postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
@@ -29,6 +25,83 @@ const PostSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  address: {
+    type: String,
+    default: null
+  },
+  latitude: {
+    type: String,
+    default: null
+  },
+  longitude: {
+    type: String,
+    default: null
+  },
+  time: {
+    type: Date,
+    default: Date.now
+  },
+  city: {
+    type: String,
+    default: null
+  },
+  isResolved: {
+    type: Boolean,
+    default: false
+  },
+  isHidden: {
+    type: Boolean,
+    default: false
+  },
+  isAnonymous: {
+    type: Boolean,
+    default: false
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  type: {
+    type: String,
+    default: null
+  },
+  upvotes: {
+    type: Number,
+    default: 0,
+  },
+  downvotes: {
+    type: Number,
+    default: 0,
+  }
 });
 
-module.exports = mongoose.model("Post", PostSchema);
+PostSchema.methods.generateUserHash = function (userId) {
+  return userId + String(this._id);
+};
+
+const UserPostSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+  post: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post"
+  },
+  _id: {
+    type: String,
+    required: true,
+  },
+});
+
+const PostUserDownvotesSchema = new mongoose.Schema(UserPostSchema);
+
+const PostUserUpvotesSchema = new mongoose.Schema(UserPostSchema);
+
+
+module.exports = {
+  Post: mongoose.model("Post", PostSchema),
+  PostUserDownvoteSchema: mongoose.model("PostUserDownvote", PostUserDownvotesSchema),
+  PostUserUpvoteSchema: mongoose.model("PostUserUpvote", PostUserUpvotesSchema),
+  UserPostSchema,
+};

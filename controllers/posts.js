@@ -1,6 +1,7 @@
 const cloudinary = require("../middleware/cloudinary");
-const Post = require("../models/Post");
+const { Post, PostUserDownvoteSchema, PostUserUpvoteSchema } = require("../models/Post");
 const Comment = require("../models/Comment");
+const { User, Bookmark } = require("../models/User");
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -13,52 +14,117 @@ module.exports = {
   },
   getFeed: async (req, res) => {
     try {
-      const posts = await Post.find().sort({ createdAt: "desc" }).lean();
-      res.render("feed.ejs", { posts: posts });
+      const filters = {
+        isHidden: false,
+        isResolved: false,
+      };
+      if (req.body.type) {
+        filters[type] = req.body.type;
+      };
+      const posts = await Post.find(filters).lean();
+      console.log(posts);
+      res.render("feed.ejs", { posts, user: req.user });
     } catch (err) {
       console.log(err);
     }
   },
   getPost: async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id);
+      // Find the post (Change the id to postID)
+      const post = await Post.findById(req.params.postID);
       const comments = await Comment.find({ post: req.params.id }).sort({ createdAt: -1 }).lean();
-      res.render("post.ejs", { post: post, user: req.user, comments: comments });
+      res.render("postView.ejs", { post: post, user: req.user, comments: comments });
     } catch (err) {
       console.log(err);
     }
   },
   createPost: async (req, res) => {
+    if (!req.user) {
+      return redirect('/map');
+    };
     try {
-      // Upload image to cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path);
+      const postData = {
+        ...req.body,
+        postedBy: req.user.id
+      };
+      let result = null;
+      if (req.file) {
+        result = await cloudinary.uploader.upload(req.file.path, { asset_folder: 'safeRouteImages', public_id_prefix: 'post' });
+        postData['image'] = result.secure_url;
+        postData['cloudinaryId'] = result.public_id
+      }
 
-      await Post.create({
-        title: req.body.title,
-        image: result.secure_url,
-        cloudinaryId: result.public_id,
-        caption: req.body.caption,
-        likes: 0,
-        user: req.user.id,
-      });
+      const post = await Post.create({ ...postData });
       console.log("Post has been added!");
-      res.redirect("/profile");
+      console.log(post);
+      res.redirect("back");
     } catch (err) {
       console.log(err);
     }
   },
-  likePost: async (req, res) => {
+  upvotePost: async (req, res) => {
     try {
       await Post.findOneAndUpdate(
         { _id: req.params.id },
         {
-          $inc: { likes: 1 },
+          $inc: { upvotes: 1 },
         }
       );
-      console.log("Likes +1");
+      console.log("Upvote +1");
       res.redirect(`/post/${req.params.id}`);
     } catch (err) {
       console.log(err);
+    }
+  },
+  downvotePost: async (req, res) => {
+    try {
+      // to make sure a user can only vote once: needs post and user defined, check and see if the post and user exist (if !post)
+      // should the upvote be defined here too? 
+      // define downvote (make sure it ".includes" user id
+      // if the user has already downVoted (.pull(userid)) [this will "remove" downvote & not allow a duplicate?]
+      // if the user has upvoted (.pull(userid)
+      //  then .push downvote
+
+      await Post.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $inc: { downvotes: 1 },
+        }
+      )
+      console.log("Downvote +1");
+      res.redirect(`/post/${req.params.id}`);
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  bookmarkPost: async (req, res) => {
+    const postId = req.params.id;
+    if (!req.user) {
+      res.redirect(`/signin`);
+    }
+
+    try {
+      const user = await User.findById(req.user.id);
+      const boomarkHash = user.generatePostHash(postId);
+      const existingBookmark = await Bookmark.findById(boomarkHash);
+      if (existingBookmark) {
+        await Bookmark.findOneAndDelete({
+          _id: boomarkHash
+        });
+        console.log('Bookmark removed.');
+        res.redirect('back');
+      } else {
+        const newBookmark = await Bookmark.create({
+          _id: boomarkHash,
+          user: req.user.id,
+          post: postId
+        });
+        console.log('Bookmark added:', newBookmark);
+        res.redirect('back');
+      }
+    } catch (err) {
+      console.error('Error updating bookmark status:', err);
+      res.redirect('back'); // Redirect on error
     }
   },
   deletePost: async (req, res) => {
