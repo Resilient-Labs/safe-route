@@ -12,7 +12,7 @@ router.get("/", homeController.getIndex);
 router.get("/signin", authController.getLogin);
 router.get("/signup", authController.getSignup);
 router.get("/feed", postsController.getFeed);
-router.get("/mapView", mapController.getMap); 
+router.get("/map", mapController.getMap); 
 router.get("/resources", resourceController.getResources) 
 
 

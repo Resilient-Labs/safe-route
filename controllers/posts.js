@@ -1,7 +1,7 @@
 const cloudinary = require("../middleware/cloudinary");
 const { Post, PostUserDownvoteSchema, PostUserUpvoteSchema } = require("../models/Post");
 const Comment = require("../models/Comment");
-const Bookmark = require("../models/Bookmark");
+const { User, Bookmark } = require("../models/User");
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -98,12 +98,33 @@ module.exports = {
     }
   },
   bookmarkPost: async (req, res) => {
+    const postId = req.params.id;
+    if (!req.user) {
+      res.redirect(`/signin`);
+    }
+
     try {
-      // TODO: implement actual bookmark logic
-      console.log(`Bookmark placeholder hit for post ID: ${req.params.id}`);
-      res.redirect(`/post/${req.params.id}`);
+      const user = await User.findById(req.user.id);
+      const boomarkHash = user.generatePostHash(postId);
+      const existingBookmark = await Bookmark.findById(boomarkHash);
+      if (existingBookmark) {
+        await Bookmark.findOneAndDelete({
+          _id: boomarkHash
+        });
+        console.log('Bookmark removed.');
+        res.redirect('back');
+      } else {
+        const newBookmark = await Bookmark.create({
+          _id: boomarkHash,
+          user: req.user.id,
+          post: postId
+        });
+        console.log('Bookmark added:', newBookmark);
+        res.redirect('back');
+      }
     } catch (err) {
-      console.error(err);
+      console.error('Error updating bookmark status:', err);
+      res.redirect('back'); // Redirect on error
     }
   },
   deletePost: async (req, res) => {
@@ -121,46 +142,4 @@ module.exports = {
       res.redirect("/profile");
     }
   },
-// Pending post bookmark
-
-  // The pin/un bookmark
-  userPostBookmark: async (req, res) => {
-    // Extract post and user IDs from request parameters
-    const { postID, userID } = req.params;
-
-    try {
-      // Check if a bookmark for this user and post already exists
-      let existingBookmark = await db.collection('bookmarks').findOne({
-        user_id: userID,
-        post_id: postID
-      });
-
-      // If a bookmark exists, delete it (toggling the bookmark off)
-      if (existingBookmark) {
-        // Assuming 'Bookmark' is a Mongoose model, use findOneAndDelete for clarity
-        await Bookmark.findOneAndDelete({
-          user_id: userID,
-          post_id: postID
-        });
-        console.log('Bookmark successfully deleted.');
-
-        res.status(200).json({message: "Bookmark was removed succesfully.", bookmarked: false})
-
-      } else {
-        // If no bookmark exists, create a new one (toggling the bookmark on)
-        let newBookmark = new Bookmark({
-          user: userID,
-          post: postID
-        });
-
-        let savedBookmark = await newBookmark.save();
-        console.log('New bookmark saved:', savedBookmark);
-        res.status(200).json({message: "Bookmark added sucessfully", bookmarked: true, bookmark: newBookmark})
-      }
-
-    } catch (err) {
-      console.error('Error updating bookmark status:', err);
-      res.redirect('/profile'); // Redirect on error
-    }
-  }
 };
