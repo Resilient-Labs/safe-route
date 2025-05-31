@@ -30,12 +30,14 @@ module.exports = {
   },
   getPost: async (req, res) => {
     try {
-      // Find the post (Change the id to postID)
-      const post = await Post.findById(req.params.postID);
-      const comments = await Comment.find({ post: req.params.id }).sort({ createdAt: -1 }).lean();
-      res.render("postView.ejs", { post: post, user: req.user, comments: comments });
+      const post = await Post.findById(req.params.id);
+      if (!post) {
+      res.status(404).send('Sorry, the page you are looking for does not exist.');
+    }
+    const comments = await Comment.find({ post: req.params.id }).sort({ createdAt: -1 }).lean();
+      res.render("post.ejs", { post: post, user: req.user, comments: comments });
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
   },
   createPost: async (req, res) => {
@@ -64,14 +66,35 @@ module.exports = {
   },
   upvotePost: async (req, res) => {
     try {
-      await Post.findOneAndUpdate(
+      const post = await Post.findById(req.params.id)
+      const upVoteHash = post.generateUserHash(req.user.id)
+      const checkUpVote = await PostUserUpvoteSchema.findById(upVoteHash)
+      if(!checkUpVote){
+        await Post.findOneAndUpdate(
         { _id: req.params.id },
         {
           $inc: { upvotes: 1 },
         }
-      );
-      console.log("Upvote +1");
-      res.redirect(`/post/${req.params.id}`);
+      )
+     const upVote = await PostUserUpvoteSchema.create({
+        user: req.user.id,
+        post: req.params.id,
+        _id:  upVoteHash,
+      })
+      console.log(upVote)
+      res.redirect('back')
+      }else{
+        await Post.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $inc: { upvotes: -1 },
+        }
+        )
+        await PostUserUpvoteSchema.findByIdAndDelete(upVoteHash)
+        console.log('upvote has been removed')
+        res.redirect('back')
+      }
+      res.redirect(`/back/${req.params.id}`);
     } catch (err) {
       console.log(err);
     }
