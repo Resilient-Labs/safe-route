@@ -30,12 +30,14 @@ module.exports = {
   },
   getPost: async (req, res) => {
     try {
-      // Find the post (Change the id to postID)
-      const post = await Post.findById(req.params.postID);
-      const comments = await Comment.find({ post: req.params.id }).sort({ createdAt: -1 }).lean();
-      res.render("postView.ejs", { post: post, user: req.user, comments: comments });
+      const post = await Post.findById(req.params.id);
+      if (!post) {
+      res.status(404).send('Sorry, the page you are looking for does not exist.');
+    }
+    const comments = await Comment.find({ post: req.params.id }).sort({ createdAt: -1 }).lean();
+      res.render("post.ejs", { post: post, user: req.user, comments: comments });
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
   },
   createPost: async (req, res) => {
@@ -64,37 +66,73 @@ module.exports = {
   },
   upvotePost: async (req, res) => {
     try {
-      await Post.findOneAndUpdate(
+      const post = await Post.findById(req.params.id)
+      const upVoteHash = post.generateUserHash(req.user.id)
+      const checkUpVote = await PostUserUpvoteSchema.findById(upVoteHash)
+      if(!checkUpVote){
+        await Post.findOneAndUpdate(
         { _id: req.params.id },
         {
           $inc: { upvotes: 1 },
         }
-      );
-      console.log("Upvote +1");
-      res.redirect(`/post/${req.params.id}`);
+      )
+     const upVote = await PostUserUpvoteSchema.create({
+        user: req.user.id,
+        post: req.params.id,
+        _id:  upVoteHash,
+      })
+      console.log(upVote)
+      res.redirect('back')
+      }else{
+        await Post.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $inc: { upvotes: -1 },
+        }
+        )
+        await PostUserUpvoteSchema.findByIdAndDelete(upVoteHash)
+        console.log('upvote has been removed')
+        res.redirect('back')
+      }
+      res.redirect(`/back/${req.params.id}`);
     } catch (err) {
       console.log(err);
     }
   },
   downvotePost: async (req, res) => {
     try {
-      // to make sure a user can only vote once: needs post and user defined, check and see if the post and user exist (if !post)
-      // should the upvote be defined here too? 
-      // define downvote (make sure it ".includes" user id
-      // if the user has already downVoted (.pull(userid)) [this will "remove" downvote & not allow a duplicate?]
-      // if the user has upvoted (.pull(userid)
-      //  then .push downvote
-
-      await Post.findOneAndUpdate(
+      const post = await Post.findById(req.params.id)
+      const downVoteHash = post.generateUserHash(req.user.id)
+      const checkDownVote = await PostUserDownvoteSchema.findById(downVoteHash)
+      if(!checkDownVote){
+        await Post.findOneAndUpdate(
         { _id: req.params.id },
         {
           $inc: { downvotes: 1 },
         }
       )
-      console.log("Downvote +1");
-      res.redirect(`/post/${req.params.id}`);
+      const downVote = await PostUserDownvoteSchema.create({
+        user: req.user.id,
+        post: req.params.id,
+        _id:  downVoteHash,
+      })
+      console.log(downVote)
+      res.redirect('back')
+      }else{
+        await Post.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $inc: { downvotes: -1 },
+        }
+        )
+        await PostUserDownvoteSchema.findByIdAndDelete(downVoteHash)
+        console.log('downvote has been removed')
+        res.redirect('back')
+      }
+      res.redirect('back');
     } catch (err) {
       console.log(err);
+      res.redirect("/feed")
     }
   },
   bookmarkPost: async (req, res) => {
@@ -130,16 +168,29 @@ module.exports = {
   deletePost: async (req, res) => {
     try {
       // Find post by id
-      let post = await Post.findById({ _id: req.params.id });
-      // Delete image from cloudinary
+    let post = await Post.findById({ _id: req.params.id });
+
+    // Check if the logged-in user is the post owner
+    if (req.user._id.toString() === post.user.toString()) {
+      // Delete image from Cloudinary
+      if (post.cloudinaryId){
       await cloudinary.uploader.destroy(post.cloudinaryId);
-      // Delete post from db
+      }
+      // Delete related bookmarks, 
+      await Bookmark.deleteMany({ post: req.params.id });
+
+      // Delete the post 
       await Post.findByIdAndDelete({ _id: req.params.id });
-      console.log("Deleted Post");
-      res.redirect("/profile");
-    } catch (err) {
-      console.log(err)
-      res.redirect("/profile");
+
+      console.log("Success! Your post has been deleted.");
+      res.redirect("/feed");
+    } else {
+      console.log("You are not authorized to delete this post.");
+      res.redirect(`/post/${req.params.id}`);
     }
-  },
-};
+  } catch (err) {
+    console.log("Error deleting post:", err);
+    res.redirect("/feed");
+  }
+}
+}
