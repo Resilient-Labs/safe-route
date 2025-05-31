@@ -1,0 +1,125 @@
+* {
+    box-sizing: border-box;
+}
+
+svg {
+    width: 1.25rem;
+}
+
+.border-b-1 {
+    border-bottom: 1px solid #000;
+}
+
+.border-t-1 {
+    border-top: 1px solid #000;
+}
+
+.bradius-8 {
+    border-radius: 0.5rem;
+}
+
+.bg-gray {
+    background-color: #DEE5ED;
+}
+
+.center {
+    text-align: center;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.flex-1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-2 {
+    display: flex;
+}
+
+.flex-3 {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-4 {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+}
+
+.flex-5 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.green {
+    fill: #227C10;
+}
+
+.lh-0 {
+    line-height: 0;
+}
+
+.mbottom-28 {
+    margin-bottom: 1.75rem;
+}
+
+.mright-8 {
+    margin-right: 0.5rem;
+}
+
+.mtop-12 {
+    margin-top: 0.75rem;
+}
+
+.navy-blue {
+    color: #486284;
+}
+
+.post-category-container {
+    border-bottom: 1px solid #000;
+    padding: 0;
+}
+
+.post-category-container li {
+    text-align: center;
+    width: 100%;
+}
+
+.post-category-container li:hover {
+    border-bottom: 4px solid #000;
+}
+
+.post-container li {
+    width: 22.5%;
+    margin: 0 2%;
+}
+
+.ptop-12 {
+    padding-top: 0.75rem;
+}
+
+.red {
+    fill: #D3171F;
+}
+
+.searchbar {
+    /* fix later it's in the wrong div */
+    display: flex;
+    background-color: #ebe6f0;
+    box-shadow: none;
+    border-radius: 1.5rem;
+    max-width: 35%;
+}
+
+.view-now-btn {
+    border: none;
+    background-color: #fff;
+    padding: 0.25rem 1rem;
+    border-radius: 0.25rem;
+}
