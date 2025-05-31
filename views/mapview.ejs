@@ -10,7 +10,13 @@
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <link rel="stylesheet" href="/safe-route/public/css/mapView.css" />
+    <!-- Leaflet Control Geocoder CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <!-- Header -->
@@ -51,7 +57,7 @@
     <main class="main-container">
       <!-- Sidebar -->
       <aside class="sidebar">
-        <h2>Map View Page - Left</h2>
+        <h2>Map View Page</h2>
 
         <!-- View Nearby Alerts Section -->
         <section class="section">
@@ -143,14 +149,19 @@
       </div>
     </footer>
 
-    window.serverData = { mapCenter: <%- JSON.stringify(locals.mapCenter) %>,
-    markers: <%- JSON.stringify(locals.markers) %> };
+    <!-- Pass server data to JavaScript -->
+
+    window.serverData = { mapCenter: <%- JSON.stringify(locals.mapCenter) %>:
+    <%- JSON.stringify(locals.markers) %> };
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+    <!-- Leaflet Control Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
+
     <!-- Your main JavaScript file -->
-    <script src="/safe-route/public/mapView(main).js"></script>
+    <script src="main.js"></script>
     <script
       src="https://kit.fontawesome.com/f8ec983be8.js"
       crossorigin="anonymous"></script>
