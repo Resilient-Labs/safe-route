@@ -61,6 +61,27 @@ module.exports = {
       console.log(err);
     }
   },
+  downVotePost: async (req, res) => {
+    try {
+      // to make sure a user can only vote once: needs post and user defined, check and see if the post and user exist (if !post)
+      // should the upvote be defined here too? 
+      // define downvote (make sure it ".includes" user id
+      // if the user has already downVoted (.pull(userid)) [this will "remove" downvote & not allow a duplicate?]
+      // if the user has upvoted (.pull(userid)
+      //  then .push downvote
+      
+      await Post.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $inc: {likes: 1},
+        }
+      )
+      console.log("Likes -1");
+      res.redirect(`/post/${req.params.id}`);
+    } catch (err) {
+      console.log(err);
+    }
+  },
   deletePost: async (req, res) => {
     try {
       // Find post by id
