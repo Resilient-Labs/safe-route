@@ -1,7 +1,7 @@
 const LocalStrategy = require("passport-local").Strategy;
 const mongoose      = require("mongoose");
 const { promisify } = require("util");
-const User          = require("../models/User");
+const { User }      = require("../models/User");
 
 module.exports = function (passport) {
   // ───────────────────────────────────
