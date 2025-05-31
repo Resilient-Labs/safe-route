@@ -32,8 +32,6 @@ UserSchema.pre("save", function save(next) {
   });
 });
 
-// Helper method for validating user's password.
-
 UserSchema.methods.comparePassword = function comparePassword(
   candidatePassword,
   cb
@@ -43,4 +41,27 @@ UserSchema.methods.comparePassword = function comparePassword(
   });
 };
 
-module.exports = mongoose.model("User", UserSchema);
+UserSchema.methods.generatePostHash = function (postId) {
+  return String(this._id) + postId;
+};
+
+const bookmarkSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+  post: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post"
+  },
+  _id: {
+    type: String,
+    required: true,
+  },
+});
+
+
+module.exports = {
+  User: mongoose.model("User", UserSchema),
+  Bookmark: mongoose.model("Bookmark", bookmarkSchema)
+};
