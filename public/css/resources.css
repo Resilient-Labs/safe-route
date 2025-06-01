@@ -1,31 +1,183 @@
+/* Base styles */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #e8eef5;
-    text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 20px;
+}
+
+/* Page title */
+.page-title-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.page-title-container h1 {
+  margin-bottom: 10px;
+  font-size: 2.5em;
+}
+
+.resource-description {
+  display: block;
+  margin: 0 auto 30px;
+  max-width: 1000px;
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: #555;
+  text-align: center;
+  white-space: normal;
+}
+
+/* Flex container */
+.res-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+/* Individual content blocks */
+.res-container-1,
+.res-container-2 {
+  max-width: 500px;
+  text-align: left;
+}
+
+/* Image box */
+.image-wrapper {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Image hover + accessibility focus */
+.image-wrapper:hover,
+.image-wrapper:focus-within {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+
+/* Paragraphs under headings */
+.line-breaks p {
+  white-space: pre-line;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Headings */
+h2 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 1.5em;
+  color: #222;
+  text-align: center;
+}
+
+/* Lists */
+ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 10px;
+  text-align: left;
+}
+
+ul li {
+  margin-bottom: 10px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Links - accessible focus styles */
+a {
+  color: #0077cc;
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+  color: #005fa3;
+  outline: none;
+}
+
+a:visited {
+  color: #0077cc;
+}
+
+/* Tips section */
+.tips {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.tips h4 {
+  font-size: 1.3em;
+  margin-bottom: 10px;
+}
+
+.tips p {
+  font-size: 1em;
+  line-height: 1.6;
+}
+
+/* ----------------------------------------
+   ✅ Responsive Styles for Mobile
+---------------------------------------- */
+@media (max-width: 768px) {
+  .main-container {
+    padding: 20px 15px;
   }
 
-/* Page title & subtext */
-h1{
+  .page-title-container h1 {
+    font-size: 2em;
+  }
 
-}
+  .resource-description {
+    font-size: 1em;
+    padding: 0 10px;
+  }
 
-span{
+  .res-container {
+    flex-direction: column;
+    align-items: center;
+  }
 
-}
+  .res-container-1,
+  .res-container-2 {
+    max-width: 100%;
+    padding: 0 10px;
+  }
 
-/* Main content */
-h2{
+  .image-wrapper {
+    height: 250px;
+  }
 
-}
+  h2 {
+    font-size: 1.3em;
+  }
 
-p{
-
-}
-
-ul{
-    list-style: none;
-}
-
-div{
-
+  .tips {
+    padding: 0 10px;
+  }
 }
