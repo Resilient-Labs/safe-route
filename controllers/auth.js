@@ -6,9 +6,10 @@ exports.getLogin = (req, res) => {
   if (req.user) {
     return res.redirect("/map");
   }
-  res.render("signin", {
-    title: "Signin",
-    user: req.user || null,
+  res.render("signin.ejs", {
+    title: "SafeRoute | Signin",
+    currentPage: "signin",
+    user: req.user,
   });
 };
 
@@ -61,8 +62,10 @@ exports.getSignup = (req, res) => {
   if (req.user) {
     return res.redirect("/map");
   }
-  res.render("signup", {
-    title: "Create Account",
+  res.render("signup.ejs", {
+    title: "SafeRoute | Signup",
+    currentPage: "signup",
+    user: req.user,
   });
 };
 
