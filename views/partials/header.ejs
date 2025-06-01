@@ -20,7 +20,7 @@
   <nav class="nav-menu">
     <a href="/" class="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">Home</a>
     <a href="/map" class="<%= typeof currentPage !== 'undefined' && currentPage === 'map' ? 'active' : '' %>">Map</a>
-    <a href="/alert" class="<%= typeof currentPage !== 'undefined' && currentPage === 'alert' ? 'active' : '' %>">Alert</a>
+    <a href="/feed" class="<%= typeof currentPage !== 'undefined' && currentPage === 'alert' ? 'active' : '' %>">Alerts</a>
     <a href="/resources" class="<%= typeof currentPage !== 'undefined' && currentPage === 'resources' ? 'active' : '' %>">Resources</a>
 
     <% if (typeof user !== 'undefined' && user) { %>  
