@@ -4,35 +4,30 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Binary Upload Boom</title>
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/imgs/favicon-32x32.png"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-      integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-      crossorigin="anonymous"
-    />
+    <title>SafeRoute</title>
+
+    <!-- External Stylesheets -->
     <link rel="stylesheet" href="/css/style.css" />
-    <!-- Resources.ejs styling  -->
-    <link rel="stylesheet" href="/public/css/resources.css"> 
+    <link rel="stylesheet" href="/css/feed.css" />
+    <link rel="stylesheet" href="/css/headerFooter.css" />
+   
   </head>
   <body>
-    <header class="container">
-      <div class="text-center">
-        <h1 class=""><a href="/profile">Binary Upload Boom</a></h1>
-        <span>The #100Devs Social Network</span>
-      </div>
-    </header>
-  </body>
-</html>
+
+<!-- Header - had to add currentPage to reflect Theo;s code to avoid ref errors-->
+<header class="header">
+  <div class="logo">SafeRoute</div>
+  <nav class="nav-menu">
+    <a href="/" class="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">Home</a>
+    <a href="/map" class="<%= typeof currentPage !== 'undefined' && currentPage === 'map' ? 'active' : '' %>">Map</a>
+    <a href="/alert" class="<%= typeof currentPage !== 'undefined' && currentPage === 'alert' ? 'active' : '' %>">Alert</a>
+    <a href="/resources" class="<%= typeof currentPage !== 'undefined' && currentPage === 'resources' ? 'active' : '' %>">Resources</a>
+
+    <% if (typeof user !== 'undefined' && user) { %>  
+      <button class="sign-in-btn" onclick="location.href='/logout'">Sign Out</button>
+    <% } else { %>
+      <button class="sign-up-btn" onclick="location.href='/signup'">Sign Up</button>
+      <button class="sign-in-btn" onclick="location.href='/signin'">Sign In</button>
+    <% } %>
+  </nav>
+</header>
