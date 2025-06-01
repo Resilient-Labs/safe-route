@@ -42,7 +42,7 @@ module.exports = {
       if (!post) {
       res.status(404).send('Sorry, the page you are looking for does not exist.');
     }
-    const comments = await Comment.find({ post: req.params.id }).sort({ createdAt: -1 }).lean();
+    const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 }).lean();
       res.render("post.ejs", {
       Title: "SafeRoute | Post",
       currentPage: "post",
@@ -188,7 +188,10 @@ module.exports = {
       await Bookmark.deleteMany({ post: req.params.id });
 
       // Delete the post 
-      await Post.findByIdAndDelete({ _id: req.params.id });
+      await Post.findByIdAndUpdate({ _id: req.params.id, isHidden: true});
+
+      // 'Delete' the comments
+      await Comment.findByIdAndUpdate({_id: req.params.id, isHidden:true})
 
       console.log("Success! Your post has been deleted.");
       res.redirect("/feed");
