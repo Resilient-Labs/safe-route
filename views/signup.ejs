@@ -18,28 +18,32 @@
                 </section> 
                 <form action="/signup" method="POST">
                     <div class="mb-3">
-                      <label for="email" class="form-label">Email address</label>
-                      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" required>
+                      <label for="email" class="form-label">Email Address:</label>
+                      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="Enter email" required>
                     </div>
                     <div class="mb-3">
-                        <label for="firstName" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="firstName" name="firstName" required>
+                        <label for="firstName" class="form-label">First Name:</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="lastName" name="lastName" required>
+                        <label for="lastName" class="form-label">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name" required>
                     </div>
                     <div class="mb-3">
-                      <label for="password" class="form-label">Password</label>
-                      <input type="password" class="form-control" id="password" name="password" required>
+                      <label for="password" class="form-label">Password:</label>
+                      <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
                     </div>
                     <div class="mb-3">
-                      <label for="zipCode" class="form-label">Zip Code</label>
-                      <input type="text" class="form-control" pattern="[0-9]{5}" title="Please enter a 5-digit zip code" id="zipCode" name="zipCode" required>
+                      <label for="confirmPassword" class="form-label">Confirm Password:</label>
+                      <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="zipCode" class="form-label">Zip Code:</label>
+                      <input type="text" class="form-control" pattern="[0-9]{5}" title="Please enter a 5-digit zip code" id="zipCode" name="zipCode" placeholder="Enter zip code" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Sign Up</button>
                   </form>
-                  <p>Already have an account? <a>Sign in.</a></p>
+                  <p>Already have an account? <a href="/signin">Sign In.</a></p>
             </section>
         </div>
     </main>
