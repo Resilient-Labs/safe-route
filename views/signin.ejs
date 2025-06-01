@@ -1,0 +1,32 @@
+<%- include('partials/header') -%>
+
+<main class="container">
+  <div class="row justify-content-center">
+    <section class="col-6 mt-5">
+      <% if (locals.messages.errors) { %> <% messages.errors.forEach( el => { %>
+      <div class="alert alert-danger"><%= el.msg %></div>
+      <% }) %> <% } %> <% if (locals.messages.info) { %> <%
+      messages.info.forEach( el => { %>
+      <div class="alert alert-info"><%= el.msg %></div>
+      <% }) %> <% } %>
+      <section>
+        <h2>Sign In to your Account</h2>
+        <span>Welcome Back!</span>
+      </section> 
+      <form action="/signin" method="POST">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="Enter email" required>
+        </div>  
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign in</button>
+      </form>
+      <p>Don't have an account? <a href="/signup">Sign up.</a></p>
+    </section>
+  </div>
+</main>
+
+<%- include('partials/footer') -%>
