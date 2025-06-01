@@ -8,10 +8,10 @@ module.exports = {
         commentText: req.body.comment,
         likes: 0,
         user: req.user.id,
-        post: req.params.rainbowUnicorn
+        post: req.params.id
       });
       console.log("Comment has been added!");
-      res.redirect("/post/" + req.params.rainbowUnicorn);
+      res.redirect("/post/" + req.params.id);
     } catch (err) {
       console.log(err);
     }
