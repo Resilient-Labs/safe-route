@@ -3,41 +3,64 @@ const Comment = require("../models/Comment");
 module.exports = {
   createComment: async (req, res) => {
     try {
-      console.log('we made it')
+      //TODO: Make it compatible with x-form as well as json (was already set to handle x-form and json)
       await Comment.create({
         commentText: req.body.comment,
         likes: 0,
         user: req.user.id,
-        post: req.params.rainbowUnicorn
+        post: req.params.id
       });
-      console.log("Comment has been added!");
-      res.redirect("/post/" + req.params.rainbowUnicorn);
+      res.redirect('back');
     } catch (err) {
-      console.log(err);
+      res.status(500).json({message:"Failed to create comment", error: err.message});
     }
   },
-  likeComment: async (req, res) => {
+  likeComment: async (req, res) => { 
     try {
-      await Comment.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          $inc: { likes: 1 },
+      const commentID = req.params.id;
+      const userID = req.user.id;
+
+      const comment = await Comment.findById(commentID);
+      if (!comment) {
+        res.status(404).send("Comment Not Found");
+      }
+      const userHasLike = comment.likeBy.includes(userID);
+
+      let operation;
+      if(userHasLike){
+        operation ={
+          $inc: {likes: -1},
+          $pull: {likeBy: userID}
         }
-      );
-      console.log("Likes +1");
+      }
+      else{
+        operation = {
+          $inc: {likes: 1},
+          $push: {likeBy: userID}
+        }
+      }
+
+      await Comment.findByIdAndUpdate(commentID, operation);
       res.redirect('back');
     } catch (err) {
       console.log(err);
+      res.redirect('back');
     }
   },
   deleteComment: async (req, res) => {
     try {
-      // let comment = await Post.findById({ _id: req.params.id });
-      // Delete comment from db
-      await Comment.findByIdAndDelete({ _id: req.params.id });
-      console.log("Deleted Comment");
+      const deleteComment = await Comment.findByIdAndUpdate(req.params.id, 
+        {isHidden: true});
+
+      if (!deleteComment) {
+        console.log("Comment not found for deletion:", req.params.id);
+        return res.redirect('back');
+      }
+
+      console.log("Hidden Comment");
       res.redirect("back");
     } catch (err) {
+      res.status(500).json({message: "Delelation was not succesful", error: err.message})
       res.redirect("back");
     }
   },

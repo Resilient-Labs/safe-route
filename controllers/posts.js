@@ -7,7 +7,11 @@ module.exports = {
   getProfile: async (req, res) => {
     try {
       const posts = await Post.find({ user: req.user.id });
-      res.render("profile.ejs", { posts: posts, user: req.user });
+      res.render("profile.ejs", { 
+      Title: "SafeRoute | Profile",
+      currentPage: "profile",
+      posts: posts,
+      user: req.user});
     } catch (err) {
       console.log(err);
     }
@@ -23,7 +27,11 @@ module.exports = {
       };
       const posts = await Post.find(filters).lean();
       console.log(posts);
-      res.render("feed.ejs", { posts, user: req.user });
+      res.render("feed.ejs", {
+      Title: "SafeRoute | Feed",
+      currentPage: "feed",
+      posts,
+      user: req.user });
     } catch (err) {
       console.log(err);
     }
@@ -34,8 +42,13 @@ module.exports = {
       if (!post) {
       res.status(404).send('Sorry, the page you are looking for does not exist.');
     }
-    const comments = await Comment.find({ post: req.params.id }).sort({ createdAt: -1 }).lean();
-      res.render("post.ejs", { post: post, user: req.user, comments: comments });
+    const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 }).lean();
+      res.render("post.ejs", {
+      Title: "SafeRoute | Post",
+      currentPage: "post",
+      post: post, 
+      user: req.user, 
+      comments: comments });
     } catch (err) {
       console.log(err)
     }
@@ -65,74 +78,69 @@ module.exports = {
     }
   },
   upvotePost: async (req, res) => {
+    if (!req.user) {
+      res.redirect(`/signin`);
+    }
+
     try {
       const post = await Post.findById(req.params.id)
-      const upVoteHash = post.generateUserHash(req.user.id)
-      const checkUpVote = await PostUserUpvoteSchema.findById(upVoteHash)
-      if(!checkUpVote){
+      const upVoteHash = post.generateUserHash(req.user.id);
+      const checkUpVote = await PostUserUpvoteSchema.findById(upVoteHash);
+      if (!checkUpVote) {
         await Post.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          $inc: { upvotes: 1 },
-        }
-      )
-     const upVote = await PostUserUpvoteSchema.create({
-        user: req.user.id,
-        post: req.params.id,
-        _id:  upVoteHash,
-      })
-      console.log(upVote)
-      res.redirect('back')
-      }else{
+          { _id: req.params.id },
+          { $inc: { upvotes: 1 } }
+        );
+        await PostUserUpvoteSchema.create({
+          user: req.user.id,
+          post: req.params.id,
+          _id:  upVoteHash,
+        });
+        res.redirect('back');
+      } else {
         await Post.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          $inc: { upvotes: -1 },
-        }
-        )
-        await PostUserUpvoteSchema.findByIdAndDelete(upVoteHash)
-        console.log('upvote has been removed')
-        res.redirect('back')
+          { _id: req.params.id },
+          { $inc: { upvotes: -1 } }
+        );
+        await PostUserUpvoteSchema.findByIdAndDelete(upVoteHash);
+        res.redirect('back');
       }
-      res.redirect(`/back/${req.params.id}`);
-    } catch (err) {
+    } catch(err) {
       console.log(err);
+      res.redirect('back');
     }
   },
   downvotePost: async (req, res) => {
+    if (!req.user) {
+      res.redirect(`/signin`);
+    }
+
     try {
       const post = await Post.findById(req.params.id)
-      const downVoteHash = post.generateUserHash(req.user.id)
-      const checkDownVote = await PostUserDownvoteSchema.findById(downVoteHash)
-      if(!checkDownVote){
+      const downVoteHash = post.generateUserHash(req.user.id);
+      const checkDownVote = await PostUserDownvoteSchema.findById(downVoteHash);
+      if (!checkDownVote) {
         await Post.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          $inc: { downvotes: 1 },
-        }
-      )
-      const downVote = await PostUserDownvoteSchema.create({
-        user: req.user.id,
-        post: req.params.id,
-        _id:  downVoteHash,
-      })
-      console.log(downVote)
-      res.redirect('back')
-      }else{
+          { _id: req.params.id },
+          { $inc: { downvotes: 1 } }
+        );
+        await PostUserDownvoteSchema.create({
+          user: req.user.id,
+          post: req.params.id,
+          _id:  downVoteHash
+        });
+        res.redirect('back');
+      } else {
         await Post.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          $inc: { downvotes: -1 },
-        }
-        )
-        await PostUserDownvoteSchema.findByIdAndDelete(downVoteHash)
-        console.log('downvote has been removed')
-        res.redirect('back')
+          { _id: req.params.id },
+          { $inc: { downvotes: -1 } }
+        );
+        await PostUserDownvoteSchema.findByIdAndDelete(downVoteHash);
+        res.redirect('back');
       }
-      res.redirect('back');
-    } catch (err) {
+    } catch(err) {
       console.log(err);
-      res.redirect("/feed")
+      res.redirect('back');
     }
   },
   bookmarkPost: async (req, res) => {
@@ -180,7 +188,10 @@ module.exports = {
       await Bookmark.deleteMany({ post: req.params.id });
 
       // Delete the post 
-      await Post.findByIdAndDelete({ _id: req.params.id });
+      await Post.findByIdAndUpdate({ _id: req.params.id, isHidden: true});
+
+      // 'Delete' the comments
+      await Comment.findByIdAndUpdate({_id: req.params.id, isHidden:true})
 
       console.log("Success! Your post has been deleted.");
       res.redirect("/feed");
