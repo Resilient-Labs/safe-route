@@ -1,59 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SafeRoute - Map View</title>
+<%- include('partials/header') -%>
+<link rel="stylesheet" href="/css/mapView.css">
+<!-- Leaflet CSS -->
 
-    <!-- Leaflet CSS -->
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <!-- Leaflet Control Geocoder CSS -->
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.css" />
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/styles.css" />
-  </head>
-  <body>
-    <!-- Header -->
-    <header class="header">
-      <div class="logo">SafeRoute</div>
-      <nav class="nav-menu">
-        <a href="/" class="<%= currentPage === 'home' ? 'active' : '' %>"
-          >Home</a
-        >
-        <a href="/map" class="<%= currentPage === 'map' ? 'active' : '' %>"
-          >Map</a
-        >
-        <a href="/alert" class="<%= currentPage === 'alert' ? 'active' : '' %>"
-          >Alert</a
-        >
-        <a
-          href="/resources"
-          class="<%= currentPage === 'resources' ? 'active' : '' %>"
-          >Resources</a
-        >
-        <% if (user) { %>
-        <span>Welcome, <%= user.name %></span>
-        <button class="sign-in-btn" onclick="location.href='/logout'">
-          Sign Out
-        </button>
-        <% } else { %>
-        <button class="sign-up-btn" onclick="location.href='/signup'">
-          Sign Up
-        </button>
-        <button class="sign-in-btn" onclick="location.href='/signin'">
-          Sign In
-        </button>
-        <% } %>
-      </nav>
-    </header>
-
-    <!-- Main Content -->
+<!-- Main Content -->
     <main class="main-container">
       <!-- Sidebar -->
       <aside class="sidebar">
@@ -82,12 +33,9 @@
               <label for="incidentType">Incident Type</label>
               <select id="incidentType" name="incidentType">
                 <option value="">Select Type</option>
-                <% const incidentTypes = locals.incidentTypes || [ { value:
-                'accessibility', label: 'Accessibility Issue' }, { value:
-                'safety', label: 'Safety Concern' }, { value: 'lighting', label:
-                'Poor Lighting' }, { value: 'maintenance', label: 'Maintenance
-                Needed' }, { value: 'other', label: 'Other' } ]; %> <%
-                incidentTypes.forEach(type => { %>
+                <% const incidentTypes = locals.incidentTypes || [ { value: 'accessibility', label: 'Accessibility Issue' }, 
+                { value: 'safety', label: 'Safety Concern' }, { value: 'lighting', label: 'Poor Lighting' }, 
+                { value: 'maintenance', label: 'Maintenance Needed' }, { value: 'other', label: 'Other' } ]; %> <% incidentTypes.forEach(type => { %>
                 <option value="<%= type.value %>"><%= type.label %></option>
                 <% }); %>
               </select>
@@ -127,43 +75,18 @@
       </div>
     </main>
 
+
+     <script>
+      window.serverData = {
+        mapCenter: <%- JSON.stringify(locals.mapCenter) %>
+        markers: <%- JSON.stringify(locals.markers) %> };
+    </script>
+
+
     <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-left">
-        <div class="footer-title">SafeRoute</div>
-        <div class="footer-text">
-          Our vision is to help you move through<br />
-          your city with awareness and agency.<br />
-          Get help.<br />
-          <br />
-          ©2025 SafeRoute. All rights reserved.
-        </div>
-      </div>
-      <div class="footer-links">
-        <a href="/">Home</a>
-        <a href="/map">Map</a>
-        <a href="/alerts">Alerts</a>
-        <a href="/resources">Resources</a>
-        <a href="/privacy">Privacy & Policy</a>
-        <a href="/terms">Terms & Condition</a>
-      </div>
-    </footer>
+    <%- include('partials/footer') -%>
 
     <!-- Pass server data to JavaScript -->
 
-    window.serverData = { mapCenter: <%- JSON.stringify(locals.mapCenter) %>:
-    <%- JSON.stringify(locals.markers) %> };
-
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <!-- Leaflet Control Geocoder JS -->
-    <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
-
-    <!-- Your main JavaScript file -->
-    <script src="main.js"></script>
-    <script
-      src="https://kit.fontawesome.com/f8ec983be8.js"
-      crossorigin="anonymous"></script>
-  </body>
-</html>
+   
+   

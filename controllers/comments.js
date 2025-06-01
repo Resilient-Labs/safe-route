@@ -49,14 +49,15 @@ module.exports = {
   },
   deleteComment: async (req, res) => {
     try {
-      const deleteComment = await Comment.findByIdAndDelete(req.params.id );
+      const deleteComment = await Comment.findByIdAndUpdate(req.params.id, 
+        {isHidden: true});
 
       if (!deleteComment) {
         console.log("Comment not found for deletion:", req.params.id);
         return res.redirect('back');
       }
 
-      console.log("Deleted Comment");
+      console.log("Hidden Comment");
       res.redirect("back");
     } catch (err) {
       res.status(500).json({message: "Delelation was not succesful", error: err.message})
