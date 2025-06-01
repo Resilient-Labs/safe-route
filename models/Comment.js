@@ -7,8 +7,16 @@ const CommentSchema = new mongoose.Schema({
   },
   likes: {
     type: Number,
+    default: 0,
     required: true,
   },
+
+  // To see who was like by
+  likeBy: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  }],
+  
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
