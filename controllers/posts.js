@@ -65,74 +65,69 @@ module.exports = {
     }
   },
   upvotePost: async (req, res) => {
+    if (!req.user) {
+      res.redirect(`/signin`);
+    }
+
     try {
       const post = await Post.findById(req.params.id)
-      const upVoteHash = post.generateUserHash(req.user.id)
-      const checkUpVote = await PostUserUpvoteSchema.findById(upVoteHash)
-      if(!checkUpVote){
+      const upVoteHash = post.generateUserHash(req.user.id);
+      const checkUpVote = await PostUserUpvoteSchema.findById(upVoteHash);
+      if (!checkUpVote) {
         await Post.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          $inc: { upvotes: 1 },
-        }
-      )
-     const upVote = await PostUserUpvoteSchema.create({
-        user: req.user.id,
-        post: req.params.id,
-        _id:  upVoteHash,
-      })
-      console.log(upVote)
-      res.redirect('back')
-      }else{
+          { _id: req.params.id },
+          { $inc: { upvotes: 1 } }
+        );
+        await PostUserUpvoteSchema.create({
+          user: req.user.id,
+          post: req.params.id,
+          _id:  upVoteHash,
+        });
+        res.redirect('back');
+      } else {
         await Post.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          $inc: { upvotes: -1 },
-        }
-        )
-        await PostUserUpvoteSchema.findByIdAndDelete(upVoteHash)
-        console.log('upvote has been removed')
-        res.redirect('back')
+          { _id: req.params.id },
+          { $inc: { upvotes: -1 } }
+        );
+        await PostUserUpvoteSchema.findByIdAndDelete(upVoteHash);
+        res.redirect('back');
       }
-      res.redirect(`/back/${req.params.id}`);
-    } catch (err) {
+    } catch(err) {
       console.log(err);
+      res.redirect('back');
     }
   },
   downvotePost: async (req, res) => {
+    if (!req.user) {
+      res.redirect(`/signin`);
+    }
+
     try {
       const post = await Post.findById(req.params.id)
-      const downVoteHash = post.generateUserHash(req.user.id)
-      const checkDownVote = await PostUserDownvoteSchema.findById(downVoteHash)
-      if(!checkDownVote){
+      const downVoteHash = post.generateUserHash(req.user.id);
+      const checkDownVote = await PostUserDownvoteSchema.findById(downVoteHash);
+      if (!checkDownVote) {
         await Post.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          $inc: { downvotes: 1 },
-        }
-      )
-      const downVote = await PostUserDownvoteSchema.create({
-        user: req.user.id,
-        post: req.params.id,
-        _id:  downVoteHash,
-      })
-      console.log(downVote)
-      res.redirect('back')
-      }else{
+          { _id: req.params.id },
+          { $inc: { downvotes: 1 } }
+        );
+        await PostUserDownvoteSchema.create({
+          user: req.user.id,
+          post: req.params.id,
+          _id:  downVoteHash
+        });
+        res.redirect('back');
+      } else {
         await Post.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          $inc: { downvotes: -1 },
-        }
-        )
-        await PostUserDownvoteSchema.findByIdAndDelete(downVoteHash)
-        console.log('downvote has been removed')
-        res.redirect('back')
+          { _id: req.params.id },
+          { $inc: { downvotes: -1 } }
+        );
+        await PostUserDownvoteSchema.findByIdAndDelete(downVoteHash);
+        res.redirect('back');
       }
-      res.redirect('back');
-    } catch (err) {
+    } catch(err) {
       console.log(err);
-      res.redirect("/feed")
+      res.redirect('back');
     }
   },
   bookmarkPost: async (req, res) => {
