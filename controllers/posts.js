@@ -7,7 +7,11 @@ module.exports = {
   getProfile: async (req, res) => {
     try {
       const posts = await Post.find({ user: req.user.id });
-      res.render("profile.ejs", { posts: posts, user: req.user });
+      res.render("profile.ejs", { 
+      Title: "SafeRoute | Profile",
+      currentPage: "profile",
+      posts: posts,
+      user: req.user});
     } catch (err) {
       console.log(err);
     }
@@ -23,7 +27,11 @@ module.exports = {
       };
       const posts = await Post.find(filters).lean();
       console.log(posts);
-      res.render("feed.ejs", { posts, user: req.user });
+      res.render("feed.ejs", {
+      Title: "SafeRoute | Feed",
+      currentPage: "feed",
+      posts,
+      user: req.user });
     } catch (err) {
       console.log(err);
     }
@@ -35,7 +43,12 @@ module.exports = {
       res.status(404).send('Sorry, the page you are looking for does not exist.');
     }
     const comments = await Comment.find({ post: req.params.id }).sort({ createdAt: -1 }).lean();
-      res.render("post.ejs", { post: post, user: req.user, comments: comments });
+      res.render("post.ejs", {
+      Title: "SafeRoute | Post",
+      currentPage: "post",
+      post: post, 
+      user: req.user, 
+      comments: comments });
     } catch (err) {
       console.log(err)
     }
