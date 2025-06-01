@@ -51,6 +51,12 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+//could use this for every view page / DRY. DON'T DELETE!  Will test when front end functionality is completed./ able to test a user requirment.
+// app.use((req, res, next) => {
+//   res.locals.user = req.user;
+//   next();
+// }); 
+
 //Use flash messages for errors, info, ect...
 app.use(flash());
 
