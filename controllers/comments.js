@@ -3,7 +3,7 @@ const Comment = require("../models/Comment");
 module.exports = {
   createComment: async (req, res) => {
     try {
-      console.log('we made it')
+      //TODO: Make it compatible with x-form as well as json
       await Comment.create({
         commentText: req.body.comment,
         likes: 0,
@@ -17,6 +17,7 @@ module.exports = {
     }
   },
   likeComment: async (req, res) => {
+    //TODO: Make sure to avoid duplicated likes and impplement toggle functionality
     try {
       await Comment.findOneAndUpdate(
         { _id: req.params.id },
@@ -32,8 +33,7 @@ module.exports = {
   },
   deleteComment: async (req, res) => {
     try {
-      // let comment = await Post.findById({ _id: req.params.id });
-      // Delete comment from db
+      //TODO: Make sure it works 
       await Comment.findByIdAndDelete({ _id: req.params.id });
       console.log("Deleted Comment");
       res.redirect("back");
