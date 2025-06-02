@@ -17,24 +17,47 @@ module.exports = {
     }
   },
   getFeed: async (req, res) => {
-    try {
-      const filters = {
-        isHidden: false,
-        isResolved: false,
-      };
-      if (req.body.type) {
-        filters[type] = req.body.type;
-      };
-      const posts = await Post.find(filters); // Removed the lean()
-      console.log(posts);
-      res.render("feed.ejs", {
+    const filters = {
+      isHidden: false,
+      isResolved: false,
+    };
+    if (req.body.type) {
+      filters[type] = req.body.type;
+    };
+    const posts = await Post.aggregate([
+      { $match: filters },
+      { $addFields: {
+        hasCurrentUserUpvoted: false,
+        hasCurrentUserDownvoted: false,
+        hasCurrentUserBookmarked: false
+      }}
+    ]);
+    const postIds = posts.map(post => post._id);
+    const [upvotes, downvotes, bookmarks] = await Promise.all([
+      PostUserUpvoteSchema.find({ user: req.user.id, post: { $in: postIds } }, 'post'),
+      PostUserDownvoteSchema.find({ user: req.user.id, post: { $in: postIds } }, 'post'),
+      Bookmark.find({ user: req.user.id, post: { $in: postIds } }, 'post')
+    ]);
+    const upvoteSet = new Set(upvotes.map(upvote => upvote.post.toString()));
+    const downvoteSet = new Set(downvotes.map(doc => doc.post.toString()));
+    const bookmarkSet = new Set(bookmarks.map(doc => doc.post.toString()));
+    posts.forEach(post => {
+      if (upvoteSet.has(post._id.toString())) {
+        post.hasCurrentUserUpvoted = true;
+      }
+      if (downvoteSet.has(post._id.toString())) {
+        post.hasCurrentUserDownvoted = true;
+      }
+      if (bookmarkSet.has(post._id.toString())) {
+        post.hasCurrentUserBookmarked = true;
+      }
+    });
+    res.render("feed.ejs", {
       title: "SafeRoute | Feed",
       currentPage: "feed",
-      posts,
-      user: req.user });
-    } catch (err) {
-      console.log(err);
-    }
+      user: req.user,
+      posts
+    });
   },
   getPost: async (req, res) => {
     try {
@@ -42,13 +65,21 @@ module.exports = {
       if (!post) {
       res.status(404).send('Sorry, the page you are looking for does not exist.');
     }
-    const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 }); // Removed the lean()
+    const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 });
+    const hash = post.generateUserHash(req.user.id);
+    const bookmark = Bookmark.findById(hash);
+    const upvote = PostUserUpvoteSchema.findById(hash);
+    const downvote = PostUserDownvoteSchema.findById(hash);
       res.render("post.ejs", {
-      title: "SafeRoute | Post",
-      currentPage: "post",
-      post: post, 
-      user: req.user, 
-      comments: comments });
+        title: "SafeRoute | Post",
+        currentPage: "post",
+        post: post, 
+        user: req.user, 
+        comments: comments,
+        hasCurrentUserUpvoted: !upvote ? false : true,
+        hasCurrentUserDownvoted: !downvote ? false : true,
+        hasCurrentUserBookmarked: !bookmark ? false : true
+      });
     } catch (err) {
       console.log(err)
     }
