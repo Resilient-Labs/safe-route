@@ -8,16 +8,17 @@ module.exports = {
   getProfile: async (req, res) => {
     try {
       const posts = await Post.find({ user: req.user.id });
-      res.render("profile.ejs", { 
-      title: "SafeRoute | Profile",
-      currentPage: "profile",
-      posts: posts,
-      user: req.user});
+        res.render("profile.ejs", { 
+        title: "SafeRoute | Profile",
+        currentPage: "profile",
+        posts: posts,
+        user: req.user
+      });
     } catch (err) {
       console.log(err);
     }
   },
-  getFeed: async (req, res) => {
+  getFeedPage: async (req, res) => {
     const filters = {
       isHidden: false,
       isResolved: false,
@@ -61,18 +62,21 @@ module.exports = {
     });
   },
   getPostPage: async (req, res) => {
+    const validationErrors = [];
     try {
       const post = await Post.findById(req.params.id);
       if (!post) {
-      res.status(404).json({
-        message: "The post does not exist or has been removed."
-      });
-    }
-    const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 });
-    const hash = post.generateUserHash(req.user.id);
-    const bookmark = Bookmark.findById(hash);
-    const upvote = PostUserUpvoteSchema.findById(hash);
-    const downvote = PostUserDownvoteSchema.findById(hash);
+        validationErrors.push({ msg: "Unable to fetch post" })
+        if (validationErrors.length) {
+          req.flash("errors", validationErrors);
+          return res.redirect("back");
+        };
+      };
+      const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 });
+      const hash = post.generateUserHash(req.user.id);
+      const bookmark = Bookmark.findById(hash);
+      const upvote = PostUserUpvoteSchema.findById(hash);
+      const downvote = PostUserDownvoteSchema.findById(hash);
       res.render("post.ejs", {
         title: "SafeRoute | Post",
         currentPage: "post",
@@ -85,6 +89,7 @@ module.exports = {
       });
     } catch (err) {
       console.log(err)
+      res.redirect('back');
     }
   },
   createPost: async (req, res) => {
