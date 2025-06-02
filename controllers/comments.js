@@ -3,42 +3,85 @@ const Comment = require("../models/Comment");
 module.exports = {
   createComment: async (req, res) => {
     try {
-      console.log('we made it')
-      await Comment.create({
+      const comment = await Comment.create({
         commentText: req.body.comment,
         likes: 0,
         user: req.user.id,
-        post: req.params.rainbowUnicorn
+        post: req.params.id
       });
-      console.log("Comment has been added!");
-      res.redirect("/post/" + req.params.rainbowUnicorn);
+      res.json({
+        message: 'Successfully added comment',
+        comment
+      });
     } catch (err) {
-      console.log(err);
+      res.status(500).json({
+        message: "Failed to create comment",
+        error: err.message
+      });
     }
   },
-  likeComment: async (req, res) => {
+  likeComment: async (req, res) => { 
     try {
-      await Comment.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-          $inc: { likes: 1 },
+      const commentID = req.params.id;
+      const userID = req.user.id;
+
+      const comment = await Comment.findById(commentID);
+      if (!comment) {
+        res.status(404).json({
+          message: 'Comment not found, it may have been deleted',
+          error: 'Unable to find comment',
+        });
+      };
+      const userHasLike = comment.likeBy.includes(userID);
+
+      let operation;
+      if (userHasLike) {
+        operation = {
+          $inc: { likes: -1 },
+          $pull: { likeBy: userID }
         }
-      );
-      console.log("Likes +1");
-      res.redirect('back');
+      } else {
+        operation = {
+          $inc: { likes: 1 },
+          $push: { likeBy: userID }
+        }
+      }
+
+      const updatedComment = await Comment.findByIdAndUpdate(commentID, operation);
+      res.json({
+        message: 'Comment liked or unliked',
+        comment: updatedComment
+      });
     } catch (err) {
-      console.log(err);
+      res.status(500).json({
+        message: 'An error occured while liking the comment',
+        error: err.message
+      });
     }
   },
   deleteComment: async (req, res) => {
     try {
-      // let comment = await Post.findById({ _id: req.params.id });
-      // Delete comment from db
-      await Comment.findByIdAndDelete({ _id: req.params.id });
-      console.log("Deleted Comment");
-      res.redirect("back");
+      const deletedComment = await Comment.findByIdAndUpdate(
+        req.params.id, 
+        {isHidden: true}
+      );
+
+      if (!deletedComment) {
+        res.status(404).json({
+          message: 'This comment does not exist or has been deleted',
+          error: err.message
+        });
+      }
+
+      res.json({
+        message: 'Comment successfully "deleted"',
+        comment: deletedComment
+      });
     } catch (err) {
-      res.redirect("back");
+      res.status(500).json({
+        message: 'An error occured while deleting the comment',
+        error: err.message
+      });
     }
   },
 };
