@@ -1,69 +1,67 @@
 <%- include('partials/header') -%>
-<div class="container">
-  <div class="row justify-content-center mt-5">
-    <div class="col-6">
-      <h2><%= post.title %></h2>
-      <img class="img-fluid" src="<%= post.image%>" />
-      <div class="row justify-content-between">
-        <form
-          class="col-1"
-          action="/post/likePost/<%= post.id %>?_method=PUT"
-          method="POST"
-        >
-          <button class="btn btn-primary fa fa-heart" type="submit"></button>
-        </form>
-        <h3 class="col-3">Likes: <%= post.likes %></h3>
-        <%if(post.user == user.id){ %>
-        <form
-          action="/post/deletePost/<%= post.id %>?_method=DELETE"
-          method="POST"
-          class="col-3"
-        >
-          <button class="btn btn-primary fa fa-trash" type="submit"></button>
-        </form>
-        <%}%>
-      </div>
-    </div>
-    <div class="col-3 mt-5">
-      <p><%= post.caption %></p>
-    </div>
-    <ul>
-    <% for(var i=0; i<comments.length; i++) {%>
-      <li class="col-6 justify-content-between mt-5">
-        <p><%=comments[i].commentText%></p>
-        <div class="row justify-content-between">
-          <form
-            class="col-1"
-            action="/comment/likeComment/<%= comments[i]._id %>?_method=PUT"
-            method="POST"
-          >
-            <button class="btn btn-primary fa fa-heart" type="submit"></button>
-          </form>
-          <h3 class="col-3">Likes: <%= comments[i].likes %></h3>
-          <form
-            action="/comment/deleteComment/<%= comments[i]._id %>?_method=DELETE"
-            method="POST"
-            class="col-3"
-          >
-            <button class="btn btn-primary fa fa-trash" type="submit"></button>
-          </form>
-        </div>
-      </li>
-    <% } %>
-    </ul>
-    <form action="/comment/createComment/<%= post.id %>" method="POST">
-      <div class="mb-3">
-          <label for="title" class="form-label">Comment</label>
-          <input type="text" class="form-control" id="title" name="comment">
-      </div>
-      <button type="submit" class="btn btn-primary" value="Upload">Submit</button>
-    </form>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <div class="col-6 mt-5">
-      <a class="btn btn-primary" href="/profile">Return to Profile</a>
-      <a class="btn btn-primary" href="/feed">Return to Feed</a>
-    </div>
-  </div>
+<!--  INDIVIDUAL POST TITLE -->
+<h2><%= post.title %></h2>
+
+<!--  POST PIC  -->
+<% if (post.image) { %>
+  <img src="<%= post.image %>" alt="Post image" />
+<% } %>
+
+<!--  POST INFO  -->
+<p><i class="fas fa-map-marker-alt"></i> <%= post.city %> - <%= post.address %></p>
+<p><i class="far fa-clock"></i> Posted on: <%= post.createdAt.toLocaleString() %></p>
+
+<!-- POST DESCRIPTION -->
+<p><%= post.description %></p>
+
+<!--  UPVOTE & DOWNVOTE ON POST  -->
+<div>
+  <form action="/post/<%= post._id %>/upvote/?_method=PUT" method="POST">
+    <button type="submit"><i class="fas fa-arrow-up"></i> Upvote</button>
+  </form>
+  <p>Upvotes: <%= post.upvotes %></p>
+
+  <form action="/post/<%= post._id %>/downvote/?_method=PUT" method="POST">
+    <button type="submit"><i class="fas fa-arrow-down"></i> Downvote</button>
+  </form>
+  <p>Downvotes: <%= post.downvotes %></p>
 </div>
+
+<!--  DELETE BUTTON FOR POST IF USER IS SAME AS POST OWNER  -->
+<% if (user && post.postedBy.toString() === user._id.toString()) { %>
+  <form action="/post/deletePost/<%= post._id %>?_method=DELETE" method="POST">
+    <button type="submit"><i class="fas fa-trash"></i> Delete Post</button>
+  </form>
+<% } %>
+
+<!--  ADDED COMMENTS SHOW UP HERE -->
+<h3>Comments</h3>
+<ul>
+<% comments.forEach(comment => { %>
+  <li>
+    <p><%= comment.commentText %></p>
+    <form action="/comment/likeComment/<%= comment._id %>?_method=PUT" method="POST">
+      <button type="submit">❤️</button>
+    </form>
+    <p>Likes: <%= comment.likes %></p>
+    <form action="/comment/deleteComment/<%= comment._id %>?_method=DELETE" method="POST">
+      <button type="submit"><i class="fas fa-trash-alt"></i></button>
+    </form>
+  </li>
+<% }) %>
+</ul>
+
+<!--  ADD NEW COMMENTS ON ALERT POST  -->
+<form action="/comment/createComment/<%= post._id %>" method="POST">
+  <label for="comment">Add a comment:</label>
+  <input type="text" id="comment" name="comment" required />
+  <button type="submit">Submit</button>
+</form>
+
+<a href="/map"><i class="fas fa-map-marked-alt"></i> Return to Map</a>
+<a href="/feed"><i class="fas fa-stream"></i> Return to Feed</a>
+
 
 <%- include('partials/footer') -%>
