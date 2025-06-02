@@ -6,9 +6,10 @@ module.exports = {
       const posts = Post.find({
         isHidden: false,
         isResolved: false,
-      }).lean();
+      });
+      // Removed the .lean()
       res.render("mapView.ejs", {
-      Title: "SafeRoute | Map",
+      title: "SafeRoute | Map",
       currentPage: "map",
       user: req.user, posts });
     } catch (err) {
