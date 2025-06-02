@@ -1,5 +1,12 @@
 <%- include('partials/header') -%>
-    <main class="container">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/sign-in-up.css" />
+
+    <main class="container sign-main">
         <div class="row justify-content-center">
             <section class="col-6 mt-5">
                 <% if (locals.messages.errors) { %>
@@ -12,38 +19,38 @@
                         <div class="alert alert-info"><%= el.msg %></div>
                     <% }) %>    
                 <% } %>
-                <section>
-                  <h2>Sign Up to Create Alerts</h2>
-                  <span>Welcome!</span>
+                <section class="sign-intro">
+                  <h2 class="sign-account">Sign Up to Create Alerts <i class="fa-solid fa-bell fa-shake fa-sm" style="color: #e72222;"></i></h2>
                 </section> 
-                <form action="/signup" method="POST">
-                    <div class="mb-3">
-                      <label for="email" class="form-label">Email Address:</label>
-                      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="Enter email" required>
+                <form class="sign-page-form" action="/signup" method="POST">
+                    <div class="mb-3 sign-page-div">
+                      <span class="sign-welcome">Welcome!</span>
+                      <label for="email" class="form-label">Email:</label>
+                      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="Enter email address" required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 sign-page-div">
                         <label for="firstName" class="form-label">First Name:</label>
                         <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name" required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 sign-page-div">
                         <label for="lastName" class="form-label">Last Name:</label>
                         <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name" required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 sign-page-div">
                       <label for="password" class="form-label">Password:</label>
                       <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 sign-page-div">
                       <label for="confirmPassword" class="form-label">Confirm Password:</label>
                       <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required>
                     </div>
-                    <div class="mb-3">
-                      <label for="zipCode" class="form-label">Zip Code:</label>
-                      <input type="text" class="form-control" pattern="[0-9]{5}" title="Please enter a 5-digit zip code" id="zipCode" name="zipCode" placeholder="Enter zip code" required>
+                    <div class="mb-3 sign-page-div">
+                      <label for="zipCode" class="form-label sign-zip-code">Zip Code:</label>
+                      <input type="text" class="form-control sign-zip-code" pattern="[0-9]{5}" title="Please enter a 5-digit zip code" id="zipCode" name="zipCode" placeholder="Enter zip code" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                    <button class="sign-button" type="submit" class="btn btn-primary">Sign Up</button>
+                    <p>Already have an account? <a class="sign-link" href="/signin">Sign In.</a></p>
                   </form>
-                  <p>Already have an account? <a href="/signin">Sign In.</a></p>
             </section>
         </div>
     </main>
