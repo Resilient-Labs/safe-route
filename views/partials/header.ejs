@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SafeRoute</title>
 
-    <!-- External Stylesheets -->
+    <!-- External Stylesheets - DO NOT ADD MORE - ADD ALL FUTURE STYLESHEETS ON TOP LINE OF YOUR EJS FILE -->
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/feed.css" />
     <link rel="stylesheet" href="/css/headerFooter.css" />
-   
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Leaflet Control Geocoder CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.css" />
   </head>
   <body>
 
@@ -20,7 +21,7 @@
   <nav class="nav-menu">
     <a href="/" class="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">Home</a>
     <a href="/map" class="<%= typeof currentPage !== 'undefined' && currentPage === 'map' ? 'active' : '' %>">Map</a>
-    <a href="/alert" class="<%= typeof currentPage !== 'undefined' && currentPage === 'alert' ? 'active' : '' %>">Alert</a>
+    <a href="/feed" class="<%= typeof currentPage !== 'undefined' && currentPage === 'alert' ? 'active' : '' %>">Alerts</a>
     <a href="/resources" class="<%= typeof currentPage !== 'undefined' && currentPage === 'resources' ? 'active' : '' %>">Resources</a>
 
     <% if (typeof user !== 'undefined' && user) { %>  
