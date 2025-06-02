@@ -3,16 +3,21 @@ const Comment = require("../models/Comment");
 module.exports = {
   createComment: async (req, res) => {
     try {
-      //TODO: Make it compatible with x-form as well as json (was already set to handle x-form and json)
-      await Comment.create({
+      const comment = await Comment.create({
         commentText: req.body.comment,
         likes: 0,
         user: req.user.id,
         post: req.params.id
       });
-      res.redirect('back');
+      res.json({
+        message: 'Successfully added comment',
+        comment
+      });
     } catch (err) {
-      res.status(500).json({message:"Failed to create comment", error: err.message});
+      res.status(500).json({
+        message: "Failed to create comment",
+        error: err.message
+      });
     }
   },
   likeComment: async (req, res) => { 
@@ -22,46 +27,61 @@ module.exports = {
 
       const comment = await Comment.findById(commentID);
       if (!comment) {
-        res.status(404).send("Comment Not Found");
-      }
+        res.status(404).json({
+          message: 'Comment not found, it may have been deleted',
+          error: 'Unable to find comment',
+        });
+      };
       const userHasLike = comment.likeBy.includes(userID);
 
       let operation;
-      if(userHasLike){
-        operation ={
-          $inc: {likes: -1},
-          $pull: {likeBy: userID}
-        }
-      }
-      else{
+      if (userHasLike) {
         operation = {
-          $inc: {likes: 1},
-          $push: {likeBy: userID}
+          $inc: { likes: -1 },
+          $pull: { likeBy: userID }
+        }
+      } else {
+        operation = {
+          $inc: { likes: 1 },
+          $push: { likeBy: userID }
         }
       }
 
-      await Comment.findByIdAndUpdate(commentID, operation);
-      res.redirect('back');
+      const updatedComment = await Comment.findByIdAndUpdate(commentID, operation);
+      res.json({
+        message: 'Comment liked or unliked',
+        comment: updatedComment
+      });
     } catch (err) {
-      console.log(err);
-      res.redirect('back');
+      res.status(500).json({
+        message: 'An error occured while liking the comment',
+        error: err.message
+      });
     }
   },
   deleteComment: async (req, res) => {
     try {
-      const deleteComment = await Comment.findByIdAndUpdate(req.params.id, 
-        {isHidden: true});
+      const deletedComment = await Comment.findByIdAndUpdate(
+        req.params.id, 
+        {isHidden: true}
+      );
 
-      if (!deleteComment) {
-        console.log("Comment not found for deletion:", req.params.id);
-        return res.redirect('back');
+      if (!deletedComment) {
+        res.status(404).json({
+          message: 'This comment does not exist or has been deleted',
+          error: err.message
+        });
       }
 
-      console.log("Hidden Comment");
-      res.redirect("back");
+      res.json({
+        message: 'Comment successfully "deleted"',
+        comment: deletedComment
+      });
     } catch (err) {
-      res.status(500).json({message: "Delelation was not succesful", error: err.message})
-      res.redirect("back");
+      res.status(500).json({
+        message: 'An error occured while deleting the comment',
+        error: err.message
+      });
     }
   },
 };

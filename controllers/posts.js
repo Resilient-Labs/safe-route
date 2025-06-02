@@ -2,6 +2,7 @@ const cloudinary = require("../middleware/cloudinary");
 const { Post, PostUserDownvoteSchema, PostUserUpvoteSchema } = require("../models/Post");
 const Comment = require("../models/Comment");
 const { User, Bookmark } = require("../models/User");
+const validator = require("validator");
 
 module.exports = {
   getProfile: async (req, res) => {
@@ -59,11 +60,13 @@ module.exports = {
       posts
     });
   },
-  getPost: async (req, res) => {
+  getPostPage: async (req, res) => {
     try {
       const post = await Post.findById(req.params.id);
       if (!post) {
-      res.status(404).send('Sorry, the page you are looking for does not exist.');
+      res.status(404).json({
+        message: "The post does not exist or has been removed."
+      });
     }
     const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 });
     const hash = post.generateUserHash(req.user.id);
@@ -100,50 +103,63 @@ module.exports = {
         postData['cloudinaryId'] = result.public_id
       }
 
-      const post = await Post.create({ ...postData });
-      console.log("Post has been added!");
-      console.log(post);
+      await Post.create({ ...postData });
       res.redirect("back");
     } catch (err) {
       console.log(err);
+      res.redirect("back");
     }
   },
   upvotePost: async (req, res) => {
     if (!req.user) {
-      res.redirect(`/signin`);
-    }
+      res.status(401).json({
+        message: 'You must be logged in to access upvotes',
+        error: 'The user must be logged in to access upvote'
+      });
+    };
 
     try {
       const post = await Post.findById(req.params.id)
       const upVoteHash = post.generateUserHash(req.user.id);
       const checkUpVote = await PostUserUpvoteSchema.findById(upVoteHash);
       if (!checkUpVote) {
-        await Post.findOneAndUpdate(
+        const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
           { $inc: { upvotes: 1 } }
         );
-        await PostUserUpvoteSchema.create({
+        const upvote = await PostUserUpvoteSchema.create({
           user: req.user.id,
           post: req.params.id,
           _id:  upVoteHash,
         });
-        res.redirect('back');
+        res.json({
+          message: 'Post successfully upvoted',
+          post
+        });
       } else {
-        await Post.findOneAndUpdate(
+        const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
           { $inc: { upvotes: -1 } }
         );
-        await PostUserUpvoteSchema.findByIdAndDelete(upVoteHash);
-        res.redirect('back');
+        const upvote = await PostUserUpvoteSchema.findByIdAndDelete(upVoteHash);
+        res.json({
+          message: 'Upvote removed from post',
+          post
+        });
       }
     } catch(err) {
-      console.log(err);
-      res.redirect('back');
+      res.status(500).json({
+        message: 'An error occured while changing upvote status',
+        error: err.message
+      });
     }
   },
   downvotePost: async (req, res) => {
     if (!req.user) {
-      res.redirect(`/signin`);
+      res.status(401).json({
+        message: 'You must be logged in to access downvote',
+        error: 'The user must be logged in to access downvote'
+      });
     }
 
     try {
@@ -151,33 +167,44 @@ module.exports = {
       const downVoteHash = post.generateUserHash(req.user.id);
       const checkDownVote = await PostUserDownvoteSchema.findById(downVoteHash);
       if (!checkDownVote) {
-        await Post.findOneAndUpdate(
+        const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
           { $inc: { downvotes: 1 } }
         );
-        await PostUserDownvoteSchema.create({
+        const downvote = await PostUserDownvoteSchema.create({
           user: req.user.id,
           post: req.params.id,
           _id:  downVoteHash
         });
-        res.redirect('back');
+        res.json({
+          message: 'Post successfully downvoted',
+          post
+        });
       } else {
-        await Post.findOneAndUpdate(
+        const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
           { $inc: { downvotes: -1 } }
         );
-        await PostUserDownvoteSchema.findByIdAndDelete(downVoteHash);
-        res.redirect('back');
+        const downvote = await PostUserDownvoteSchema.findByIdAndDelete(downVoteHash);
+        res.json({
+          message: 'Downvote removed from post',
+          post
+        });
       }
     } catch(err) {
-      console.log(err);
-      res.redirect('back');
+      res.status(500).json({
+        message: 'An error occured while changing downvote status',
+        error: err.message
+      });
     }
   },
   bookmarkPost: async (req, res) => {
     const postId = req.params.id;
     if (!req.user) {
-      res.redirect(`/signin`);
+      res.status(401).json({
+        message: 'You must be logged in to use bookmark',
+        error: 'The user must be logged in to use bookmark'
+      });
     }
 
     try {
@@ -188,51 +215,62 @@ module.exports = {
         await Bookmark.findOneAndDelete({
           _id: boomarkHash
         });
-        console.log('Bookmark removed.');
-        res.redirect('back');
+        res.json({
+          message: 'Bookmark successfully removed',
+        });
       } else {
         const newBookmark = await Bookmark.create({
           _id: boomarkHash,
           user: req.user.id,
           post: postId
         });
-        console.log('Bookmark added:', newBookmark);
-        res.redirect('back');
+        res.json({
+          message: 'Bookmark successfully added'
+        });
       }
     } catch (err) {
-      console.error('Error updating bookmark status:', err);
-      res.redirect('back'); // Redirect on error
-    }
+      res.status(500).json({
+        message: 'An error occured while updating bookmark status',
+        error: err.message
+      });
+    };
   },
   deletePost: async (req, res) => {
     try {
-      // Find post by id
-    let post = await Post.findById({ _id: req.params.id });
+      let post = await Post.findById({ _id: req.params.id });
 
-    // Check if the logged-in user is the post owner
-    if (req.user._id.toString() === post.user.toString()) {
-      // Delete image from Cloudinary
-      if (post.cloudinaryId){
-      await cloudinary.uploader.destroy(post.cloudinaryId);
+      if (req.user._id.toString() === post.user.toString()) {
+        if (post.cloudinaryId) {
+          await cloudinary.uploader.destroy(post.cloudinaryId);
+        }
+
+        await Bookmark.deleteMany(
+          { post: req.params.id }
+        );
+        await Comment.find(
+          { post: req.params.id },
+          { $set: { isHidden:true } }
+        );
+        await Post.findByIdAndUpdate(
+          req.params.id,
+          { isHidden: true }
+        );
+
+        res.json({
+          message: 'Post successfully deleted',
+          post
+        });
+      } else {
+        res.status(401).json({
+          message: 'You are not authorized to delete this post, or it has already been deleted',
+          error: 'The user must own the post to delete it'
+        });
       }
-      // Delete related bookmarks, 
-      await Bookmark.deleteMany({ post: req.params.id });
-
-      // Delete the post 
-      await Post.findByIdAndUpdate({ _id: req.params.id, isHidden: true});
-
-      // 'Delete' the comments
-      await Comment.findByIdAndUpdate({_id: req.params.id, isHidden:true})
-
-      console.log("Success! Your post has been deleted.");
-      res.redirect("/feed");
-    } else {
-      console.log("You are not authorized to delete this post.");
-      res.redirect(`/post/${req.params.id}`);
+    } catch (err) {
+      res.status(500).json({
+        message: 'An error occured while deleting the post',
+        error: err.message
+      });
     }
-  } catch (err) {
-    console.log("Error deleting post:", err);
-    res.redirect("/feed");
   }
-}
 }

@@ -8,20 +8,18 @@ const resourceController = require("../controllers/resource");
 const { ensureAuth, ensureGuest } = require("../middleware/auth");
 
 //Main Routes - simplified for now
-router.get("/", homeController.getIndex);
-router.get("/signin", authController.getLogin);
-router.get("/signup", authController.getSignup);
-router.get("/feed", postsController.getFeed);
-router.get("/map", mapController.getMap); 
-router.get("/resources", resourceController.getResources) 
+router.get("/", homeController.getLandingPage);
 
+router.get("/signin", authController.getSigninPage);
+router.post("/signin", authController.postSignin);
+router.get("/signup", authController.getSignupPage);
+router.post("/signup", authController.postSignup);
+router.get("/signout", authController.getSignout);
+
+router.get("/feed", postsController.getFeedPage);
+router.get("/map", mapController.getMapPage); 
+router.get("/resources", resourceController.getResourcesPage);
 
 router.get("/profile", ensureAuth, postsController.getProfile);
-
-router.post("/login", authController.postLogin);
-router.get("/logout", authController.logout);
-
-
-router.post("/signup", authController.postSignup);
 
 module.exports = router;
