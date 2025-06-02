@@ -8,7 +8,7 @@ module.exports = {
     try {
       const posts = await Post.find({ user: req.user.id });
       res.render("profile.ejs", { 
-      Title: "SafeRoute | Profile",
+      title: "SafeRoute | Profile",
       currentPage: "profile",
       posts: posts,
       user: req.user});
@@ -25,10 +25,10 @@ module.exports = {
       if (req.body.type) {
         filters[type] = req.body.type;
       };
-      const posts = await Post.find(filters).lean();
+      const posts = await Post.find(filters); // Removed the lean()
       console.log(posts);
       res.render("feed.ejs", {
-      Title: "SafeRoute | Feed",
+      title: "SafeRoute | Feed",
       currentPage: "feed",
       posts,
       user: req.user });
@@ -42,9 +42,9 @@ module.exports = {
       if (!post) {
       res.status(404).send('Sorry, the page you are looking for does not exist.');
     }
-    const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 }).lean();
+    const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 }); // Removed the lean()
       res.render("post.ejs", {
-      Title: "SafeRoute | Post",
+      title: "SafeRoute | Post",
       currentPage: "post",
       post: post, 
       user: req.user, 
