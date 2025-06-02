@@ -1,0 +1,9 @@
+.active-upvote {
+  color: white;
+  background-color: green; 
+}
+
+.active-downvote {
+  color: white;
+  background-color: red;
+}
