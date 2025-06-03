@@ -24,7 +24,7 @@
     <a href="/resources" class="<%= typeof currentPage !== 'undefined' && currentPage === 'resources' ? 'active' : '' %>">Resources</a>
 
     <% if (typeof user !== 'undefined' && user) { %>  
-      <button class="sign-in-btn" onclick="location.href='/logout'">Sign Out</button>
+      <button class="sign-in-btn" onclick="location.href='/signout'">Sign Out</button>
     <% } else { %>
       <button class="sign-up-btn" onclick="location.href='/signup'">Sign Up</button>
       <button class="sign-in-btn" onclick="location.href='/signin'">Sign In</button>
