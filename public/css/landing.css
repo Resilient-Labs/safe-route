@@ -13,8 +13,8 @@ body {
 
 /* Container styles */
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1478px; /*responsive*/
+  margin: 0 auto; /*responsive*/
   padding: 0px;
   text-align: center;
 }
@@ -34,35 +34,73 @@ img {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100%; /*responsive*/
   height: 600px;
-  object-fit: cover;
+  object-fit: cover; /*responsive*/
   z-index: -1;
+}
+
+/* the first inner div inside the first section */
+.container section:first-of-type > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* horizontal center */
+  justify-content: center;  /* vertical center */
+  height: 100%;
+  z-index: 1;
+  
+}
+
+/* Remove absolute positioning from h1 */
+.container section:first-of-type h1 {
+  position: static;
+  font-size: 55px;
+  color: #2c5282;
+  font-weight: bold;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+
+/* adjust paragraph too */
+.container section:first-of-type p {
+  position: static;
+  font-size: 24px;
+  width: 80%;
+  max-width: 600px;
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 40px;
+  /* margin-top:10%; */
 }
 
 
 /* Safe Route title */
-.container section:first-of-type h1 {
+/* .container section:first-of-type h1 {
   position: absolute;
   top: 20%;
   left: 38%;
   font-size: 55px;
-  color: #2c5282; /* color used from headerfooter.css */
+  color: #2c5282; /* color used from headerfooter.css 
   font-weight:bold;
 }
+*/
 
-/* paragraph */
+/* paragraph 
 .container section:first-of-type p {
   position: absolute;
-  top: 40%;
+ 
   width: 35%; 
   left: 32%;
   font-size: 25px;
-  max-width: 600px;
+  max-width: 600px; 
   color: black;
   font-weight: 300;
   line-height: 30px;
-}
+  
+} */
+
 
 /* --- Buttons Section --- */
 
@@ -77,7 +115,7 @@ img {
   border: none;
   cursor:pointer;
   display: inline-block;
-  margin-top: 120px;
+  /* margin-top: 120px; */
 }
 
 
@@ -115,7 +153,7 @@ img {
 .container section:last-of-type {
   display: flex;
   justify-content: space-around;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /*responsive*/
   gap: 3%;
   margin-top: 80px;
   margin:25px;
@@ -142,3 +180,56 @@ img {
   line-height: 1.5;
 }
 
+
+/* ----------------------------------------
+   ✅ Responsive Styles for Mobile
+---------------------------------------- */
+
+@media (max-width: 768px) {
+
+/* hero text */
+  .container section:first-of-type h1 {
+    font-size: 32px;
+    top: 10%;
+    left: 10%;
+    text-align: center;
+  }
+
+  /* paragraph */
+  .container section:first-of-type p {
+    font-size: 18px;
+    width: 80%;
+    left: 10%;
+    top: 25%;
+    line-height: 1.4;
+  }
+
+  /* buttons */
+  /* layout decision to make the buttons vertical */
+ 
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* smaller gap */
+    top: 70%; /* 65 - 75 is sufficient */
+    left: 0;
+    width: 100%;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+  }
+
+  .buttons a {
+    width: 80%;
+    max-width: 200px;
+    font-size: 16px;
+    padding: 12px 0;
+    text-align: center;
+    margin: 0; /* remove default margin */
+    padding: 0;
+    line-height: 1;
+  }
+
+  }
