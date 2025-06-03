@@ -139,8 +139,10 @@ module.exports = {
     }
   },
   createPost: async (req, res) => {
-    const lat = parseFloat(req.body.latitude);
-    const lng = parseFloat(req.body.longitude);
+    const { latitude, longitude, ...rest } = req.body;
+
+    const lat = parseFloat(latitude);
+    const lng = parseFloat(longitude);
 
     if (isNaN(lat) || isNaN(lng)) {
       return res.status(400).send('Invalid coordinates');
@@ -151,7 +153,7 @@ module.exports = {
     
     try {
       const postData = {
-        ...req.body,
+        ...rest,
         postedBy: req.user.id,
         location: {
           type: 'Point',
