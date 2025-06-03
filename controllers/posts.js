@@ -81,11 +81,21 @@ module.exports = {
       }}
     ]);
     const postIds = posts.map(post => post._id);
+
+    if (!req.user) {
+      return res.render("feed.ejs", {
+        title: "SafeRoute | Feed",
+        currentPage: "feed",
+        posts
+      });
+    }
+
     const [upvotes, downvotes, bookmarks] = await Promise.all([
       PostUserUpvoteSchema.find({ user: req.user.id, post: { $in: postIds } }, 'post'),
       PostUserDownvoteSchema.find({ user: req.user.id, post: { $in: postIds } }, 'post'),
       Bookmark.find({ user: req.user.id, post: { $in: postIds } }, 'post')
     ]);
+
     const upvoteSet = new Set(upvotes.map(upvote => upvote.post.toString()));
     const downvoteSet = new Set(downvotes.map(doc => doc.post.toString()));
     const bookmarkSet = new Set(bookmarks.map(doc => doc.post.toString()));
@@ -100,7 +110,8 @@ module.exports = {
         post.hasCurrentUserBookmarked = true;
       }
     });
-    res.render("feed.ejs", {
+    
+    return res.render("feed.ejs", {
       title: "SafeRoute | Feed",
       currentPage: "feed",
       user: req.user,
