@@ -11,15 +11,81 @@ document.addEventListener('DOMContentLoaded', function() {
         console.warn('Server data not available, using fallback values');
         mapCenter = { lat: 39.8283, lng: -98.5795, zoom: 4 }; // Center of USA
         markers = [];
+
     }
 
     // Initialize the map
     const map = L.map('map').setView([mapCenter.lat, mapCenter.lng], mapCenter.zoom);
 
+    
+  map.on('moveend', function () {
+        const bounds = map.getBounds();
+        const sw = bounds.getSouthWest();
+        const ne = bounds.getNorthEast();
+    
+        const query = new URLSearchParams({
+            swLat: sw.lat,
+            swLng: sw.lng,
+            neLat: ne.lat,
+            neLng: ne.lng,
+        });
+    
+        fetch(`post/?${query.toString()}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log("Fetched posts in view:", data);
+    
+                if (window.dynamicMarkers) {
+                    window.dynamicMarkers.forEach(marker => map.removeLayer(marker));
+                }
+    
+                window.dynamicMarkers = [];
+    
+                data.forEach(post => {
+                    if (post.location && post.location.coordinates) {
+                        const lat = post.location.coordinates[1];
+                        const lng = post.location.coordinates[0];
+    
+                        // Select appropriate icon
+                        let icon;
+                        switch (post.type) {
+                            case 'accessibility':
+                                icon = accessibilityIcon;
+                                break;
+                            case 'safety':
+                            case 'lighting':
+                                icon = warningIcon;
+                                break;
+                            case 'maintenance':
+                                icon = cautionIcon;
+                                break;
+                            default:
+                                icon = infoIcon;
+                                break;
+                        }
+    
+                        const marker = L.marker([lat, lng], { icon: icon })
+                            .addTo(map)
+                            .bindPopup(`
+                                ${post.type?.charAt(0).toUpperCase() + post.type?.slice(1) || 'Info'}
+                                ${post.description || 'No description'}
+                            `);
+    
+                        window.dynamicMarkers.push(marker);
+                    }
+                });
+            })
+            .catch(err => {
+                console.error("Error fetching posts:", err);
+            });
+    });
+
     // Add tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
+
+    
 
     // Define custom icons for each incident type
     const accessibilityIcon = L.divIcon({
@@ -59,16 +125,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     case 'accessibility':
                         icon = accessibilityIcon;
                         break;
-                    case 'warning':
-                    case 'safety':
-                    case 'lighting':
+                    case 'suspiciousActivity':
+                    case 'motorAccident':
                         icon = warningIcon;
                         break;
-                    case 'info':
-                        icon = infoIcon;
-                        break;
-                    case 'caution':
-                    case 'maintenance':
+                   
+                    
+                    case 'infrastructure':
                         icon = cautionIcon;
                         break;
                     default:
@@ -166,11 +229,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Open the popup
                 newMarker.openPopup();
 
-                console.log('Alert submitted:', formData);
-                alert('Alert submitted successfully and marker added to map!');
-
-                // Reset form
-                document.getElementById('alertForm').reset();
+                // Store alert in database via fetch POST
+                fetch('/post/newPost', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: `${formData.incidentType.charAt(0).toUpperCase() + formData.incidentType.slice(1)} Alert`,
+                        type: formData.incidentType,
+                        address: formData.address,
+                        description: formData.description,
+                        latitude: lat.toString(),
+                        longitude: lng.toString(),
+                        city: result.city || result.county || result.state || "Unknown", 
+                        isResolved: false,
+                        isHidden: false,
+                        isAnonymous: false,
+                        isVerified: false,
+                        upvotes: 0,
+                        downvotes: 0,
+                        createdAt: new Date().toISOString()
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Alert stored successfully:', data);
+                    alert('Alert submitted successfully and marker added to map!');
+                    
+                    // Reset form
+                    document.getElementById('alertForm').reset();
+                })
+                .catch(error => {
+                    
+                   
+                    
+                    // Still reset form even if database save failed
+                    document.getElementById('alertForm').reset();
+                });
 
             } else {
                 alert('Could not find the specified address. Please check the address and try again.');
