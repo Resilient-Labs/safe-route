@@ -130,11 +130,23 @@ module.exports = {
         };
       };
       const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 });
+
+      if (!req.user) {
+        return res.render("post.ejs", {
+          title: "SafeRoute | Post",
+          currentPage: "post",
+          post: post, 
+          comments: comments,
+          user:null          
+        });
+      }
+
       const hash = post.generateUserHash(req.user.id);
       const bookmark = Bookmark.findById(hash);
       const upvote = PostUserUpvoteSchema.findById(hash);
       const downvote = PostUserDownvoteSchema.findById(hash);
-      res.render("post.ejs", {
+
+      return res.render("post.ejs", {
         title: "SafeRoute | Post",
         currentPage: "post",
         post: post, 
