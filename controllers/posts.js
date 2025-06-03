@@ -18,6 +18,52 @@ module.exports = {
       console.log(err);
     }
   },
+  getFeed: async (req, res) => {
+    try {
+      const filter = {};
+      // (?type=accessibility)
+      if (req.query.type) {
+        filter.type = req.query.type;
+      }
+
+      // (?since=2024-05-01)
+      if (req.query.since) {
+        const sinceDate = new Date(req.query.since);
+        if (!isNaN(sinceDate)) {
+          filter.createdAt = { $gte: sinceDate };
+        }
+      }
+  
+      
+      // (?swLat=...&swLng=...&neLat=...&neLng=...)
+      const { swLat, swLng, neLat, neLng } = req.query;
+  
+      if (swLat && swLng && neLat && neLng) {
+        const southwest = [parseFloat(swLng), parseFloat(swLat)];
+        const northeast = [parseFloat(neLng), parseFloat(neLat)];
+  
+        // Validate numbers
+        if (southwest.every(Number.isFinite) && northeast.every(Number.isFinite)) {
+          filter.location = {
+            $geoWithin: {
+              $box: [southwest, northeast]
+            }
+          };
+        }
+      }
+  
+      
+      const posts = await Post.find(filter)
+        .sort({ createdAt: -1 }) 
+        .limit(100) 
+        .lean();
+  
+      res.status(200).json(posts);
+    } catch (err) {
+      console.error("Error in getFeed:", err);
+      res.status(500).json({ error: "Server error" });
+    }
+  },
   getFeedPage: async (req, res) => {
     const filters = {
       isHidden: false,
@@ -93,13 +139,26 @@ module.exports = {
     }
   },
   createPost: async (req, res) => {
+    const { latitude, longitude, ...rest } = req.body;
+
+    const lat = parseFloat(latitude);
+    const lng = parseFloat(longitude);
+
+    if (isNaN(lat) || isNaN(lng)) {
+      return res.status(400).send('Invalid coordinates');
+    }
     if (!req.user) {
-      return redirect('/map');
+      return res.redirect('/map');
     };
+    
     try {
       const postData = {
-        ...req.body,
-        postedBy: req.user.id
+        ...rest,
+        postedBy: req.user.id,
+        location: {
+          type: 'Point',
+          coordinates: [parseFloat(lng), parseFloat(lat)]
+        }
       };
       let result = null;
       if (req.file) {
