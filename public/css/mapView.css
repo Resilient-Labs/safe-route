@@ -80,11 +80,15 @@ body {
 
 /* Sidebar Styles */
 .sidebar {
-  width: 300px;
+  width: 18.75rem;
   background-color: white;
   padding: 20px;
   overflow-y: auto;
   box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.sb-collapsed {
+  width: 6.25rem;
 }
 
 .sidebar h2 {
@@ -252,4 +256,20 @@ body {
 
 .caution-marker {
   background-color: #2d3748;
+}
+
+@media(max-width: 1000px){
+  .main-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .map-container {
+    height: 500px;
+    flex: 0 0 auto;
+  }
 }
