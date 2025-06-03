@@ -25,15 +25,18 @@ const PostSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  },
   address: {
-    type: String,
-    default: null
-  },
-  latitude: {
-    type: String,
-    default: null
-  },
-  longitude: {
     type: String,
     default: null
   },
@@ -75,6 +78,7 @@ const PostSchema = new mongoose.Schema({
   }
 });
 
+PostSchema.index({ location: '2dsphere' });
 PostSchema.methods.generateUserHash = function (userId) {
   return userId + String(this._id);
 };
