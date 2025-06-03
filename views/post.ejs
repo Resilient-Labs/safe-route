@@ -1,104 +1,70 @@
 <%- include('partials/header') -%>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="/css/post.css">
-<section class="main">
-  <section class="postViewContainer">
-    <section class="postView">
-      
-    <!--  INDIVIDUAL POST TITLE -->
-    <h2><%= post.title %></h2>
-    <div class="bookendImgContainer">
+<link rel="stylesheet" href="/styles/post.css">
 
-      <div class="bookendContainer">
-        <div class="bookendOne">
-            <p><i class="fas fa-map-marker-alt"></i> <%= post.city %> - <%= post.address %></p>
-        </div>
-        <div class="bookendTwo">
-            <i class="fa-regular fa-bookmark mright-8"></i>
-        </div>
-      </div>
 
-    <!--  POST PIC  -->
-    <div class="postImage">
-      <% if (post.image) { %>
-        <img  src="<%= post.image %>" alt="Post image" />
-      <% } %>
-    </div>  
-    <div>
-    <!--  POST INFO  -->
-    
-    
-    <!--  UPVOTE & DOWNVOTE ON POST  -->
-    <div class="bookendContainer">
-      
-      <div class="bookendOne">
-          <p class="postedAt"><i class="far fa-clock"></i> Posted on: <%= post.createdAt.toLocaleString() %></p>
-        </div>
-        <div class="bookendTwo ">
+<!--  INDIVIDUAL POST TITLE -->
+<h2><%= post.title %></h2>
 
-          <div class="upvote">
-            <form action="/post/<%= post._id %>/upvote/?_method=PUT" method="POST">
-              <button class="upvote-button <%= user && post.hasCurrentUserUpvoted ? 'active-upvote' : '' %>" type="submit"><i class="fas fa-arrow-up"></i> Upvote</button>
-            </form>
-            <p>Upvotes: <%= post.upvotes %></p>
-          </div>
-          <div class="downvote">
-            <form action="/post/<%= post._id %>/downvote/?_method=PUT" method="POST">
-              <button class="downvote-button <%= user && post.hasCurrentUserDownvoted ? 'active-downvote' : '' %>" type="submit"><i class="fas fa-arrow-down"></i> Downvote</button>
-            </form>
-            <p>Downvotes: <%= post.downvotes %></p>
-          </div>  
-        </div>
-      </div>
-    </div>
-    </div>  
-    <div class="postDeets">
+<!--  POST PIC  -->
+<% if (post.image) { %>
+  <img src="<%= post.image %>" alt="Post image" />
+<% } %>
 
-      <!-- POST DESCRIPTION -->
-      <p><%= post.description %></p>
-  
-      <!--  DELETE BUTTON FOR POST IF USER IS SAME AS POST OWNER  -->
-      <% if (user && post.postedBy.toString() === user._id.toString()) { %>
-        <form action="/post/deletePost/<%= post._id %>?_method=DELETE" method="POST">
-          <button type="submit"><i class="fas fa-trash"></i> Delete Post</button>
-        </form>
-      <% } %>
-  
-      <!--  ADDED COMMENTS SHOW UP HERE -->
-      <h3>Comments</h3>
-      <ul>
-      <% comments.forEach(comment => { %>
-        <li>
-          <p><%= comment.commentText %></p>
-          <form action="/comment/likeComment/<%= comment._id %>?_method=PUT" method="POST">
-            <button type="submit"><i class="fas fa-heart"></i></button>
-          </form>
-          <p>Likes: <%= comment.likes %></p>
-          <form action="/comment/deleteComment/<%= comment._id %>?_method=DELETE" method="POST">
-            <button type="submit"><i class="fas fa-trash-alt"></i></button>
-          </form>
-        </li>
-      <% }) %>
-      </ul>
-  
-      <!--  ADD NEW COMMENTS ON ALERT POST  -->
-      <form action="/comment/createComment/<%= post._id %>" method="POST">
-        <label for="comment">Add a comment:</label>
-        <input type="text" id="comment" name="comment" required />
-        <div class="commentButton">
-          
-        </div>
-        <button  type="submit">Submit</button>
-      </form>
-    </div>
+<!--  POST INFO  -->
+<p><i class="fas fa-map-marker-alt"></i> <%= post.city %> - <%= post.address %></p>
+<p><i class="far fa-clock"></i> Posted on: <%= post.createdAt.toLocaleString() %></p>
 
-    <div class="mapFeedButton">
-      <a href="/map"><i class="fas fa-map-marked-alt"></i> Return to Map</a>
-      <a href="/feed"><i class="fas fa-stream"></i> Return to Feed</a>
-    </div>
-    </section>
-  </section>
-</section>
+<!-- POST DESCRIPTION -->
+<p><%= post.description %></p>
+
+<!--  UPVOTE & DOWNVOTE ON POST  -->
+<div>
+  <form action="/post/<%= post._id %>/upvote/?_method=PUT" method="POST">
+  <button class="upvote-button <%= user && post.hasCurrentUserUpvoted ? 'active-upvote' : '' %>" type="submit"><i class="fas fa-arrow-up"></i> Upvote</button>
+  </form>
+  <p>Upvotes: <%= post.upvotes %></p>
+
+  <form action="/post/<%= post._id %>/downvote/?_method=PUT" method="POST">
+ <button class="downvote-button <%= user && post.hasCurrentUserDownvoted ? 'active-downvote' : '' %>" type="submit"><i class="fas fa-arrow-down"></i> Downvote</button>
+  </form>
+  <p>Downvotes: <%= post.downvotes %></p>
+</div>
+
+<!--  DELETE BUTTON FOR POST IF USER IS SAME AS POST OWNER  -->
+<% if (user && post.postedBy.toString() === user._id.toString()) { %>
+  <form action="/post/deletePost/<%= post._id %>?_method=DELETE" method="POST">
+    <button type="submit"><i class="fas fa-trash"></i> Delete Post</button>
+  </form>
+<% } %>
+
+<!--  ADDED COMMENTS SHOW UP HERE -->
+<h3>Comments</h3>
+<ul>
+<% comments.forEach(comment => { %>
+  <li>
+    <p><%= comment.commentText %></p>
+    <form action="/comment/likeComment/<%= comment._id %>?_method=PUT" method="POST">
+      <button type="submit"><i class="fas fa-heart"></i></button>
+    </form>
+    <p>Likes: <%= comment.likes %></p>
+    <form action="/comment/deleteComment/<%= comment._id %>?_method=DELETE" method="POST">
+      <button type="submit"><i class="fas fa-trash-alt"></i></button>
+    </form>
+  </li>
+<% }) %>
+</ul>
+
+<!--  ADD NEW COMMENTS ON ALERT POST  -->
+<form action="/comment/createComment/<%= post._id %>" method="POST">
+  <label for="comment">Add a comment:</label>
+  <input type="text" id="comment" name="comment" required />
+  <button type="submit">Submit</button>
+</form>
+
+<a href="/map"><i class="fas fa-map-marked-alt"></i> Return to Map</a>
+<a href="/feed"><i class="fas fa-stream"></i> Return to Feed</a>
+
 <!--  ADDED NEW SCRIPT JS FOR COLORED TOGGLE FOR UPVOTE/DOWNVOTE (DOESNT INTERFERE W BACKEND) -->
 <script src="/js/votes.js"></script>
 
