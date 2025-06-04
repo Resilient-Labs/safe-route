@@ -1,0 +1,235 @@
+/* safe-route landing page */
+*{
+  margin:0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* landing page background*/
+body {
+  background-color: #d4e0ec;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Container styles */
+.container {
+  max-width: 1478px; /*responsive*/
+  margin: 0 auto; /*responsive*/
+  padding: 0px;
+  text-align: center;
+}
+
+/* targeting (1) section*/
+/* Hero Section (map - title & buttons) */
+.container section:first-of-type {
+  position: relative;
+  height: 500px; /* confirm with cal & group on height */
+  overflow: hidden;
+  padding: 0;
+  margin:0;
+}
+
+/* img */
+img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /*responsive*/
+  height: 600px;
+  object-fit: cover; /*responsive*/
+  z-index: -1;
+}
+
+/* the first inner div inside the first section */
+.container section:first-of-type > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* horizontal center */
+  justify-content: center;  /* vertical center */
+  height: 100%;
+  z-index: 1;
+  
+}
+
+/* Remove absolute positioning from h1 */
+.container section:first-of-type h1 {
+  position: static;
+  font-size: 55px;
+  color: #2c5282;
+  font-weight: bold;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+
+/* adjust paragraph too */
+.container section:first-of-type p {
+  position: static;
+  font-size: 24px;
+  width: 80%;
+  max-width: 600px;
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 40px;
+  /* margin-top:10%; */
+}
+
+
+/* Safe Route title */
+/* .container section:first-of-type h1 {
+  position: absolute;
+  top: 20%;
+  left: 38%;
+  font-size: 55px;
+  color: #2c5282; /* color used from headerfooter.css 
+  font-weight:bold;
+}
+*/
+
+/* paragraph 
+.container section:first-of-type p {
+  position: absolute;
+ 
+  width: 35%; 
+  left: 32%;
+  font-size: 25px;
+  max-width: 600px; 
+  color: black;
+  font-weight: 300;
+  line-height: 30px;
+  
+} */
+
+
+/* --- Buttons Section --- */
+
+/* Buttons: View Map and Sign Up */
+.container section:first-of-type a {
+  background-color: #2c5282; 
+  color: white;
+  padding: 2px;
+  padding-top: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  cursor:pointer;
+  display: inline-block;
+  /* margin-top: 120px; */
+}
+
+
+.buttons {
+  position: absolute;
+  top: 70%; 
+  left: 38%;
+  display: flex;
+  gap: 20%;
+  /*margin-top: 30px;*/
+  justify-content: center;
+  width : 260px;
+  height: 32px;
+  align-items: center;
+}
+
+/* individual button links */
+.container section:first-of-type a {
+  background-color: #2c5282;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  width: 250px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-block;
+}
+
+
+/* --- Core Feature Blocks Section --- */
+.container section:last-of-type {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap; /*responsive*/
+  gap: 3%;
+  margin-top: 80px;
+  margin:25px;
+  padding-bottom: 20px;
+}
+
+
+.container section:last-of-type div {
+  padding: 5px;
+  flex: 1;
+  min-width: 250px;
+  max-width: 600px;
+}
+
+.container section:last-of-type h2 {
+  font-size: 26px;
+  color: #2c5282;
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+.container section:last-of-type p {
+  font-size: 14px;
+  color: black;
+  line-height: 1.5;
+}
+
+
+/* ----------------------------------------
+   ✅ Responsive Styles for Mobile
+---------------------------------------- */
+
+@media (max-width: 768px) {
+
+/* hero text */
+  .container section:first-of-type h1 {
+    font-size: 32px;
+    top: 10%;
+    left: 10%;
+    text-align: center;
+  }
+
+  /* paragraph */
+  .container section:first-of-type p {
+    font-size: 18px;
+    width: 80%;
+    left: 10%;
+    top: 25%;
+    line-height: 1.4;
+  }
+
+  /* buttons */
+  /* layout decision to make the buttons vertical */
+ 
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* smaller gap */
+    top: 70%; /* 65 - 75 is sufficient */
+    left: 0;
+    width: 100%;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+  }
+
+  .buttons a {
+    width: 80%;
+    max-width: 200px;
+    font-size: 16px;
+    padding: 12px 0;
+    text-align: center;
+    margin: 0; /* remove default margin */
+    padding: 0;
+    line-height: 1;
+  }
+
+  }

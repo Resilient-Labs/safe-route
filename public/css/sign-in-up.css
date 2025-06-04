@@ -1,0 +1,211 @@
+.sign-up-btn{
+    display: none;
+}
+
+.sign-in-btn{
+    display: none;
+}
+
+.sign-main{
+    display: flex;
+    justify-content: center;
+    background-image: url('waves-background.svg');
+    background-repeat: no-repeat; 
+    background-size: cover;
+    background-position: center;
+    border: none;
+}
+
+.sign-intro{
+    display: flex;
+    justify-content: center;
+    margin: 3rem 0;
+}
+
+.sign-account{
+    color: #486284;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0 0;
+}
+
+.sign-welcome{
+    color: #152036;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    align-self: center;
+    margin-bottom: 1rem;
+    text-decoration: underline #152036; 
+}
+
+.sign-page-form{
+    background-color: #f5f3f3;
+    margin: 2rem 0 3rem 0;
+    padding: 1rem 1rem;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); 
+}
+
+.sign-page-div{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: 0.5rem 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+}
+
+.sign-page-div input{
+    font-family: 'Poppins', sans-serif;
+    padding: 0.3rem 0.3rem;
+    border-radius: 3px;
+    outline: none;
+    border: 0.5px solid #959ba7; 
+    transition: border-color 0.3s ease-in-out;
+}
+
+.sign-page-div input:focus{
+    border: 2px solid #072853;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); 
+}
+
+.sign-page-div input::placeholder{
+   color: #B3B3B3;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.7rem;
+}
+
+.sign-zip-code{
+    width: 35%;
+}
+
+.sign-button{
+    background-color: #072853;
+    color: white; 
+    width: 70%;
+    border: none; 
+    border-radius: 5px;
+    margin: 1rem 0; 
+    padding: 0.5rem 0; 
+    transition: background-color 0.3s ease-in-out; 
+    cursor: pointer;
+}
+
+.sign-button:hover{
+    background-color: #357ABD;
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form-label{
+    margin-bottom: 0.3rem;
+}
+
+p, .sign-link{
+    font-family: 'Times New Roman', Times, serif;
+    color: rgb(87, 85, 85);
+}
+
+.sign-link:visited {
+  color: #0077cc;
+}
+
+/* ----------------------------------------
+    Responsive Styles for Mobile
+---------------------------------------- */
+@media (max-width: 630px) {
+  .sign-account {
+    font-size: 2.3rem;
+  }
+}  
+
+@media (max-width: 530px) {
+  .sign-account {
+    font-size: 2rem;
+  }
+
+  .sign-page-form{
+    margin: 2rem 0 3rem 0;
+    padding: 0.5rem 0.5rem;
+  }
+
+  .sign-page-div{
+    width: 80%;
+  }
+
+  .sign-button{
+    width: 80%;
+  }  
+}
+
+@media (max-width: 500px) {
+  .sign-account {
+    font-size: 1.55rem;
+  }
+
+  .sign-welcome{
+    font-size: 1.1rem;
+  }
+
+   .sign-page-div{
+    width: 90%;
+    font-size: 0.8rem;
+  }
+
+  .sign-page-div input{
+      padding: 0.2rem 0.2rem;
+  }
+
+    .sign-page-div input::placeholder{
+    font-size: 0.6rem;
+  }
+
+  .sign-button{
+    width: 90%;
+    padding: 0.3rem 0; 
+  }
+} 
+
+@media (max-width: 400px) {
+  .sign-account {
+    font-size: 1.30rem;
+  }
+
+   .sign-page-div{
+    font-size: 0.7rem;
+  }
+
+}
+
+@media (max-width: 350px) {
+  .sign-account {
+    font-size: 1.20rem;
+  }
+
+   .sign-welcome{
+    font-size: 0.9rem;
+  }
+
+.sign-page-form{
+    padding: 0 0;
+    margin-bottom: 5rem;
+  }
+.sign-page-div input{
+      padding: 0.1rem 0.1rem;
+  }
+}
+
+@media (max-width: 300px) {
+  .sign-account {
+    font-size: 1.10rem;
+  }
+
+  p{
+    font-size: 0.9rem;
+  }
+}

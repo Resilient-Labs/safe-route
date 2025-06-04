@@ -1,20 +1,25 @@
 const { Post } = require('../models/Post');
 
 module.exports = {
-  getMap: (req, res) => {
+  getMapPage: (req, res) => {
     try {
       const posts = Post.find({
         isHidden: false,
         isResolved: false,
       });
-      // Removed the .lean()
       res.render("mapView.ejs", {
-      title: "SafeRoute | Map",
-      currentPage: "map",
-      user: req.user, posts });
+        title: "SafeRoute | Map",
+        currentPage: "map",
+        user: req.user,
+        posts
+      });
     } catch (err) {
-      console.log('Unable to fetch posts', err);
+      console.log("Unable to fetch posts or render page", err);
+      req.flash("errors", {
+        msg: "Unable to fetch posts or view page.",
+      });
       res.redirect('/');
     }
   },
 };
+

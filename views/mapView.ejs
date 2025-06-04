@@ -1,8 +1,7 @@
+
 <%- include('partials/header') -%>
 <link rel="stylesheet" href="/css/mapView.css">
 <!-- Leaflet CSS -->
-
-
 
 <!-- Main Content -->
     <main class="main-container">
@@ -33,11 +32,10 @@
               <label for="incidentType">Incident Type</label>
               <select id="incidentType" name="incidentType">
                 <option value="">Select Type</option>
-                <% const incidentTypes = locals.incidentTypes || [ { value: 'accessibility', label: 'Accessibility Issue' }, 
-                { value: 'safety', label: 'Safety Concern' }, { value: 'lighting', label: 'Poor Lighting' }, 
-                { value: 'maintenance', label: 'Maintenance Needed' }, { value: 'other', label: 'Other' } ]; %> <% incidentTypes.forEach(type => { %>
-                <option value="<%= type.value %>"><%= type.label %></option>
-                <% }); %>
+                <option value="accessibility">Accessibility</option>
+                <option value="suspiciousActivity">Suspicious Activity</option>
+                <option value="motorAccident">Motor Accidents</option>
+                <option value="infrastructure">Infrastructure</option>
               </select>
             </div>
 
@@ -72,21 +70,22 @@
       <div class="map-container">
         <h1 class="map-title">Your Neighborhood Safety Map</h1>
         <div id="map"></div>
+        
       </div>
     </main>
 
-
-     <script>
-      window.serverData = {
+    <!-- Pass server data to JavaScript -->
+<script>
+  window.serverData = {
         mapCenter: <%- JSON.stringify(locals.mapCenter) %>
         markers: <%- JSON.stringify(locals.markers) %> };
-    </script>
+</script>
+     
 
 
     <!-- Footer -->
     <%- include('partials/footer') -%>
 
-    <!-- Pass server data to JavaScript -->
 
    
    
