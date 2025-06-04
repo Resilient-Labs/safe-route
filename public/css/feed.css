@@ -26,6 +26,11 @@ svg {
     text-align: center;
 }
 
+.downvote-caret-btn {
+    border: none;
+    background: none;
+}
+
 .font-bold {
     font-weight: bold;
 }
@@ -38,6 +43,7 @@ svg {
 
 .flex-2 {
     display: flex;
+    align-items: center;
 }
 
 .flex-3 {
@@ -57,12 +63,34 @@ svg {
     align-items: center;
 }
 
+.flex-6 {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .green {
-    fill: #227C10;
+    color: #227C10;
+}
+
+.img-fluid {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    object-position: top center;
 }
 
 .lh-0 {
     line-height: 0;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.list-none {
+    list-style-type: none;
+}
+
+.mbottom-3 {
+    margin-bottom: 3rem;
 }
 
 .mbottom-28 {
@@ -96,8 +124,8 @@ svg {
 }
 
 .post-container li {
-    width: 22.5%;
-    margin: 0 2%;
+    width: 22%;
+    margin: 0 1.5%;
 }
 
 .ptop-12 {
@@ -105,7 +133,7 @@ svg {
 }
 
 .red {
-    fill: #D3171F;
+    color: #D3171F;
 }
 
 .searchbar {
@@ -117,9 +145,124 @@ svg {
     max-width: 35%;
 }
 
+.upvote-caret-btn {
+    border: none;
+    background: none;
+}
+
+.view-link {
+    text-decoration: none;
+    color: #000;
+}
+
 .view-now-btn {
     border: none;
     background-color: #fff;
     padding: 0.25rem 1rem;
     border-radius: 0.25rem;
+    text-decoration: none;
+    color: #000;
+}
+
+.view-now-btn:hover {
+    background-color: #eaeaea;
+}
+
+
+.select {
+  width: fit-content;
+  cursor: pointer;
+  position: relative;
+  transition: 300ms;
+  color: white;
+  overflow: hidden;
+}
+
+.selected {
+  background-color: #2a2f3b;
+  padding: 5px;
+  margin-bottom: 3px;
+  border-radius: 5px;
+  position: relative;
+  z-index: 100000;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.arrow {
+  position: relative;
+  right: 0px;
+  height: 10px;
+  transform: rotate(-90deg);
+  width: 25px;
+  fill: white;
+  z-index: 100000;
+  transition: 300ms;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #2a2f3b;
+  position: relative;
+  top: -100px;
+  opacity: 0;
+  transition: 300ms;
+}
+
+.select:hover > .options {
+  opacity: 1;
+  top: 0;
+}
+
+.select:hover > .selected .arrow {
+  transform: rotate(0deg);
+}
+
+.option {
+  border-radius: 5px;
+  padding: 5px;
+  transition: 300ms;
+  background-color: #2a2f3b;
+  width: 150px;
+  font-size: 15px;
+}
+.option:hover {
+  background-color: #323741;
+}
+
+.options input[type="radio"] {
+  display: none;
+}
+
+.options label {
+  display: inline-block;
+}
+.options label::before {
+  content: attr(data-txt);
+}
+
+.options input[type="radio"]:checked + label {
+  display: none;
+}
+
+.options input[type="radio"]#all:checked + label {
+  display: none;
+}
+
+.select:has(.options input[type="radio"]#all:checked) .selected::before {
+  content: attr(data-default);
+}
+.select:has(.options input[type="radio"]#option-1:checked) .selected::before {
+  content: attr(data-one);
+}
+.select:has(.options input[type="radio"]#option-2:checked) .selected::before {
+  content: attr(data-two);
+}
+.select:has(.options input[type="radio"]#option-3:checked) .selected::before {
+  content: attr(data-three);
 }
