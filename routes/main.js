@@ -5,9 +5,9 @@ const homeController = require("../controllers/home.js");
 const postsController = require("../controllers/posts");
 const mapController = require("../controllers/map");
 const resourceController = require("../controllers/resource");
-const { ensureAuth, ensureGuest } = require("../middleware/auth");
+const { ensureAuth } = require("../middleware/auth");
 
-//Main Routes - simplified for now
+
 router.get("/", homeController.getLandingPage);
 
 router.get("/signin", authController.getSigninPage);
@@ -20,6 +20,5 @@ router.get("/feed", postsController.getFeedPage);
 router.get("/map", mapController.getMapPage); 
 router.get("/resources", resourceController.getResourcesPage);
 
-router.get("/profile", ensureAuth, postsController.getProfile);
 
 module.exports = router;

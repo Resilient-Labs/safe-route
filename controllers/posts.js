@@ -2,22 +2,9 @@ const cloudinary = require("../middleware/cloudinary");
 const { Post, PostUserDownvoteSchema, PostUserUpvoteSchema } = require("../models/Post");
 const Comment = require("../models/Comment");
 const { User, Bookmark } = require("../models/User");
-const validator = require("validator");
+
 
 module.exports = {
-  getProfile: async (req, res) => {
-    try {
-      const posts = await Post.find({ user: req.user.id });
-        res.render("profile.ejs", { 
-        title: "SafeRoute | Profile",
-        currentPage: "profile",
-        posts: posts,
-        user: req.user
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  },
   getFeed: async (req, res) => {
     try {
       const filter = {};

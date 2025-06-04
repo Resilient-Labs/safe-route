@@ -14,7 +14,7 @@ module.exports = {
         posts
       });
     } catch (err) {
-      console.log('Unable to fetch posts or render page', err);
+      console.log(err);
       res.redirect('/');
     }
   },
