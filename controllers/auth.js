@@ -47,13 +47,15 @@ exports.postSignin = (req, res, next) => {
   })(req, res, next);
 };
 
-exports.getSignout = async (req, res) => {
-  req.logout();
-  req.session.destroy((err) => {
-    if (err)
-      console.log(err);
-    req.user = null;
-    res.redirect("/");
+exports.getSignout = async (req, res, next) => {
+  req.logout(function (err) {
+    if (err) return next(err);
+
+    req.session.destroy((err) => {
+      if (err) console.log(err);
+      req.user = null;
+      res.redirect("/");
+    });
   });
 };
 
@@ -82,7 +84,7 @@ exports.postSignup = async (req, res, next) => {
     });
   if (req.body.password !== req.body.confirmPassword)
     validationErrors.push({ msg: "Passwords do not match" });
-  
+
   if (validationErrors.length) {
     req.flash("errors", validationErrors);
     return res.redirect("../signup");
@@ -91,9 +93,9 @@ exports.postSignup = async (req, res, next) => {
     gmail_remove_dots: false,
   });
 
- try {
-  const existingUser = await  User.findOne(
-    { email: req.body.email });
+  try {
+    const existingUser = await User.findOne(
+      { email: req.body.email });
     if (existingUser) {
       req.flash("errors", {
         msg: "Account with that email address already exists.",
@@ -103,13 +105,13 @@ exports.postSignup = async (req, res, next) => {
 
     const geocoder = NodeGeocoder({ provider: 'openstreetmap' });
     const geoResults = await geocoder.geocode({ postalcode: req.body.zipCode, country: 'US' });
-  
+
     let coordinates = undefined;
     if (geoResults && geoResults.length > 0) {
       const { latitude, longitude } = geoResults[0];
       coordinates = [longitude, latitude];
-    } 
-    
+    }
+
 
     const user = new User({
       firstName: req.body.firstName,
@@ -118,14 +120,16 @@ exports.postSignup = async (req, res, next) => {
       password: req.body.password,
       zipCode: req.body.zipCode,
       location: coordinates
-        ? { type: 'Point',
-          coordinates }
+        ? {
+          type: 'Point',
+          coordinates
+        }
         : undefined,
     });
 
-     await user.save();
+    await user.save();
 
-        req.logIn(user, (err) => {
+    req.logIn(user, (err) => {
       if (err) return next(err);
       res.redirect("/map");
     });
@@ -134,4 +138,3 @@ exports.postSignup = async (req, res, next) => {
     return next(err);
   }
 };
- 
