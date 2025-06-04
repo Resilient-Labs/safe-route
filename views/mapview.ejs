@@ -27,7 +27,7 @@
           <h3>Submit an Alert</h3>
           <p>Click the Map or Use the Form Below to Submit an Alert</p>
 
-          <form id="alertForm">
+          <form action="/posts" method="post"  id="alertForm" enctype="multipart/form-data">
             <div class="form-group">
               <label for="incidentType">Incident Type</label>
               <select id="incidentType" name="incidentType">
@@ -56,8 +56,8 @@
                 placeholder="Enter Incident Details"></textarea>
             </div>
 
-            <div class="checkbox-group">
-              <input type="checkbox" id="uploadImage" name="uploadImage" />
+            <div class="form-group">
+              <input type="file" id="uploadImage" name="file" />
               <label for="uploadImage">Upload Image</label>
             </div>
 

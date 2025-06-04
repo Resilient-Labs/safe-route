@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 window.dynamicMarkers = [];
     
-                data.forEach(post => {
+                data.posts.forEach(post => {
                     if (post.location && post.location.coordinates) {
                         const lat = post.location.coordinates[1];
                         const lng = post.location.coordinates[0];
@@ -157,18 +157,36 @@ document.addEventListener('DOMContentLoaded', function() {
         // Scroll to form
         document.getElementById('alertForm').scrollIntoView({ behavior: 'smooth' });
     });
-
+    const alertForm = document.getElementById('alertForm')
     // Form submission handler
-    document.getElementById('alertForm').addEventListener('submit', function(e) {
+     alertForm.addEventListener('submit', function(e) {
         e.preventDefault();
-
+        
+            const formData = new FormData();
+            formData.append('file', file);
         // Get form data
-        const formData = {
-            incidentType: document.getElementById('incidentType').value,
-            address: document.getElementById('address').value,
-            description: document.getElementById('description').value,
-            uploadImage: document.getElementById('uploadImage').checked
-        };
+
+            formData.incidentType =  document.getElementById('incidentType').value
+            formData.address = document.getElementById('address').value
+            formData.description = document.getElementById('description').value
+
+            const imageFile = document.getElementById('uploadImage').files[0];
+                if (imageFile) {
+                  formData.append('file', imageFile); // ✅ image is attached here
+                }
+                        formData.title = `${formData.incidentType.charAt(0).toUpperCase() + formData.incidentType.slice(1)} Alert`
+                        formData.type = formData.incidentType
+                        // formData.address = formData.address
+                        // formData.description = formData.description
+                        
+                        
+                        formData.isResolved = false
+                        formData.isHidden = false
+                        formData.isAnonymous = false
+                        formData.isVerified = false
+                        formData.upvotes = 0
+                        formData.downvotes = 0
+                        formData.createdAt = new Date().toISOString()
 
         // Validate required fields
         if (!formData.incidentType || !formData.address) {
@@ -189,6 +207,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const result = results[0];
                 const lat = result.center.lat;
                 const lng = result.center.lng;
+                
+                
 
                 // Validate that result is within U.S. bounds
                 if (!isWithinUSBounds(lat, lng)) {
@@ -229,28 +249,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Open the popup
                 newMarker.openPopup();
 
+                formData.latitude = lat.toString()
+                formData.longitude = lng.toString()
+                formData.city = result.city || result.county || result.state || "Unknown"
                 // Store alert in database via fetch POST
+                
                 fetch('/posts/', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        title: `${formData.incidentType.charAt(0).toUpperCase() + formData.incidentType.slice(1)} Alert`,
-                        type: formData.incidentType,
-                        address: formData.address,
-                        description: formData.description,
-                        latitude: lat.toString(),
-                        longitude: lng.toString(),
-                        city: result.city || result.county || result.state || "Unknown", 
-                        isResolved: false,
-                        isHidden: false,
-                        isAnonymous: false,
-                        isVerified: false,
-                        upvotes: 0,
-                        downvotes: 0,
-                        createdAt: new Date().toISOString()
-                    })
+                    body: formData
                 })
                 .then(response => {
                     if (!response.ok) {
