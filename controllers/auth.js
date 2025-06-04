@@ -1,5 +1,6 @@
 const passport = require("passport");
 const validator = require("validator");
+const NodeGeocoder = require('node-geocoder');
 const { User } = require("../models/User");
 
 exports.getSigninPage = (req, res) => {
@@ -47,12 +48,10 @@ exports.postSignin = (req, res, next) => {
 };
 
 exports.getSignout = async (req, res) => {
-  req.logout(() => {
-    console.log('User has logged out.')
-  });
+  req.logout();
   req.session.destroy((err) => {
     if (err)
-      console.log("Error : Failed to destroy the session during signout.", err);
+      console.log(err);
     req.user = null;
     res.redirect("/");
   });
@@ -69,7 +68,7 @@ exports.getSignupPage = (req, res) => {
   });
 };
 
-exports.postSignup = (req, res, next) => {
+exports.postSignup = async (req, res, next) => {
   const validationErrors = [];
   if (!validator.isEmail(req.body.email))
     validationErrors.push({ msg: "Please enter a valid email address." });
@@ -92,34 +91,47 @@ exports.postSignup = (req, res, next) => {
     gmail_remove_dots: false,
   });
 
-  const user = new User({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    password: req.body.password,
-  });
-
-  User.findOne(
-    { email: req.body.email }
-  ).then(existingUser => {
+ try {
+  const existingUser = await  User.findOne(
+    { email: req.body.email });
     if (existingUser) {
       req.flash("errors", {
         msg: "Account with that email address already exists.",
       });
       return res.redirect("../signup");
     }
-    user.save()
-      .then(newUser => {
-        req.logIn(newUser, (err) => {
-          res.redirect("/map");
-        });
-      }).catch((err) => {
-        if (err) {
-          return next(err);
-        }
-      });
-  }
-  ).catch((err) => {
+
+    const geocoder = NodeGeocoder({ provider: 'openstreetmap' });
+    const geoResults = await geocoder.geocode({ postalcode: req.body.zipCode, country: 'US' });
+  
+    let coordinates = undefined;
+    if (geoResults && geoResults.length > 0) {
+      const { latitude, longitude } = geoResults[0];
+      coordinates = [longitude, latitude];
+    } 
+    
+
+    const user = new User({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: req.body.password,
+      zipCode: req.body.zipCode,
+      location: coordinates
+        ? { type: 'Point',
+          coordinates }
+        : undefined,
+    });
+
+     await user.save();
+
+        req.logIn(user, (err) => {
+      if (err) return next(err);
+      res.redirect("/map");
+    });
+
+  } catch (err) {
     return next(err);
-  })
+  }
 };
+ 

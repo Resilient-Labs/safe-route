@@ -50,12 +50,14 @@
                 <div>
                   <div class="flex-3">
 
+
                     <form action="/post/<%= posts[i]._id %>/upvote/?_method=PUT" method="POST">
                       <button class="upvote-caret-btn" type="submit"><i class="fa-solid fa-caret-up green"></i></button>
                     </form>
                     <span class="center lh-0">
                       <%= posts[i].upvotes - posts[i].downvotes %>
                     </span>
+
                     <form action="/post/<%= posts[i]._id %>/downvote/?_method=PUT" method="POST">
                       <button class="downvote-caret-btn" type="submit"><i class="fa-solid fa-caret-down red"></i></button>
                     </form>
@@ -70,7 +72,7 @@
                 </div>
               </div>
             </div>
-            <a href="/post/<%= posts[i]._id%>">
+            <a href="/posts/<%= posts[i]._id%>">
               <img class="img-fluid" src="<%= posts[i].image%>">
             </a>
             <div class="mtop-12 mbottom-28 border-t-1 ptop-12 flex-5">
