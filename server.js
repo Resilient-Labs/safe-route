@@ -40,6 +40,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+//Adding a 1 Liner middleware to make flash messages available in all views
+app.use((req, res, next) => {
+  res.locals.messages = req.flash();
+  next();
+});
+
+
 //could use this for every view page / DRY. DON'T DELETE!  Will test when front end functionality is completed./ able to test a user requirment.
 // app.use((req, res, next) => {
 //   res.locals.user = req.user;

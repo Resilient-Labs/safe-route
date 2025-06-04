@@ -26,6 +26,22 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Leaflet Control Geocoder JS -->
     <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
+
+    <!-- Custom JS CDN & TOAST Logic -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/toast.js"></script>
+
+    <!-- If there’s at least one success, error on info message, this shows it on each ejs page w a diff color, catches errors in realtime display  -->
+     <script>
+      <% if (messages.success && messages.success.length > 0) { %>
+        showToast("<%= messages.success[0] %>", "success");
+      <% } else if (messages.error && messages.error.length > 0) { %>
+        showToast("<%= messages.error[0] %>", "error");
+      <% } else if (messages.info && messages.info.length > 0) { %>
+        showToast("<%= messages.info[0] %>", "info");
+      <% } %>
+    </script>
+
   </body>
 </html>
 
