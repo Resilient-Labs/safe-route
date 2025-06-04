@@ -249,7 +249,6 @@ document.addEventListener('DOMContentLoaded', function () {
           newMarker.openPopup();
 
           // Store alert in database via fetch POST
-          console.log(formData);
           fetch('/posts', { method: 'POST', body: formData })
             .then((response) => {
               if (!response.ok) {
