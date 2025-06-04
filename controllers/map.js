@@ -15,6 +15,9 @@ module.exports = {
       });
     } catch (err) {
       console.log('Unable to fetch posts or render page', err);
+      req.flash("errors", {
+        msg: "Unable to fetch posts or view page.",
+      });
       res.redirect('/');
     }
   },
