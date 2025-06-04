@@ -9,16 +9,16 @@
 .sign-main{
     display: flex;
     justify-content: center;
-    /* background-color: #F8FAFF; */
-    /* background-image: url('sign-background.gif'); */
     background-image: url('waves-background.svg');
     background-repeat: no-repeat; 
     background-size: cover;
     background-position: center;
-    border: none
+    border: none;
 }
 
 .sign-intro{
+    display: flex;
+    justify-content: center;
     margin: 3rem 0;
 }
 
@@ -27,7 +27,7 @@
     font-family: "Plus Jakarta Sans", sans-serif;
     font-size: 2.5rem;
     font-weight: 600;
-    margin: 1rem 0;
+    margin: 0 0;
 }
 
 .sign-welcome{
@@ -44,7 +44,7 @@
     background-color: #f5f3f3;
     margin: 2rem 0 3rem 0;
     padding: 1rem 1rem;
-    border-radius: 2%;
+    border-radius: 3px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -56,13 +56,14 @@
     flex-direction: column;
     width: 70%;
     margin: 0.5rem 0;
-    font-family: 'Poppins', sans-serif;;
-    font-size: 0.8rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
 }
 
 .sign-page-div input{
+    font-family: 'Poppins', sans-serif;
     padding: 0.3rem 0.3rem;
-    border-radius: 4px;
+    border-radius: 3px;
     outline: none;
     border: 0.5px solid #959ba7; 
     transition: border-color 0.3s ease-in-out;
@@ -91,7 +92,7 @@
     border-radius: 5px;
     margin: 1rem 0; 
     padding: 0.5rem 0; 
-    transition: background-color 0.2s ease-in-out; 
+    transition: background-color 0.3s ease-in-out; 
     cursor: pointer;
 }
 
@@ -112,4 +113,99 @@ p, .sign-link{
 
 .sign-link:visited {
   color: #0077cc;
+}
+
+/* ----------------------------------------
+    Responsive Styles for Mobile
+---------------------------------------- */
+@media (max-width: 630px) {
+  .sign-account {
+    font-size: 2.3rem;
+  }
+}  
+
+@media (max-width: 530px) {
+  .sign-account {
+    font-size: 2rem;
+  }
+
+  .sign-page-form{
+    margin: 2rem 0 3rem 0;
+    padding: 0.5rem 0.5rem;
+  }
+
+  .sign-page-div{
+    width: 80%;
+  }
+
+  .sign-button{
+    width: 80%;
+  }  
+}
+
+@media (max-width: 500px) {
+  .sign-account {
+    font-size: 1.55rem;
+  }
+
+  .sign-welcome{
+    font-size: 1.1rem;
+  }
+
+   .sign-page-div{
+    width: 90%;
+    font-size: 0.8rem;
+  }
+
+  .sign-page-div input{
+      padding: 0.2rem 0.2rem;
+  }
+
+    .sign-page-div input::placeholder{
+    font-size: 0.6rem;
+  }
+
+  .sign-button{
+    width: 90%;
+    padding: 0.3rem 0; 
+  }
+} 
+
+@media (max-width: 400px) {
+  .sign-account {
+    font-size: 1.30rem;
+  }
+
+   .sign-page-div{
+    font-size: 0.7rem;
+  }
+
+}
+
+@media (max-width: 350px) {
+  .sign-account {
+    font-size: 1.20rem;
+  }
+
+   .sign-welcome{
+    font-size: 0.9rem;
+  }
+
+.sign-page-form{
+    padding: 0 0;
+    margin-bottom: 5rem;
+  }
+.sign-page-div input{
+      padding: 0.1rem 0.1rem;
+  }
+}
+
+@media (max-width: 300px) {
+  .sign-account {
+    font-size: 1.10rem;
+  }
+
+  p{
+    font-size: 0.9rem;
+  }
 }

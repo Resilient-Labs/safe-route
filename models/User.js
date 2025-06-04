@@ -22,9 +22,6 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.index({ location: '2dsphere' });
 
-
-// Password hash middleware.
-
 UserSchema.pre("save", function save(next) {
   const user = this;
   if (!user.isModified("password")) {
