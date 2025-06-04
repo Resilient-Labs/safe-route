@@ -34,9 +34,10 @@
     <!-- If there’s at least one success, error on info message, this shows it on each ejs page w a diff color, catches errors in realtime display  -->
      <script>
       <% if (messages.success && messages.success.length > 0) { %>
-        showToast("<%= messages.success[0] %>", "success");
-      <% } else if (messages.error && messages.error.length > 0) { %>
-        showToast("<%= messages.error[0] %>", "error");
+        showToast("<%= messages.success[0].msg %>", "success");
+      <% } else if (messages.errors && messages.errors.length > 0) { %>
+      // grab the “msg” property from the first errors array element
+        showToast("<%= messages.errors[0].msg %>", "error");
       <% } else if (messages.info && messages.info.length > 0) { %>
         showToast("<%= messages.info[0] %>", "info");
       <% } %>
