@@ -340,15 +340,10 @@ module.exports = {
       });
     };
   },
- deletePost: async (req, res) => {
+  deletePost: async (req, res) => {
     try {
-<<<<<<< Updated upstream
-      let post = await Post.findById(req.params.id);
-      console.log(post)
-=======
       let post = await Post.findById({ _id: req.params.id });
 
->>>>>>> Stashed changes
       if (req.user._id.toString() === post.postedBy.toString()) {
         if (post.cloudinaryId) {
           await cloudinary.uploader.destroy(post.cloudinaryId);
@@ -362,13 +357,13 @@ module.exports = {
         );
         await Post.findByIdAndUpdate(
           req.params.id,
-          { isHidden:true }
+          { isHidden: true }
         );
         // res.json({
         //   message: 'Post successfully deleted',
         //   post
         // });
-        res.redirect ('/feed')
+        res.redirect('/feed')
       } else {
         res.status(401).json({
           message: 'You are not authorized to delete this post, or it has already been deleted',
