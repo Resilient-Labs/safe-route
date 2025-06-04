@@ -27,10 +27,10 @@
           <h3>Submit an Alert</h3>
           <p>Click the Map or Use the Form Below to Submit an Alert</p>
 
-          <form action="/posts" method="post"  id="alertForm" enctype="multipart/form-data">
+          <form id="alertForm">
             <div class="form-group">
-              <label for="incidentType">Incident Type</label>
-              <select id="incidentType" name="incidentType">
+              <label for="type">Incident Type</label>
+              <select id="type" name="type">
                 <option value="">Select Type</option>
                 <option value="accessibility">Accessibility</option>
                 <option value="suspiciousActivity">Suspicious Activity</option>
@@ -75,11 +75,11 @@
     </main>
 
     <!-- Pass server data to JavaScript -->
-<script>
+<!-- <script>
   window.serverData = {
         mapCenter: <%- JSON.stringify(locals.mapCenter) %>
         markers: <%- JSON.stringify(locals.markers) %> };
-</script>
+</script> -->
      
 
 
