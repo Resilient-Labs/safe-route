@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
             neLng: ne.lng,
         });
     
-        fetch(`post/?${query.toString()}`)
+        fetch(`posts/?${query.toString()}`)
             .then(res => res.json())
             .then(data => {
                 console.log("Fetched posts in view:", data);
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 newMarker.openPopup();
 
                 // Store alert in database via fetch POST
-                fetch('/post/newPost', {
+                fetch('/posts/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

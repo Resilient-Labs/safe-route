@@ -33,13 +33,13 @@
         <div class="bookendTwo ">
 
           <div class="upvote">
-            <form action="/post/<%= post._id %>/upvote/?_method=PUT" method="POST">
+            <form action="/posts/<%= post._id %>/upvote/?_method=PUT" method="POST">
               <button class="upvote-button <%= user && post.hasCurrentUserUpvoted ? 'active-upvote' : '' %>" type="submit"><i class="fas fa-arrow-up"></i> Upvote</button>
             </form>
             <p>Upvotes: <%= post.upvotes %></p>
           </div>
           <div class="downvote">
-            <form action="/post/<%= post._id %>/downvote/?_method=PUT" method="POST">
+            <form action="/posts/<%= post._id %>/downvote/?_method=PUT" method="POST">
               <button class="downvote-button <%= user && post.hasCurrentUserDownvoted ? 'active-downvote' : '' %>" type="submit"><i class="fas fa-arrow-down"></i> Downvote</button>
             </form>
             <p>Downvotes: <%= post.downvotes %></p>
@@ -51,7 +51,7 @@
     <div class="postDeets">
 
       <% if (user && post.postedBy.toString() === user._id.toString()) { %>
-        <form action="/post/deletePost/<%= post._id %>?_method=DELETE" method="POST">
+        <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
           <button type="submit"><i class="fas fa-trash"></i> Delete Post</button>
         </form>
       <% } %>
@@ -69,12 +69,12 @@
               <p>"<%= comment.commentText %>"</p>
             </div>
              <div class="commentLikes">
-               <form action="/comment/likeComment/<%= comment._id %>?_method=PUT" method="POST">
+               <form action="/comments/<%= comment._id %>/like?_method=PUT" method="POST">
                 <button type="submit"><i class="fas fa-heart"></i></button>
               </form>
             <p class="likes bold">Likes: <%= comment.likes %></p>
             <% if (user && comment.user.toString() === user._id.toString()) { %>
-                <form action="/comment/deleteComment/<%= comment._id %>?_method=DELETE" method="POST">
+                <form action="/comments/<%= comment._id %>?_method=DELETE" method="POST">
                     <button type="submit"><i class="fas fa-trash-alt"></i></button>
                 </form>
             <% } %>
@@ -84,7 +84,7 @@
       <% }) %>
       </ul>
 
-      <form action="/comment/createComment/<%= post._id %>" method="POST">
+      <form action="/comments/<%= post._id %>" method="POST">
         <label for="comment">Add a comment:</label>
         <input type="text" id="comment" name="comment" required />
         <div class="commentButton">
