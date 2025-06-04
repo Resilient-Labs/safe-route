@@ -104,13 +104,14 @@ exports.postSignup = async (req, res, next) => {
     }
 
     const geocoder = NodeGeocoder({ provider: 'openstreetmap' });
-    const geoResults = await geocoder.geocode({ zipcode: req.body.zipCode, countryCode: 'US' });
-
+    const geoResults = await geocoder.geocode({ postalcode: req.body.zipCode, country: 'US' });
+  
     let coordinates = undefined;
     if (geoResults && geoResults.length > 0) {
       const { latitude, longitude } = geoResults[0];
       coordinates = [longitude, latitude];
-    }
+    } 
+    
 
     const user = new User({
       firstName: req.body.firstName,
@@ -126,7 +127,7 @@ exports.postSignup = async (req, res, next) => {
 
      await user.save();
 
-        req.logIn(newUser, (err) => {
+        req.logIn(user, (err) => {
       if (err) return next(err);
       res.redirect("/map");
     });
