@@ -4,14 +4,22 @@
   <div class="container">
     <h1 class="center navy-blue">Post Sightings</h1>
     <h2 class="center navy-blue">View real-time incidents to help vulnerable communities</h2>
+    <!-- Filter types stored in data attribute -->
     <ul class="flex-4 post-category-container">
-      <li>Accessibility</li>
-      <li>Suspicious Activity</li>
-      <li>Motor Accidents</li>
-      <li>Infrastructure</li>
+      <li data-filter="all">All</li>
+      <li data-filter="accessibility">Accessibility</li>
+      <li data-filter="suspicious">Suspicious Activity</li>
+      <li data-filter="Motor">Motor Accidents</li>
+      <li data-filter="Infrastructure">Infrastructure</li>
     </ul>
+    
+    <select id="filter-select">
+      <option value="">-- Select --</option>
+      <!-- <option value="nearMe">Near me</option> -->
+      <option value="recent">Recent</option>
+    </select>
 
-    <div class="searchbar">
+    <!-- <div class="searchbar">
       <div class="searchbar-wrapper">
         <div class="searchbar-left">
           <div class="search-icon-wrapper">
@@ -24,29 +32,32 @@
         </div>
         <i class="fa-solid fa-magnifying-glass searchbar-right"></i>
       </div>
-    </div>
+    </div> -->
 
-    <button>Filter</button>
+    <!-- <button>Filter</button> -->
 
     <div class="row justify-content-center mt-5">
-      <ul class="row list-unstyled post-container">
+      <ul class="row list-unstyled post-container flex-6 mbottom-3" id="posts-list">
         <% for(var i=0; i<posts.length; i++) {%>
-          <li class="col-6 justify-content-between mt-5 bg-gray bradius-8">
+          <li class="col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item" data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>" data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>">
             <div class="border-b-1 flex-1">
-              <h3>Location</h3>
+              <h3>Location: <%= posts[i].city %></h3>
+              <p>Type: <%= posts[i].type %></p>
+              <!-- <p>Lat: <%= posts[i].latitude %></p> -->
+              <!-- <p>Lng: <%= posts[i].longitude %></p> -->
               <div class="flex-2">
                 <i class="fa-regular fa-bookmark mright-8"></i>
                 <div>
                   <div class="flex-3">
 
                     <form action="/post/<%= posts[i]._id %>/upvote/?_method=PUT" method="POST">
-                      <button type="submit"><i class="fa-solid fa-caret-up green"></i></button>
+                      <button class="upvote-caret-btn" type="submit"><i class="fa-solid fa-caret-up green"></i></button>
                     </form>
                     <span class="center lh-0">
                       <%= posts[i].upvotes - posts[i].downvotes %>
                     </span>
                     <form action="/post/<%= posts[i]._id %>/downvote/?_method=PUT" method="POST">
-                      <button type="submit"><i class="fa-solid fa-caret-down"></i></button>
+                      <button class="downvote-caret-btn" type="submit"><i class="fa-solid fa-caret-down red"></i></button>
                     </form>
                     <!-- Will be converted to ajax with this code later -->
                     <!-- <i class="fa-solid fa-caret-up green vote-icon upvote" data-id="<%= posts[i]._id %>"></i>
@@ -63,12 +74,18 @@
               <img class="img-fluid" src="<%= posts[i].image%>">
             </a>
             <div class="mtop-12 mbottom-28 border-t-1 ptop-12 flex-5">
-              <span class="font-bold">Time/Date</span>
-              <button class="view-now-btn">View Now</button>
+              <span class="font-bold">Created: <%= posts[i].createdAt.toLocaleString() %></span>
+              <button class="view-now-btn">
+                <a class="view-link" href="/post/<%= posts[i]._id%>">
+                  View Now
+                </a>
+              </button>
             </div>
           </li>
           <% } %>
       </ul>
     </div>
   </div>
+  <!-- Script file for filter logic -->
+  <script src="filter.js"></script>
   <%- include('partials/footer') -%>
