@@ -7,11 +7,20 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: String,
   zipCode: String,
-  longitude: String,
-  latitude: String,
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  },
 });
 
-// Password hash middleware.
+UserSchema.index({ location: '2dsphere' });
 
 UserSchema.pre("save", function save(next) {
   const user = this;

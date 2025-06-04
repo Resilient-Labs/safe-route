@@ -3,14 +3,8 @@ module.exports = {
     if (req.isAuthenticated()) {
       return next();
     } else {
-      res.redirect("/");
+      req.flash("errors", { msg: "You must sign in first" });
+      res.redirect("/signin");
     }
-  },
-  ensureGuest: function (req, res, next) {
-    if (!req.isAuthenticated()) {
-      return next();
-    } else {
-      res.redirect("/dashboard");
-    }
-  },
+  }
 };

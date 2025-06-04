@@ -2,121 +2,123 @@ const cloudinary = require("../middleware/cloudinary");
 const { Post, PostUserDownvoteSchema, PostUserUpvoteSchema } = require("../models/Post");
 const Comment = require("../models/Comment");
 const { User, Bookmark } = require("../models/User");
-const validator = require("validator");
+
 
 module.exports = {
-  getProfile: async (req, res) => {
-    try {
-      const posts = await Post.find({ user: req.user.id });
-        res.render("profile.ejs", { 
-        title: "SafeRoute | Profile",
-        currentPage: "profile",
-        posts: posts,
-        user: req.user
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  },
   getFeed: async (req, res) => {
     try {
-      const filter = {};
-      // (?type=accessibility)
-      if (req.query.type) {
-        filter.type = req.query.type;
-      }
+      const filter = {
+        isHidden: false,
+        isResolved: false
+      };
+      if (req.query.type || req.body.type) {
+        filter.type = req.query.type || req.body.type;
+      };
 
-      // (?since=2024-05-01)
       if (req.query.since) {
         const sinceDate = new Date(req.query.since);
         if (!isNaN(sinceDate)) {
           filter.createdAt = { $gte: sinceDate };
-        }
-      }
-  
-      
-      // (?swLat=...&swLng=...&neLat=...&neLng=...)
+        };
+      };
+
       const { swLat, swLng, neLat, neLng } = req.query;
-  
+
       if (swLat && swLng && neLat && neLng) {
         const southwest = [parseFloat(swLng), parseFloat(swLat)];
         const northeast = [parseFloat(neLng), parseFloat(neLat)];
-  
-        // Validate numbers
-        if (southwest.every(Number.isFinite) && northeast.every(Number.isFinite)) {
+        if (
+          southwest.every(Number.isFinite) &&
+          northeast.every(Number.isFinite)
+        ) {
           filter.location = {
             $geoWithin: {
               $box: [southwest, northeast]
             }
           };
-        }
-      }
-  
-      
+        };
+      };
+
       const posts = await Post.find(filter)
-        .sort({ createdAt: -1 }) 
-        .limit(100) 
+        .sort({ createdAt: -1 })
+        .limit(100)
         .lean();
-  
-      res.status(200).json(posts);
+
+      res.status(200).json({
+        message: "Successfully fetched posts",
+        posts
+      });
     } catch (err) {
-      console.error("Error in getFeed:", err);
-      res.status(500).json({ error: "Server error" });
-    }
+      console.error('Error in getFeed:', err);
+      res.status(500).json({
+        message: 'There was an error while getting all posts',
+        error: 'Server error'
+      });
+    };
   },
   getFeedPage: async (req, res) => {
-    const filters = {
-      isHidden: false,
-      isResolved: false,
-    };
-    if (req.body.type) {
-      filters[type] = req.body.type;
-    };
-    const posts = await Post.aggregate([
-      { $match: filters },
-      { $addFields: {
-        hasCurrentUserUpvoted: false,
-        hasCurrentUserDownvoted: false,
-        hasCurrentUserBookmarked: false
-      }}
-    ]);
-    const postIds = posts.map(post => post._id);
+    try {
+      const filters = {
+        isHidden: false,
+        isResolved: false,
+      };
+      if (req.body.type || req.query.type) {
+        filters[type] = req.body.type || req.query.type;
+      };
+      const posts = await Post.aggregate([
+        { $match: filters },
+        { $addFields: {
+          hasCurrentUserUpvoted: false,
+          hasCurrentUserDownvoted: false,
+          hasCurrentUserBookmarked: false
+        }},
+        { $sort: { createdAt: -1 }}
+      ]);
+      const postIds = posts.map(post => post._id);
 
-    if (!req.user) {
+      if (!req.user) {
+        return res.render("feed.ejs", {
+          title: "SafeRoute | Feed",
+          currentPage: "feed",
+          user: req.user,
+          posts
+        });
+      }
+
+      const [upvotes, downvotes, bookmarks] = await Promise.all([
+        PostUserUpvoteSchema.find({ user: req.user.id, post: { $in: postIds } }, 'post'),
+        PostUserDownvoteSchema.find({ user: req.user.id, post: { $in: postIds } }, 'post'),
+        Bookmark.find({ user: req.user.id, post: { $in: postIds } }, 'post')
+      ]);
+
+      const upvoteSet = new Set(upvotes.map(upvote => upvote.post.toString()));
+      const downvoteSet = new Set(downvotes.map(doc => doc.post.toString()));
+      const bookmarkSet = new Set(bookmarks.map(doc => doc.post.toString()));
+      posts.forEach(post => {
+        if (upvoteSet.has(post._id.toString())) {
+          post.hasCurrentUserUpvoted = true;
+        }
+        if (downvoteSet.has(post._id.toString())) {
+          post.hasCurrentUserDownvoted = true;
+        }
+        if (bookmarkSet.has(post._id.toString())) {
+          post.hasCurrentUserBookmarked = true;
+        }
+      });
+
       return res.render("feed.ejs", {
         title: "SafeRoute | Feed",
         currentPage: "feed",
+        user: req.user,
         posts
       });
-    }
-
-    const [upvotes, downvotes, bookmarks] = await Promise.all([
-      PostUserUpvoteSchema.find({ user: req.user.id, post: { $in: postIds } }, 'post'),
-      PostUserDownvoteSchema.find({ user: req.user.id, post: { $in: postIds } }, 'post'),
-      Bookmark.find({ user: req.user.id, post: { $in: postIds } }, 'post')
-    ]);
-
-    const upvoteSet = new Set(upvotes.map(upvote => upvote.post.toString()));
-    const downvoteSet = new Set(downvotes.map(doc => doc.post.toString()));
-    const bookmarkSet = new Set(bookmarks.map(doc => doc.post.toString()));
-    posts.forEach(post => {
-      if (upvoteSet.has(post._id.toString())) {
-        post.hasCurrentUserUpvoted = true;
-      }
-      if (downvoteSet.has(post._id.toString())) {
-        post.hasCurrentUserDownvoted = true;
-      }
-      if (bookmarkSet.has(post._id.toString())) {
-        post.hasCurrentUserBookmarked = true;
-      }
-    });
-    
-    return res.render("feed.ejs", {
-      title: "SafeRoute | Feed",
-      currentPage: "feed",
-      user: req.user,
-      posts
-    });
+    } catch(err) {
+      console.log(err);
+      req.flash("errors", {
+        msg: "There was an error getting the feed page",
+      });
+      return res.redirect('/map');
+    };
   },
   getPostPage: async (req, res) => {
     const validationErrors = [];
@@ -130,11 +132,23 @@ module.exports = {
         };
       };
       const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 });
+
+      if (!req.user) {
+        return res.render("post.ejs", {
+          title: "SafeRoute | Post",
+          currentPage: "post",
+          post: post, 
+          comments: comments,
+          user:null          
+        });
+      }
+
       const hash = post.generateUserHash(req.user.id);
       const bookmark = Bookmark.findById(hash);
       const upvote = PostUserUpvoteSchema.findById(hash);
       const downvote = PostUserDownvoteSchema.findById(hash);
-      res.render("post.ejs", {
+
+      return res.render("post.ejs", {
         title: "SafeRoute | Post",
         currentPage: "post",
         post: post, 

@@ -1,4 +1,3 @@
-
 /* * {
   margin: 0;
   padding: 0;
@@ -12,6 +11,9 @@ body {
   margin: 0;
   padding: 0;
 }
+.bold{
+  font-weight: bold;
+}
 .main{
   display:flex;
   align-items:center;
@@ -21,7 +23,7 @@ body {
   align-items: center;
   padding: 2rem;
   min-height: 100vh;
-  
+
 }
 .postViewContainer{
   margin:2rem;
@@ -51,8 +53,8 @@ h2{
   justify-content: center;
 }
 .bookendContainer{
-  display: flex; 
-  justify-content: center; 
+  display: flex;
+  justify-content: center;
 }
 .bookendOne{
   flex: 3;
@@ -88,6 +90,10 @@ h2{
 }
 .postDeets{
   text-align:center;
+  background-color: #e8eef5;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  border-radius: 5px;
+  padding: 1.5rem; 
 }
 .commentButton{
   margin-top:10px;
@@ -100,9 +106,108 @@ h2{
 .postedAt{
   margin-top: 0%;
 }
+.postDesc{
+  text-align: center;
+  margin-top: 0%;
+  margin-bottom: 5%;
+  font-style: italic;
+}
+.postDeets{
+  width: 510px;
+}
+.Comments {
+    display: flex;
+    flex-direction: column; 
+    margin-bottom: 1rem; 
+    background-color: #f9f9f9; 
+    padding: 0.8rem;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+}
+
+.commentSection {
+   
+    gap: 0.5rem; 
+    margin-bottom: 0.5rem; 
+
+}
+
+.commentSection p {
+    margin: 0; 
+}
+
+.commentSection .bold {
+    white-space: nowrap; 
+}
+
+.commentSection button {
+    margin-left: auto; 
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #666;
+    padding: 0.2rem;
+}
+
+.commentSection button:hover {
+    color: #007bff; 
+}
+
+.commentSection .fa-heart {
+    color: #ccc; 
+}
+
+.commentSection .fa-heart.liked {
+    color: #e0245e; 
+}
+
+
+.commentLikes {
+    display: flex;
+    gap: 1rem; 
+  justify-content: center;
+}
+
+.commentLikes p {
+    margin: 0; 
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.commentLikes form {
+    margin: 0; 
+}
+
+.commentLikes button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #888;
+    padding: 0.2rem;
+}
+
+.commentLikes button:hover {
+    color: #dc3545; 
+}
+.likes{
+  margin-left: 5em;
+}
+.commentText{
+  margin: 1em;
+}
+
+ul{
+  list-style-type: none;
+  padding: 0;
+  width: 100%; 
+  max-width: 510px; 
+  margin: 0 auto; 
+}
 .active-upvote {
   color: white;
-  background-color: green; 
+  background-color: green;
 }
 
 .active-downvote {
