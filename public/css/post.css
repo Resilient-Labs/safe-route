@@ -94,6 +94,8 @@ h2{
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   border-radius: 5px;
   padding: 1.5rem; 
+  display: flex;
+  flex-direction: column;
 }
 .commentButton{
   margin-top:10px;
@@ -213,4 +215,7 @@ ul{
 .active-downvote {
   color: white;
   background-color: red;
+}
+.delete{
+  margin-top: 2em;
 }

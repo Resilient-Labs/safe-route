@@ -144,9 +144,9 @@ module.exports = {
       }
 
       const hash = post.generateUserHash(req.user.id);
-      const bookmark = Bookmark.findById(hash);
-      const upvote = PostUserUpvoteSchema.findById(hash);
-      const downvote = PostUserDownvoteSchema.findById(hash);
+      const bookmark = await Bookmark.findById(hash);
+      const upvote = await PostUserUpvoteSchema.findById(hash);
+      const downvote = await PostUserDownvoteSchema.findById(hash);
 
       return res.render("post.ejs", {
         title: "SafeRoute | Post",
@@ -156,8 +156,9 @@ module.exports = {
         comments: comments,
         hasCurrentUserUpvoted: !upvote ? false : true,
         hasCurrentUserDownvoted: !downvote ? false : true,
-        hasCurrentUserBookmarked: !bookmark ? false : true
+        hasCurrentUserBookmarked: !bookmark ? false : true,
       });
+      console.log(hasCurrentUserBookmarked)
     } catch (err) {
       console.log(err)
       res.redirect('back');
@@ -324,31 +325,30 @@ module.exports = {
       });
     };
   },
-  deletePost: async (req, res) => {
+ deletePost: async (req, res) => {
     try {
-      let post = await Post.findById({ _id: req.params.id });
-
-      if (req.user._id.toString() === post.user.toString()) {
+      let post = await Post.findById(req.params.id);
+      console.log(post)
+      if (req.user._id.toString() === post.postedBy.toString()) {
         if (post.cloudinaryId) {
           await cloudinary.uploader.destroy(post.cloudinaryId);
         }
-
         await Bookmark.deleteMany(
           { post: req.params.id }
         );
-        await Comment.find(
+        await Comment.updateMany(
           { post: req.params.id },
           { $set: { isHidden:true } }
         );
         await Post.findByIdAndUpdate(
           req.params.id,
-          { isHidden: true }
+          { isHidden:true }
         );
-
-        res.json({
-          message: 'Post successfully deleted',
-          post
-        });
+        // res.json({
+        //   message: 'Post successfully deleted',
+        //   post
+        // });
+        res.redirect ('/feed')
       } else {
         res.status(401).json({
           message: 'You are not authorized to delete this post, or it has already been deleted',
@@ -356,10 +356,11 @@ module.exports = {
         });
       }
     } catch (err) {
+      console.log(err)
       res.status(500).json({
         message: 'An error occured while deleting the post',
         error: err.message
       });
     }
   }
-}
+}      
