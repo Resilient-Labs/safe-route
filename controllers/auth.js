@@ -48,12 +48,10 @@ exports.postSignin = (req, res, next) => {
 };
 
 exports.getSignout = async (req, res) => {
-  req.logout(() => {
-    console.log('User has logged out.')
-  });
+  req.logout();
   req.session.destroy((err) => {
     if (err)
-      console.log("Error : Failed to destroy the session during signout.", err);
+      console.log(err);
     req.user = null;
     res.redirect("/");
   });
