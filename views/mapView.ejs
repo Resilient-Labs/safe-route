@@ -83,7 +83,12 @@
         markers: <%- JSON.stringify(locals.markers) %> };
 </script>
      
-
+  <!-- Your main Map JavaScript file - moved here and out of header to load only on this map page -->
+    <script src="mapView(main).js"></script>
+  <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet Control Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
 
     <!-- Footer -->
     <%- include('partials/footer') -%>
