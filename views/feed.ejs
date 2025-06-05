@@ -30,7 +30,7 @@
           data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>" data-bookmarked="<%= posts[i].hasCurrentUserBookmarked ? 'bookmarked' : '' %>">
 
             <div class="border-b-1 flex-1">
-              <p><span class="font-bold">Location:</span> <br> <span class="font-thin"><%= posts[i].city %></span></p>
+              <p><span class="font-bold">Location:</span> <br> <span class="font-thin"><%= posts[i].address %></span></p>
               <p><span class="font-bold">Type:</span> <br> <span class="font-thin"><%= posts[i].type.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); %></span></p>
               <div class="bookendTwo">
                 <% if (user) { %>
