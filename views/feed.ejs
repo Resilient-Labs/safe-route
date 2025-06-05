@@ -1,9 +1,13 @@
-<%- include('partials/header') -%>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/feed.css" />
+
+<%- include('partials/header') -%>
 
   <div class="container">
     <h1 class="center navy-blue">Post Sightings</h1>
-    <h2 class="center navy-blue">View real-time incidents to help vulnerable communities</h2>
+    <h3 class="center black">View real-time incidents to help vulnerable communities</h3>
     <!-- Filter types stored in data attribute -->
     <ul class="flex-4 post-category-container">
       <li data-filter="all">All</li>
@@ -39,7 +43,7 @@
     <div class="row justify-content-center mt-5">
       <ul class="row list-unstyled post-container flex-6 mbottom-3" id="posts-list">
         <% for(var i=0; i<posts.length; i++) {%>
-          <li class="col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item" data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>" data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>">
+          <li class="view col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item" data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>" data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>">
             <div class="border-b-1 flex-1">
               <h3>Location: <%= posts[i].city %></h3>
               <p>Type: <%= posts[i].type %></p>

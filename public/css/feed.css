@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 svg {
@@ -19,7 +20,7 @@ svg {
 }
 
 .bg-gray {
-    background-color: #DEE5ED;
+    background-color: #93bff5;
 }
 
 .center {
@@ -55,6 +56,10 @@ svg {
     display: flex;
     justify-content: space-between;
     list-style-type: none;
+    font-weight: bold;
+    color: #173c6c;
+    font-size: large;
+    margin-top: 4rem;
 }
 
 .flex-5 {
@@ -265,4 +270,9 @@ svg {
 }
 .select:has(.options input[type="radio"]#option-3:checked) .selected::before {
   content: attr(data-three);
+}
+
+/* margin to separate posts top to bottom*/
+.view{
+    margin-bottom: 10rem;
 }
