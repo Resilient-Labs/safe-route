@@ -27,11 +27,11 @@
 
           <li class="view col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item"
           data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>"
-          data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>">
+          data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>" data-bookmarked="<%= posts[i].hasCurrentUserBookmarked ? 'bookmarked' : '' %>">
 
             <div class="border-b-1 flex-1">
               <p><span class="font-bold">Location:</span> <br> <span class="font-thin"><%= posts[i].city %></span></p>
-              <p><span class="font-bold">Type:</span> <br> <span class="font-thin"><%= posts[i].type %></span></p>
+              <p><span class="font-bold">Type:</span> <br> <span class="font-thin"><%= posts[i].type.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); %></span></p>
               <div class="bookendTwo">
                 <% if (user) { %>
                   <form class="forms" id="bookmark-<%= posts[i]._id %>" style="display:inline;">
@@ -142,17 +142,34 @@
           const data = await response.json();
           if (route === 'upvote' || route === 'downvote') {
             const voter = document.getElementById(`voteCount-${id}`);
-            voter.innerText = data.post.upvotes + '|' + data.post.downvotes;
+            voter.innerText = data.post.upvotes - data.post.downvotes;
             const voteIcon = document.getElementById(`${route}Icon-${id}`);
             voteIcon.classList.toggle('fa-regular');
             voteIcon.classList.toggle('fa-solid');
+            if (data.upvoteChanged) {
+              const upvoteIcon = document.getElementById(`upvoteIcon-${id}`);
+              upvoteIcon.classList.toggle('fa-regular');
+              upvoteIcon.classList.toggle('fa-solid');
+            } else if (data.downvoteChanged) {
+              const downvoteIcon = document.getElementById(`downvoteIcon-${id}`);
+              downvoteIcon.classList.toggle('fa-regular');
+              downvoteIcon.classList.toggle('fa-solid');
+            }
           } else if (route === 'bookmark') {
+            const parentLi = form.closest('li.post-item');
+            if (parentLi) {
+              parentLi.setAttribute(
+                'data-bookmarked',
+                parentLi.getAttribute('data-bookmarked') === 'bookmarked'
+                ? '' : 'bookmarked'
+              );
+            }
             const bookmarkIcon = document.getElementById(`bookmarkIcon-${id}`);
             bookmarkIcon.classList.toggle('fa-regular');
             bookmarkIcon.classList.toggle('fa-solid');
           }
         } else {
-          showToast(`Failed to ${route}`);
+          console.error(`Failed to ${route}`);
         }
       });
     };
