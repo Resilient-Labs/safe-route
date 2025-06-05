@@ -14,7 +14,7 @@
       <div class="bookendImgContainer">
         <div class="bookendContainer">
           <div class="bookendOne">
-            <p><i class="fas fa-map-marker-alt"></i> <%= post.city %> - <%= post.address %></p>
+            <p><i class="fas fa-map-marker-alt"></i><%= post.address %></p>
           </div>
           <div class="bookendTwo">
             <% if (user) { %>
@@ -84,7 +84,7 @@
             <li class="Comments">
               <div class="commentSection">
                 <div>
-                  <p class="bold">User (<%= comment.user %>) Says:</p>
+                  <p class="bold">User (<%= comment.user.firstName %>) Says:</p>
                   <div class="commentText">
                     <p>"<%= comment.commentText %>"</p>
                   </div>
