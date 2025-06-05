@@ -1,0 +1,103 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/mapView.css">
+
+<%- include('partials/header') -%>
+
+<!-- Leaflet CSS -->
+
+<!-- Main Content -->
+    <main class="main-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <h2>Map View Page</h2>
+
+        <!-- View Nearby Sightings Section -->
+        <section class="section">
+          <h3>View Nearby Sightings</h3>
+          <p>No Sign-In Needed</p>
+          <div class="form-group">
+            <input
+              type="text"
+              placeholder="Enter Address or Zip Code"
+              id="searchLocation" />
+          </div>
+          <button class="submit-btn" onclick="searchAlerts()">Submit</button>
+        </section>
+
+        <!-- Submit an Sighting/Alert Section -->
+        <section class="section">
+          <h3>Report a Sighting</h3>
+          <p>Click the Map or Use the Form Below to Share a Community Sighting</p>
+
+          <form id="alertForm" novalidate>
+            <div class="form-group">
+              <label for="type">Incident Type</label>
+              <select id="type" name="type" required>
+                <option value="default">Select Type</option>
+
+                <option value="accessibility">Accessibility</option>
+                <option value="suspicious activity">Suspicious Activity</option>
+                <option value="motor accident">Motor Accidents</option>
+                <option value="infrastructure">Infrastructure</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                placeholder="Enter Address"
+                required />
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Enter Incident Details"
+                required></textarea>
+            </div>
+
+            <div class="form-group">
+              <input type="file" id="uploadImage" name="file" />
+              <label for="uploadImage">Upload Image</label>
+            </div>
+
+            <button type="submit" class="submit-btn">Share Sighting</button>
+          </form>
+        </section>
+      </aside>
+
+      <!-- Map Container -->
+      <div class="map-container">
+        <h1 class="map-title">Your Neighborhood Safety Map</h1>
+        <div id="map"></div>
+        
+      </div>
+    </main>
+
+    <!-- Pass server data to JavaScript -->
+<!-- <script>
+  window.serverData = {
+        mapCenter: <%- JSON.stringify(locals.mapCenter) %>,
+        markers: <%- JSON.stringify(locals.markers) %> };
+</script> -->
+     
+  <!-- Your main Map JavaScript file - moved here and out of header to load only on this map page -->
+    <script src="mapView(main).js"></script>
+  <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet Control Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
+
+    <!-- Footer -->
+    <%- include('partials/footer') -%>
+
+
+   
+   

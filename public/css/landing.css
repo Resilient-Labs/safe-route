@@ -1,235 +1,106 @@
-/* safe-route landing page */
-*{
-  margin:0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* landing page background*/
 body {
-  background-color: #d4e0ec;
-  font-family: 'Arial', sans-serif;
-}
-
-/* Container styles */
-.container {
-  max-width: 1478px; /*responsive*/
-  margin: 0 auto; /*responsive*/
-  padding: 0px;
-  text-align: center;
-}
-
-/* targeting (1) section*/
-/* Hero Section (map - title & buttons) */
-.container section:first-of-type {
-  position: relative;
-  height: 500px; /* confirm with cal & group on height */
-  overflow: hidden;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  background-color: #f8fafc;
+  color: #1f2937;
+  margin: 0;
   padding: 0;
-  margin:0;
 }
 
-/* img */
-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%; /*responsive*/
-  height: 600px;
-  object-fit: cover; /*responsive*/
-  z-index: -1;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
-/* the first inner div inside the first section */
-.container section:first-of-type > div {
+/* Hero Section */
+.hero {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;      /* horizontal center */
-  justify-content: center;  /* vertical center */
-  height: 100%;
-  z-index: 1;
-  
-}
-
-/* Remove absolute positioning from h1 */
-.container section:first-of-type h1 {
-  position: static;
-  font-size: 55px;
-  color: #2c5282;
-  font-weight: bold;
-  margin-bottom: 40px;
   text-align: center;
+  margin-bottom: 3rem;
 }
 
-
-/* adjust paragraph too */
-.container section:first-of-type p {
-  position: static;
-  font-size: 24px;
-  width: 80%;
-  max-width: 600px;
-  text-align: center;
-  line-height: 1.5;
-  margin-bottom: 40px;
-  /* margin-top:10%; */
+.hero-img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-
-/* Safe Route title */
-/* .container section:first-of-type h1 {
-  position: absolute;
-  top: 20%;
-  left: 38%;
-  font-size: 55px;
-  color: #2c5282; /* color used from headerfooter.css 
-  font-weight:bold;
-}
-*/
-
-/* paragraph 
-.container section:first-of-type p {
-  position: absolute;
- 
-  width: 35%; 
-  left: 32%;
-  font-size: 25px;
-  max-width: 600px; 
-  color: black;
-  font-weight: 300;
-  line-height: 30px;
-  
-} */
-
-
-/* --- Buttons Section --- */
-
-/* Buttons: View Map and Sign Up */
-.container section:first-of-type a {
-  background-color: #2c5282; 
-  color: white;
-  padding: 2px;
-  padding-top: 5px;
-  text-decoration: none;
-  font-weight: 600;
-  border: none;
-  cursor:pointer;
-  display: inline-block;
-  /* margin-top: 120px; */
+.hero-content {
+  margin-top: 2rem;
 }
 
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  margin-bottom: 0.5rem;
+}
 
-.buttons {
-  position: absolute;
-  top: 70%; 
-  left: 38%;
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+}
+
+.hero-buttons {
   display: flex;
-  gap: 20%;
-  /*margin-top: 30px;*/
   justify-content: center;
-  width : 260px;
-  height: 32px;
-  align-items: center;
+  gap: 1.5rem;
 }
 
-/* individual button links */
-.container section:first-of-type a {
-  background-color: #2c5282;
-  color: white;
-  padding: 10px 20px;
-  text-decoration: none;
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
   font-weight: 600;
-  font-size: 14px;
-  border: none;
-  border-radius: 4px;
-  width: 250px;
+  text-decoration: none;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #1e3a8a;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #3b82f6;
+}
+
+.btn-outline {
+  border: 2px solid #1e3a8a;
+  color: #1e3a8a;
+  background-color: transparent;
+}
+
+.btn-outline:hover {
+  background-color: #1e3a8a;
+  color: #fff;
+}
+
+/* Features Section */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  padding-top: 2rem;
+}
+
+.feature {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   text-align: center;
-  cursor: pointer;
-  display: inline-block;
 }
 
-
-/* --- Core Feature Blocks Section --- */
-.container section:last-of-type {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap; /*responsive*/
-  gap: 3%;
-  margin-top: 80px;
-  margin:25px;
-  padding-bottom: 20px;
+.feature h2 {
+  font-size: 1.5rem;
+  color: #1e3a8a;
+  margin-bottom: 1rem;
 }
 
-
-.container section:last-of-type div {
-  padding: 5px;
-  flex: 1;
-  min-width: 250px;
-  max-width: 600px;
+.feature p {
+  font-size: 1rem;
+  color: #374151;
 }
-
-.container section:last-of-type h2 {
-  font-size: 26px;
-  color: #2c5282;
-  margin-top: 25px;
-  margin-bottom: 10px;
-}
-.container section:last-of-type p {
-  font-size: 14px;
-  color: black;
-  line-height: 1.5;
-}
-
-
-/* ----------------------------------------
-   ✅ Responsive Styles for Mobile
----------------------------------------- */
-
-@media (max-width: 768px) {
-
-/* hero text */
-  .container section:first-of-type h1 {
-    font-size: 32px;
-    top: 10%;
-    left: 10%;
-    text-align: center;
-  }
-
-  /* paragraph */
-  .container section:first-of-type p {
-    font-size: 18px;
-    width: 80%;
-    left: 10%;
-    top: 25%;
-    line-height: 1.4;
-  }
-
-  /* buttons */
-  /* layout decision to make the buttons vertical */
- 
-  .buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px; /* smaller gap */
-    top: 70%; /* 65 - 75 is sufficient */
-    left: 0;
-    width: 100%;
-    position: absolute;
-    margin: 0;
-    padding: 0;
-  }
-
-  .buttons a {
-    width: 80%;
-    max-width: 200px;
-    font-size: 16px;
-    padding: 12px 0;
-    text-align: center;
-    margin: 0; /* remove default margin */
-    padding: 0;
-    line-height: 1;
-  }
-
-  }

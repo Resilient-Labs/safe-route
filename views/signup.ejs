@@ -1,10 +1,10 @@
-<%- include('partials/header') -%>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/sign-in-up.css" />
+
+<%- include('partials/header') -%>
 
     <main class="container sign-main">
         <div class="row justify-content-center">
@@ -20,13 +20,13 @@
                     <% }) %>    
                 <% } %>
                 <section class="sign-intro">
-                  <h2 class="sign-account">Sign Up to Create Alerts <i class="fa-solid fa-bell fa-shake fa-sm" style="color: #e72222;"></i></h2>
+                  <h2 class="sign-account">Sign Up to Share Sightings <i class="fa-solid fa-bell fa-shake fa-sm" style="color: #e72222;"></i></h2>
                 </section> 
-                <form class="sign-page-form" action="/signup" method="POST">
+                <form class="sign-page-form" action="/signup" method="POST" novalidate >
                     <div class="mb-3 sign-page-div">
                       <span class="sign-welcome">Welcome!</span>
                       <label for="email" class="form-label">Email:</label>
-                      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="Enter email address" required>
+                      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="user@email.com" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                     </div>
                     <div class="mb-3 sign-page-div">
                         <label for="firstName" class="form-label">First Name:</label>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="mb-3 sign-page-div">
                       <label for="password" class="form-label">Password:</label>
-                      <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                      <input type="password" class="form-control" id="password" name="password" placeholder="At least 8 characters" required>
                     </div>
                     <div class="mb-3 sign-page-div">
                       <label for="confirmPassword" class="form-label">Confirm Password:</label>
@@ -46,10 +46,10 @@
                     </div>
                     <div class="mb-3 sign-page-div">
                       <label for="zipCode" class="form-label sign-zip-code">Zip Code:</label>
-                      <input type="text" class="form-control sign-zip-code" pattern="[0-9]{5}" title="Please enter a 5-digit zip code" id="zipCode" name="zipCode" placeholder="Enter zip code" required>
+                      <input type="text" class="form-control sign-zip-code" pattern="[0-9]{5}" title="Please enter a 5-digit zip code" id="zipCode" name="zipCode" placeholder="5-digit zip code" required>
                     </div>
                     <button class="sign-button" type="submit" class="btn btn-primary">Sign Up</button>
-                    <p>Already have an account? <a class="sign-link" href="/signin">Sign In.</a></p>
+                    <p class="sign-end">Already have an account? <a class="sign-link" href="/signin">Sign In.</a></p>
                   </form>
             </section>
         </div>

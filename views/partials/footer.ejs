@@ -3,16 +3,13 @@
   <div class="footer-left">
     <div class="footer-title">SafeRoute</div>
     <div class="footer-text">
-      Our vision is to help you move through<br />
-      your city with awareness and agency.<br />
-      Get help.<br /><br />
       ©2025 SafeRoute. All rights reserved.
     </div>
   </div>
   <div class="footer-links">
     <a href="/">Home</a>
     <a href="/map">Map</a>
-    <a href="/feed">Alerts</a>
+    <a href="/feed">Sightings</a>
     <a href="/resources">Resources</a>
   </div>
 </footer>
@@ -20,12 +17,23 @@
   <script
       src="https://kit.fontawesome.com/f8ec983be8.js"
       crossorigin="anonymous"></script>
-  <!-- Your main JavaScript file -->
-    <script src="mapView(main).js"></script>
-  <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <!-- Leaflet Control Geocoder JS -->
-    <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
+
+    <!-- Custom JS CDN & TOAST Logic -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/toast.js"></script>
+
+    <!-- If there’s at least one success, error on info message, this shows it on each ejs page w a diff color, catches errors in realtime display  -->
+     <script>
+      <% if (messages.success && messages.success.length > 0) { %>
+        showToast("<%= messages.success[0].msg %>", "success");
+      <% } else if (messages.errors && messages.errors.length > 0) { %>
+      // grab the “msg” property from the first errors array element
+        showToast("<%= messages.errors[0].msg %>", "error");
+      <% } else if (messages.info && messages.info.length > 0) { %>
+        showToast("<%= messages.info[0] %>", "info");
+      <% } %>
+    </script>
+
   </body>
 </html>
 

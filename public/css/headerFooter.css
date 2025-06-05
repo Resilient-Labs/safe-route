@@ -6,14 +6,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 600;
-  color: #2c5282;
+  display: block;
+  width: 40%;
 }
 
 .logo::before {
@@ -72,6 +70,7 @@
 
 /* Footer Styles */
 .footer {
+  font-family: "Plus Jakarta Sans", sans-serif;
   background-color: white;
   padding: 20px 30px;
   text-align: center;
@@ -79,6 +78,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-sizing: border-box;
+  bottom: 0;
+  width: 100%;
 }
 
 .footer-left {
@@ -201,5 +203,4 @@ display:inline-block;
 }
 .dropdown-content {
   direction: ltr;
-}
 }

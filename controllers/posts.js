@@ -67,12 +67,14 @@ module.exports = {
       };
       const posts = await Post.aggregate([
         { $match: filters },
-        { $addFields: {
-          hasCurrentUserUpvoted: false,
-          hasCurrentUserDownvoted: false,
-          hasCurrentUserBookmarked: false
-        }},
-        { $sort: { createdAt: -1 }}
+        {
+          $addFields: {
+            hasCurrentUserUpvoted: false,
+            hasCurrentUserDownvoted: false,
+            hasCurrentUserBookmarked: false
+          }
+        },
+        { $sort: { createdAt: -1 } }
       ]);
       const postIds = posts.map(post => post._id);
 
@@ -112,7 +114,7 @@ module.exports = {
         user: req.user,
         posts
       });
-    } catch(err) {
+    } catch (err) {
       console.log(err);
       req.flash("errors", {
         msg: "There was an error getting the feed page",
@@ -123,7 +125,11 @@ module.exports = {
   getPostPage: async (req, res) => {
     const validationErrors = [];
     try {
-      const post = await Post.findById(req.params.id);
+      const post = await Post.findById({
+        _id: req.params.id,
+        isHidden: false,
+        isResolved: false
+      });
       if (!post) {
         validationErrors.push({ msg: "Unable to fetch post" })
         if (validationErrors.length) {
@@ -131,33 +137,36 @@ module.exports = {
           return res.redirect("back");
         };
       };
-      const comments = await Comment.find({ post: req.params.id , isHidden: false }).sort({ createdAt: -1 });
+      const comments = await Comment.find({
+        post: req.params.id, isHidden: false
+      }).sort({ createdAt: -1 }).populate('user');
 
       if (!req.user) {
         return res.render("post.ejs", {
           title: "SafeRoute | Post",
           currentPage: "post",
-          post: post, 
+          post: post,
           comments: comments,
-          user:null          
+          user: null
         });
       }
 
       const hash = post.generateUserHash(req.user.id);
-      const bookmark = Bookmark.findById(hash);
-      const upvote = PostUserUpvoteSchema.findById(hash);
-      const downvote = PostUserDownvoteSchema.findById(hash);
+      const bookmark = await Bookmark.findById(hash);
+      const upvote = await PostUserUpvoteSchema.findById(hash);
+      const downvote = await PostUserDownvoteSchema.findById(hash);
 
       return res.render("post.ejs", {
         title: "SafeRoute | Post",
         currentPage: "post",
-        post: post, 
-        user: req.user, 
+        post: post,
+        user: req.user,
         comments: comments,
         hasCurrentUserUpvoted: !upvote ? false : true,
         hasCurrentUserDownvoted: !downvote ? false : true,
-        hasCurrentUserBookmarked: !bookmark ? false : true
+        hasCurrentUserBookmarked: !bookmark ? false : true,
       });
+      console.log(hasCurrentUserBookmarked)
     } catch (err) {
       console.log(err)
       res.redirect('back');
@@ -170,32 +179,41 @@ module.exports = {
     const lng = parseFloat(longitude);
 
     if (isNaN(lat) || isNaN(lng)) {
-      return res.status(400).send('Invalid coordinates');
+      req.flash("errors", { msg: "Invalid coordinates provided." });
+      return res.redirect("back");
     }
+
     if (!req.user) {
-      return res.redirect('/map');
-    };
-    
+      req.flash("errors", { msg: "You must be signed in to create a post." });
+      return res.redirect("back");
+    }
+
     try {
       const postData = {
         ...rest,
         postedBy: req.user.id,
         location: {
           type: 'Point',
-          coordinates: [parseFloat(lng), parseFloat(lat)]
+          coordinates: [lng, lat]
         }
       };
-      let result = null;
+
       if (req.file) {
-        result = await cloudinary.uploader.upload(req.file.path, { asset_folder: 'safeRouteImages', public_id_prefix: 'post' });
-        postData['image'] = result.secure_url;
-        postData['cloudinaryId'] = result.public_id
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          asset_folder: 'safeRouteImages',
+          public_id_prefix: 'post'
+        });
+        postData.image = result.secure_url;
+        postData.cloudinaryId = result.public_id;
       }
 
-      await Post.create({ ...postData });
+      await Post.create(postData);
+
+      req.flash("success", { msg: "Post created successfully." });
       res.redirect("back");
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      req.flash("errors", { msg: "An error occurred while creating the post." });
       res.redirect("back");
     }
   },
@@ -212,23 +230,27 @@ module.exports = {
       const upVoteHash = post.generateUserHash(req.user.id);
       const checkUpVote = await PostUserUpvoteSchema.findById(upVoteHash);
       if (!checkUpVote) {
+        const removeDownVote = await PostUserDownvoteSchema.findByIdAndDelete(upVoteHash);
         const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
-          { $inc: { upvotes: 1 } }
+          { $inc: { upvotes: 1, downvotes: removeDownVote ? -1 : 0 } },
+          { new: true }
         );
         const upvote = await PostUserUpvoteSchema.create({
           user: req.user.id,
           post: req.params.id,
-          _id:  upVoteHash,
+          _id: upVoteHash,
         });
         res.json({
           message: 'Post successfully upvoted',
+          downvoteChanged: removeDownVote ? true : false,
           post
         });
       } else {
         const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
-          { $inc: { upvotes: -1 } }
+          { $inc: { upvotes: -1 } },
+          { new: true }
         );
         const upvote = await PostUserUpvoteSchema.findByIdAndDelete(upVoteHash);
         res.json({
@@ -236,7 +258,7 @@ module.exports = {
           post
         });
       }
-    } catch(err) {
+    } catch (err) {
       res.status(500).json({
         message: 'An error occured while changing upvote status',
         error: err.message
@@ -255,24 +277,28 @@ module.exports = {
       const post = await Post.findById(req.params.id)
       const downVoteHash = post.generateUserHash(req.user.id);
       const checkDownVote = await PostUserDownvoteSchema.findById(downVoteHash);
+      const removeUpVote = await PostUserUpvoteSchema.findByIdAndDelete(downVoteHash);
       if (!checkDownVote) {
         const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
-          { $inc: { downvotes: 1 } }
+          { $inc: { downvotes: 1, upvotes: removeUpVote ? -1 : 0 } },
+          { new: true }
         );
         const downvote = await PostUserDownvoteSchema.create({
           user: req.user.id,
           post: req.params.id,
-          _id:  downVoteHash
+          _id: downVoteHash
         });
         res.json({
           message: 'Post successfully downvoted',
+          upvoteChanged: removeUpVote ? true : false,
           post
         });
       } else {
         const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
-          { $inc: { downvotes: -1 } }
+          { $inc: { downvotes: -1 } },
+          { new: true }
         );
         const downvote = await PostUserDownvoteSchema.findByIdAndDelete(downVoteHash);
         res.json({
@@ -280,7 +306,7 @@ module.exports = {
           post
         });
       }
-    } catch(err) {
+    } catch (err) {
       res.status(500).json({
         message: 'An error occured while changing downvote status',
         error: err.message
@@ -328,27 +354,26 @@ module.exports = {
     try {
       let post = await Post.findById({ _id: req.params.id });
 
-      if (req.user._id.toString() === post.user.toString()) {
+      if (req.user._id.toString() === post.postedBy.toString()) {
         if (post.cloudinaryId) {
           await cloudinary.uploader.destroy(post.cloudinaryId);
         }
-
         await Bookmark.deleteMany(
           { post: req.params.id }
         );
-        await Comment.find(
+        await Comment.updateMany(
           { post: req.params.id },
-          { $set: { isHidden:true } }
+          { $set: { isHidden: true } }
         );
         await Post.findByIdAndUpdate(
           req.params.id,
           { isHidden: true }
         );
-
-        res.json({
-          message: 'Post successfully deleted',
-          post
-        });
+        // res.json({
+        //   message: 'Post successfully deleted',
+        //   post
+        // });
+        res.redirect('/feed')
       } else {
         res.status(401).json({
           message: 'You are not authorized to delete this post, or it has already been deleted',
@@ -356,10 +381,11 @@ module.exports = {
         });
       }
     } catch (err) {
+      console.log(err)
       res.status(500).json({
         message: 'An error occured while deleting the post',
         error: err.message
       });
     }
   }
-}
+}      

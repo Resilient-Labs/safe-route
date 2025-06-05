@@ -1,60 +1,106 @@
-<%- include('partials/header') -%>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/feed.css" />
+<%- include('partials/header') -%>
 
   <div class="container">
-    <h1 class="center navy-blue">Post Sightings</h1>
-    <h2 class="center navy-blue">View real-time incidents to help vulnerable communities</h2>
-    <ul class="flex-4 post-category-container">
-      <li>Accessibility</li>
-      <li>Suspicious Activity</li>
-      <li>Motor Accidents</li>
-      <li>Infrastructure</li>
-    </ul>
+    <h1 class="center navy-blue">Local Sightings</h1>
 
-    <div class="searchbar">
-      <div class="searchbar-wrapper">
-        <div class="searchbar-left">
-          <div class="search-icon-wrapper">
-            <i class="fa-solid fa-bars search-icon searchbar-icon"></i>
-          </div>
-        </div>
-        <div class="searchbar-center">
-          <div class="searchbar-input-spacer"></div>
-          <input type="text" placeholder="Hinted search text">
-        </div>
-        <i class="fa-solid fa-magnifying-glass searchbar-right"></i>
-      </div>
+    <h3 class="center black">View real-time sightings that improve accessibility and promote safer, walkable communities</h3>
+    <!-- Filter types stored in data attribute -->
+
+    <div class="filter-bar">
+      <ul class="flex-4 post-category-container">
+        <li data-filter="all"><i class="fa-regular fa-bell"></i> All</li>
+        <li data-filter="accessibility"><i class="fa-brands fa-accessible-icon"></i> Accessibility</li>
+        <li data-filter="suspicious activity"><i class="fa-solid fa-person-harassing"></i> Suspicious Activity</li>
+        <li data-filter="motor accident"><i class="fa-solid fa-car-burst"></i> Motor Accidents</li>
+        <li data-filter="infrastructure"><i class="fa-solid fa-person-digging"></i> Infrastructure</li>
+        <li data-filter="bookmarked"><i class="fa-solid fa-bookmark"></i> My Bookmarks</li>
+      </ul>
     </div>
 
-    <button>Filter</button>
-
     <div class="row justify-content-center mt-5">
-      <ul class="row list-unstyled post-container">
+      <ul class="row list-unstyled post-container flex-6 mbottom-3" id="posts-list">
         <% for(var i=0; i<posts.length; i++) {%>
-          <li class="col-6 justify-content-between mt-5 bg-gray bradius-8">
+
+          <li class="view col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item"
+          data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>"
+          data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>" data-bookmarked="<%= posts[i].hasCurrentUserBookmarked ? 'bookmarked' : '' %>">
+
             <div class="border-b-1 flex-1">
-              <h3>Location</h3>
+              <p><span class="font-bold">Location:</span> <br> <span class="font-thin"><%= posts[i].city %></span></p>
+              <p><span class="font-bold">Type:</span> <br> <span class="font-thin"><%= posts[i].type.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); %></span></p>
+              <div class="bookendTwo">
+                <% if (user) { %>
+                  <form class="forms" id="bookmark-<%= posts[i]._id %>" style="display:inline;">
+                    <button type="submit" class="bookmark-button" style="background:none; border:none; cursor:pointer;">
+                      <i
+                        id="bookmarkIcon-<%= posts[i]._id %>"
+                        class="<%= user && posts[i].hasCurrentUserBookmarked === true ? 'fa-solid' : 'fa-regular' %> fa-bookmark fa-2xl mright-8"
+                      ></i>
+                    </button>
+                  </form>
+                <% } else { %>
+                  <button
+                    class="bookmark-button" onclick="showToast('Please sign in to bookmark posts.', 'error')"
+                    style="background:none; border:none; cursor:pointer;"
+                  >
+                    <i class="fa-regular fa-2xl fa-bookmark mright-8"></i>
+                  </button>
+                <% } %>
+              </div>
               <div class="flex-2">
-                <i class="fa-regular fa-bookmark mright-8"></i>
                 <div>
                   <div class="flex-3">
+                    <div class="upvote">
+                      <% if (user) { %>
+                        <form class="forms" id="upvote-<%= posts[i]._id %>" method="POST">
+                          <button
+                            class="upvote-caret-btn <%= user && posts[i].hasCurrentUserUpvoted === true ? 'active-upvote' : '' %>"
+                            type="submit"
+                          >
+                            <i
+                              id="upvoteIcon-<%= posts[i]._id %>"
+                              class="<%= user && posts[i].hasCurrentUserUpvoted === true ? 'fa-solid' : 'fa-regular' %> fa-square-caret-up green"
+                            ></i>
+                          </button>
+                        </form>
+                      <% } else { %>
+                        <button
+                          class="upvote-caret-btn" onclick="showToast('Please sign in to upvote.', 'error')"
+                        >
+                          <i class="fa-solid fa-square-caret-up green"></i>
+                        </button>
+                      <% } %>
+                    </div>
 
-                    <form action="/posts/<%= posts[i]._id %>/upvote/?_method=PUT" method="POST">
-                      <button type="submit"><i class="fa-solid fa-caret-up green"></i></button>
-                    </form>
-                    <span class="center lh-0">
-                      <%= posts[i].upvotes - posts[i].downvotes %>
+                    <span id="voteCount-<%= posts[i]._id %>" class="center lh-0">
+                      <%= posts[i].upvotes + '|' + posts[i].downvotes %>
                     </span>
-                    <form action="/posts/<%= posts[i]._id %>/downvote/?_method=PUT" method="POST">
-                      <button type="submit"><i class="fa-solid fa-caret-down"></i></button>
-                    </form>
-                    <!-- Will be converted to ajax with this code later -->
-                    <!-- <i class="fa-solid fa-caret-up green vote-icon upvote" data-id="<%= posts[i]._id %>"></i>
-                    <span class="vote-count" id="vote-<%= posts[i]._id %>">
-                      <%= posts[i].upvotes - posts[i].downvotes %>
-                    </span>
-                    <i class="fa-solid fa-caret-down vote-icon downvote" data-id="<%= posts[i]._id %>"></i> -->
 
+                    <div class="downvote">
+                      <% if (user) { %>
+                        <form class="forms" id="downvote-<%= posts[i]._id %>">
+                          <button
+                            class="downvote-caret-btn <%= user && posts[i].hasCurrentUserDownvoted === true ? 'active-downvote' : '' %>"
+                            type="submit"
+                          >
+                            <i
+                              id="downvoteIcon-<%= posts[i]._id %>"
+                              class="<%= user && posts[i].hasCurrentUserDownvoted === true ? 'fa-solid' : 'fa-regular' %> fa-square-caret-down red"
+                            ></i>
+                          </button>
+                        </form>
+                      <% } else { %>
+                        <button
+                          class="downvote-caret-btn" onclick="showToast('Please sign in to downvote.', 'error')"
+                        >
+                          <i class="fa-solid fa-square-caret-down red"></i>
+                        </button>
+                      <% } %>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -62,13 +108,72 @@
             <a href="/posts/<%= posts[i]._id%>">
               <img class="img-fluid" src="<%= posts[i].image%>">
             </a>
-            <div class="mtop-12 mbottom-28 border-t-1 ptop-12 flex-5">
-              <span class="font-bold">Time/Date</span>
-              <button class="view-now-btn">View Now</button>
+            <div class="mtop-12 mbottom-28 border-t-1 ptop-12 flex-5">              
+              <span class="post-timestamp font-thin"><span class="font-bold">Created:</span> <%= posts[i].createdAt.toLocaleString() %></span>
+              <button class="view-now-btn">
+                <a class="view-link" href="/posts/<%= posts[i]._id%>">
+                  View Now
+                </a>
+              </button>
             </div>
           </li>
-          <% } %>
+        <% } %>
       </ul>
     </div>
   </div>
-  <%- include('partials/footer') -%>
+
+
+  <script src="filter.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const allForms = document.getElementsByTagName("form");
+    for (const form of allForms) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const [route, id] = form.id.split('-');
+        const response = await fetch(
+          `/posts/${id}/${route}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          if (route === 'upvote' || route === 'downvote') {
+            const voter = document.getElementById(`voteCount-${id}`);
+            voter.innerText = data.post.upvotes - data.post.downvotes;
+            const voteIcon = document.getElementById(`${route}Icon-${id}`);
+            voteIcon.classList.toggle('fa-regular');
+            voteIcon.classList.toggle('fa-solid');
+            if (data.upvoteChanged) {
+              const upvoteIcon = document.getElementById(`upvoteIcon-${id}`);
+              upvoteIcon.classList.toggle('fa-regular');
+              upvoteIcon.classList.toggle('fa-solid');
+            } else if (data.downvoteChanged) {
+              const downvoteIcon = document.getElementById(`downvoteIcon-${id}`);
+              downvoteIcon.classList.toggle('fa-regular');
+              downvoteIcon.classList.toggle('fa-solid');
+            }
+          } else if (route === 'bookmark') {
+            const parentLi = form.closest('li.post-item');
+            if (parentLi) {
+              parentLi.setAttribute(
+                'data-bookmarked',
+                parentLi.getAttribute('data-bookmarked') === 'bookmarked'
+                ? '' : 'bookmarked'
+              );
+            }
+            const bookmarkIcon = document.getElementById(`bookmarkIcon-${id}`);
+            bookmarkIcon.classList.toggle('fa-regular');
+            bookmarkIcon.classList.toggle('fa-solid');
+          }
+        } else {
+          console.error(`Failed to ${route}`);
+        }
+      });
+    };
+  });
+  </script>
+
+<%- include('partials/footer') -%>
