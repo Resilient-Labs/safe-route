@@ -3,7 +3,7 @@
 **About:** SafeRoute is a community-powered safety map designed for neighborhoods to come together and empower one another with knowledge and resources. It lets residents anonymously report sightings of broken streetlights, suspicious activity, dangerous infrastructure, and more.
 With a clean map view and accessible submission form, SafeRoute enables everyone— especially marginalized communities such as disabled folks, women, and elders— to move through their communities with confidence. SafeRoute is built for local awareness, fear reduction, and community solidarity through real-time, peer-sourced alerts.
 
-**Project Link:** SafeRoute (https://safe-route-6iqv.onrender.com/)
+**Project Link:** [SafeRoute](https://safe-route-6iqv.onrender.com/)
 
 ## Key Features:
    - **Alert Reporting**
