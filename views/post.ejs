@@ -20,7 +20,7 @@
                 </button>
               </form>
             <% } else { %>
-              <button class="bookmark-button" onclick="alert('Please sign in to bookmark posts.')" style="background:none; border:none; cursor:pointer;">
+              <button class="bookmark-button" onclick="showToast('Please sign in to bookmark posts.')" style="background:none; border:none; cursor:pointer;">
                 <i class="far fa-bookmark fa-lg"></i>
               </button>
             <% } %>
@@ -47,7 +47,7 @@
                   <button class="upvote-button <%= user && hasCurrentUserUpvoted === true ? 'active-upvote' : '' %>" type="submit"><i class="fas fa-arrow-up"></i> Upvote</button>
                 </form>
                 <% } else { %>
-                  <button class="upvote-button" onclick="alert('Please sign in to upvote.')">
+                  <button class="upvote-button" onclick="showToast('Please sign in to upvote.')">
                     <i class="fas fa-arrow-up"></i> Upvote
                   </button>
                 <% } %>
@@ -60,7 +60,7 @@
                     <button class="downvote-button <%= user && hasCurrentUserDownvoted === true ? 'active-downvote' : '' %>" type="submit"><i class="fas fa-arrow-down"></i> Downvote</button>
                   </form>
                 <% } else { %>
-                  <button class="downvote-button" onclick="alert('Please sign in to downvote.')">
+                  <button class="downvote-button" onclick="showToast('Please sign in to downvote.')">
                     <i class="fas fa-arrow-down"></i> Downvote
                   </button>
                 <% } %>
@@ -90,7 +90,7 @@
                         <button type="submit"><i class="fas fa-heart"></i></button>
                       </form>
                     <% } else { %>
-                      <button onclick="alert('Please sign in to like comments.')"><i class="fas fa-heart"></i></button>
+                      <button onclick="showToast('Please sign in to like comments.')"><i class="fas fa-heart"></i></button>
                     <% } %>
                     <p class="likes bold">Likes: <%= comment.likes %></p>
                     <% if (user && comment.user.toString() === user._id.toString()) { %>
@@ -151,11 +151,12 @@
           const data = await response.json();
           document.getElementById('upvoteCount').textContent = data.post.upvotes;
           document.getElementById('downvoteCount').textContent = data.post.downvotes;
+          showToast('Upvoted!' + 'success');
         } else {
-          console.error('Failed to upvote');
+          showToast('Failed to upvote: ' + data.message, 'error');
         }
       } catch (err) {
-        console.error(err);
+          showToast('Failed to upvote: ' + data.message, 'error');
       }
     });
   }
@@ -175,11 +176,12 @@
           const data = await response.json();
           document.getElementById('upvoteCount').textContent = data.post.upvotes;
           document.getElementById('downvoteCount').textContent = data.post.downvotes;
+          showToast('Downvoted!', 'success');
         } else {
-          console.error('Failed to downvote');
+          showToast('Failed to downvote: ' + data.message, 'error');
         }
       } catch (err) {
-        console.error(err);
+          showToast('Failed to downvote: ' + data.message, 'error');
       }
     });
   }
@@ -209,7 +211,7 @@
         //   console.error('Failed to toggle bookmark');
         // }
       } catch (err) {
-        console.error('Error toggling bookmark:', err);
+        showToast('Failed to bookmark: ' + data.message, 'error');
       }
     });
   }

@@ -73,7 +73,7 @@ filterSelect.addEventListener("change", () => {
     if(selectedFilter === "nearMe"){
         // If geolocation isn’t supported, show an alert and exit
         if(!navigator.geolocation){
-            alert("Geolocation is not supported in your browser");
+      showToast("Geolocation is not supported in your browser", "error");
             return;
         }
         
