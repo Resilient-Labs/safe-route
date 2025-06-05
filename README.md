@@ -1,6 +1,7 @@
 # SafeRoute📍 🗺️
 
 **About:** SafeRoute is a community-powered safety map designed for neighborhoods to come together and empower one another with knowledge and resources. It lets residents anonymously report sightings of broken streetlights, suspicious activity, dangerous infrastructure, and more.
+
 With a clean map view and accessible submission form, SafeRoute enables everyone— especially marginalized communities such as disabled folks, women, and elders— to move through their communities with confidence. SafeRoute is built for local awareness, fear reduction, and community solidarity through real-time, peer-sourced alerts.
 
 **Project Link:** [SafeRoute](https://safe-route-6iqv.onrender.com/)
@@ -60,9 +61,9 @@ Project Lead: immanuelmonroe@gmail.com
 ## 🫱🏽‍🫲🏼 Contributions:
 Contributions are what make the open-source community an amazing place to learn, inspire, and create! Here's how you can contribute:
 1. Fork the Project
-2. Create your Feature Branch (git checkout -b feature/amazing-feature)
-3. Commit your Changes (git commit -m 'Add some amazing feature)
-4. Push to the Branch (git push origin feature/amazing-feature)
+2. Create your Feature Branch (`git checkout -b feature/amazing-feature`)
+3. Commit your Changes (`git commit -m 'Add some amazing feature`)
+4. Push to the Branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request 
 
 Thank you for checking out SafeRoute! We look forward to connecting.
