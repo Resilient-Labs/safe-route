@@ -1,5 +1,4 @@
 const filterTabs = document.querySelectorAll('.post-category-container li');
-const filterSelect = document.getElementById('filter-select');
 const posts = Array.from(document.querySelectorAll('.post-item')); //convert NodeList to an array
 let selectedTab = 'all'; // Track currently selected category
 
@@ -55,56 +54,4 @@ filterTabs.forEach((tab) => {
       applyTypeFilter();
     }
   });
-});
-
-// Sort handler
-filterSelect.addEventListener('change', () => {
-  const selectedFilter = filterSelect.value;
-
-  if (selectedFilter === 'recent') {
-    // Sort by newest post first
-    posts.sort((a, b) => {
-      return Number(b.dataset.created) - Number(a.dataset.created);
-    });
-    updateDOMOrder(posts);
-  }
-
-  if (selectedFilter === 'nearMe') {
-    // If geolocation isn’t supported, show an alert and exit
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported in your browser');
-      return;
-    }
-
-    //Fetch coordinates asynchronously
-    navigator.geolocation.getCurrentPosition((position) => {
-      console.log('User position:', position);
-      // Coordinates of the user
-      const userLat = position.coords.latitude;
-      const userLng = position.coords.longitude;
-
-      // Sorts posts by distance to user
-      posts.sort((a, b) => {
-        const distA = getDistance(
-          userLat,
-          userLng,
-          Number(a.dataset.lat),
-          Number(a.dataset.lng)
-        );
-        const distB = getDistance(
-          userLat,
-          userLng,
-          Number(b.dataset.lat),
-          Number(b.dataset.lng)
-        );
-        return distA - distB;
-      });
-
-      updateDOMOrder(posts); //reorder sorted posts
-    });
-
-    return; //wait for geolocation
-  }
-  // Apply sort to DOM for "recent"
-  updateDOMOrder(posts);
 });
