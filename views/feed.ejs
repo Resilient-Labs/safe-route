@@ -10,13 +10,16 @@
     <h3 class="center black">View real-time incidents to help vulnerable communities</h3>
     <!-- Filter types stored in data attribute -->
 
-    <ul class="flex-4 post-category-container">
-      <li data-filter="all">All</li>
-      <li data-filter="accessibility">Accessibility</li>
-      <li data-filter="suspicious">Suspicious Activity</li>
-      <li data-filter="Motor">Motor Accidents</li>
-      <li data-filter="Infrastructure">Infrastructure</li>
-    </ul>
+    <div class="filter-bar">
+      <ul class="flex-4 post-category-container">
+        <li data-filter="all">All</li>
+        <li data-filter="accessibility"><i class="fa-brands fa-accessible-icon"></i> Accessibility</li>
+        <li data-filter="suspicious activity"><i class="fa-solid fa-person-harassing"></i> Suspicious Activity</li>
+        <li data-filter="motor accident"><i class="fa-solid fa-car-burst"></i> Motor Accidents</li>
+        <li data-filter="infrastructure"><i class="fa-solid fa-road-bridge"></i> Infrastructure</li>
+        <li data-filter="bookmarked"><i class="fa-solid fa-bookmark"></i> My Bookmarks</li>
+      </ul>
+    </div>
 
     <select id="filter-select">
       <option value="">-- Select --</option>
@@ -26,15 +29,16 @@
 
     <div class="row justify-content-center mt-5">
       <ul class="row list-unstyled post-container flex-6 mbottom-3" id="posts-list">
-        <% for(var i=0; i<posts.length; i++) {%>
-
-          <li class="view col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item"
-          data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>"
-          data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>">
-
+        <% for(let i = 0; i < posts.length; i++) {%>
+          <li
+            class="view col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item"
+            data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>"
+            data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>"
+            data-bookmarked="<%= posts[i].hasCurrentUserBookmarked ? 'bookmarked' : '' %>"
+          >
             <div class="border-b-1 flex-1">
               <h3>Location: <%= posts[i].city %></h3>
-              <p>Type: <%= posts[i].type %></p>
+              <p>Type: <%= posts[i].type.charAt(0).toUpperCase() + posts[i].type.slice(1) %></p>
               <div class="bookendTwo">
                 <% if (user) { %>
                   <form class="forms" id="bookmark-<%= posts[i]._id %>" style="display:inline;">
@@ -80,7 +84,7 @@
                     </div>
 
                     <span id="voteCount-<%= posts[i]._id %>" class="center lh-0">
-                      <%= posts[i].upvotes + '|' + posts[i].downvotes %>
+                      <%= posts[i].upvotes - posts[i].downvotes %>
                     </span>
 
                     <div class="downvote">
@@ -145,11 +149,28 @@
           const data = await response.json();
           if (route === 'upvote' || route === 'downvote') {
             const voter = document.getElementById(`voteCount-${id}`);
-            voter.innerText = data.post.upvotes + '|' + data.post.downvotes;
+            voter.innerText = data.post.upvotes - data.post.downvotes;
             const voteIcon = document.getElementById(`${route}Icon-${id}`);
             voteIcon.classList.toggle('fa-regular');
             voteIcon.classList.toggle('fa-solid');
+            if (data.upvoteChanged) {
+              const upvoteIcon = document.getElementById(`upvoteIcon-${id}`);
+              upvoteIcon.classList.toggle('fa-regular');
+              upvoteIcon.classList.toggle('fa-solid');
+            } else if (data.downvoteChanged) {
+              const downvoteIcon = document.getElementById(`downvoteIcon-${id}`);
+              downvoteIcon.classList.toggle('fa-regular');
+              downvoteIcon.classList.toggle('fa-solid');
+            }
           } else if (route === 'bookmark') {
+            const parentLi = form.closest('li.post-item');
+            if (parentLi) {
+              parentLi.setAttribute(
+                'data-bookmarked',
+                parentLi.getAttribute('data-bookmarked') === 'bookmarked'
+                ? '' : 'bookmarked'
+              );
+            }
             const bookmarkIcon = document.getElementById(`bookmarkIcon-${id}`);
             bookmarkIcon.classList.toggle('fa-regular');
             bookmarkIcon.classList.toggle('fa-solid');
