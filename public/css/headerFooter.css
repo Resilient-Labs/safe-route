@@ -72,7 +72,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
   box-sizing: border-box;
   bottom: 0;
   width: 100%;
