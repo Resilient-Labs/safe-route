@@ -23,5 +23,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
   if (message) {
     showToast(message, type);
-  }
+  } 
+
+// Applies to any forms, If any HTML5 validation fails, stops ugly native bubble and show pretty toast msg instead
+  const allForms = document.querySelectorAll("form");
+  allForms.forEach(form => {
+    form.addEventListener("submit", function(evt) {
+      if (!form.checkValidity()) {
+        evt.preventDefault();
+        const firstInvalid = form.querySelector(":invalid");
+        showToast(firstInvalid.validationMessage, "error");
+      }
+    });
+  });
 });
