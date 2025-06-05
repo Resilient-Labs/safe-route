@@ -14,7 +14,7 @@
       <div class="bookendImgContainer">
         <div class="bookendContainer">
           <div class="bookendOne">
-            <p><i class="fas fa-map-marker-alt"></i> <%= post.city %> - <%= post.address %></p>
+            <p><i class="fas fa-map-marker-alt"></i><%= post.address %></p>
           </div>
           <div class="bookendTwo">
             <% if (user) { %>
@@ -77,14 +77,24 @@
 
 
       <div class="postDeets">
+        <% if (user) { %>
+          <form id="commentForm">
+            <label for="comment">Add a comment:</label>
+            <textarea id="comment" name="comment" rows="1" required></textarea>
+            <div class="commentButton"></div>
+            <button type="submit">Submit</button>
+          </form>
+        <% } else { %>
+          <p><em><a href="/signin">Sign in</a> to add a comment.</em></p>
+        <% } %>
 
         <h3>Comments</h3>
-        <ul>
+        <ul id="commentList">
           <% comments.forEach(comment => { %>
             <li class="Comments">
               <div class="commentSection">
                 <div>
-                  <p class="bold">User (<%= comment.user %>) Says:</p>
+                  <p class="bold"><%= comment.user.firstName %>:</p>
                   <div class="commentText">
                     <p>"<%= comment.commentText %>"</p>
                   </div>
@@ -97,7 +107,7 @@
                       <button onclick="showToast('Please sign in to like comments.', 'error')"><i class="fas fa-heart"></i></button>
                     <% } %>
                     <p class="likes bold">Likes: <%= comment.likes %></p>
-                    <% if (user && comment.user.toString() === user._id.toString()) { %>
+                    <% if (user && comment.user._id.toString() === user._id.toString()) { %>
                       <form action="/comments/<%= comment._id %>?_method=DELETE" method="POST">
                         <button type="submit"><i class="fas fa-trash-alt"></i></button>
                       </form>
@@ -108,17 +118,6 @@
             </li>
           <% }) %>
         </ul>
-
-        <% if (user) { %>
-          <form action="/comments/<%= post._id %>" method="POST">
-            <label for="comment">Add a comment:</label>
-            <textarea id="comment" name="comment" rows="1" required></textarea>
-            <div class="commentButton"></div>
-            <button type="submit">Submit</button>
-          </form>
-        <% } else { %>
-          <p><em><a href="/signin">Sign in</a> to add a comment.</em></p>
-        <% } %>
 
         <div class="mapFeedButton">
           <a href="/map"><i class="fas fa-map-marked-alt"></i> Return to Map</a>
@@ -150,7 +149,6 @@
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' }
         });
-        window.location.reload();
         if (response.ok) {
           const data = await response.json();
           document.getElementById('upvoteCount').textContent = data.post.upvotes;
@@ -175,7 +173,6 @@
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' }
         });
-        window.location.reload();
         if (response.ok) {
           const data = await response.json();
           document.getElementById('upvoteCount').textContent = data.post.upvotes;
@@ -201,24 +198,66 @@
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' }
         });
-        window.location.reload();
-        // if (response.ok) {
-        //   const data = await response.json();
-        //   if (data.bookmarked) {
-        //     bookmarkIcon.classList.remove('fa-regular fa-bookmark');
-        //     bookmarkIcon.classList.add('fa-solid fa-bookmark');
-        //   } else {
-        //     bookmarkIcon.classList.remove('fa-regular fa-bookmark');
-        //     bookmarkIcon.classList.add('fa-solid fa-bookmark');
-        //   }
-        // } else {
-        //   console.error('Failed to toggle bookmark');
-        // }
       } catch (err) {
         showToast('Failed to bookmark: ' + data.message, 'error');
       }
     });
   }
+
+
+  // Downvote handler
+  const commentForm = document.getElementById('commentForm');
+  if (commentForm) {
+    commentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      fetch(`/comments/<%= post._id %>`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({comment: document.getElementById("comment").value})
+      }).then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            showToast(data.message, 'success');
+            const commentList = document.getElementById('commentList');
+            const commHTML = `
+              <li class="Comments">
+                <div class="commentSection">
+                  <div>
+                    <p class="bold">${data.comment.user.firstName} Says:</p>
+                    <div class="commentText">
+                      <p>"${ data.comment.commentText }"</p>
+                    </div>
+                    <div class="commentLikes">
+                      <form action="/comments/${ data.comment._id }/like?_method=PUT" method="POST">
+                        <button type="submit"><i class="fas fa-heart"></i></button>
+                      </form>
+                      <p class="likes bold">Likes: ${ data.comment.likes }</p>
+                      <form action="/comments/${ data.comment._id }?_method=DELETE" method="POST">
+                        <button type="submit"><i class="fas fa-trash-alt"></i></button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            `
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = commHTML;
+            const newCommentElement = tempDiv.firstElementChild;
+            commentList.prepend(newCommentElement);
+          });
+        } else {
+          response.json().then(data => {
+            showToast(data.message, 'error');
+          });
+        }
+      }).catch(error => {
+        showToast('Failed to coment' + error, 'error');
+      })
+    });
+  }
+
+
+
 </script>
 
 <%- include('partials/footer') -%>

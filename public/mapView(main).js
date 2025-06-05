@@ -333,7 +333,7 @@ function performGeocode(query, originalInput) {
     }
   });
 
-  console.log('Searching alerts near:', originalInput);
+  console.log('Searching sightings near:', originalInput);
 
   geocoder.geocode(
     query,
