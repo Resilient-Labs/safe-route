@@ -10,18 +10,15 @@
     <h3 class="center black">View real-time sightings that improve accessibility and promote safer, walkable communities</h3>
     <!-- Filter types stored in data attribute -->
 
-   
-
     <div class="filter-bar">
       <ul class="flex-4 post-category-container">
         <li data-filter="all"><i class="fa-regular fa-bell"></i> All</li>
         <li data-filter="accessibility"><i class="fa-brands fa-accessible-icon"></i> Accessibility</li>
-        <li data-filter="suspicious"><i class="fa-solid fa-exclamation"></i> Suspicious Activity</li>
-        <li data-filter="Motor"><i class="fa-solid fa-car-burst"></i> Motor Accidents</li>
-        <li data-filter="Infrastructure"><i class="fa-solid fa-person-digging"></i> Infrastructure</li>
+        <li data-filter="suspicious activity"><i class="fa-solid fa-person-harassing"></i> Suspicious Activity</li>
+        <li data-filter="motor accident"><i class="fa-solid fa-car-burst"></i> Motor Accidents</li>
+        <li data-filter="infrastructure"><i class="fa-solid fa-person-digging"></i> Infrastructure</li>
+        <li data-filter="bookmarked"><i class="fa-solid fa-bookmark"></i> My Bookmarks</li>
       </ul>
-    
-      
     </div>
 
     <div class="row justify-content-center mt-5">
@@ -47,7 +44,7 @@
                   </form>
                 <% } else { %>
                   <button
-                    class="bookmark-button" onclick="showToast('Please sign in to bookmark posts.')"
+                    class="bookmark-button" onclick="showToast('Please sign in to bookmark posts.', 'error')"
                     style="background:none; border:none; cursor:pointer;"
                   >
                     <i class="fa-regular fa-2xl fa-bookmark mright-8"></i>
@@ -72,7 +69,7 @@
                         </form>
                       <% } else { %>
                         <button
-                          class="upvote-caret-btn" onclick="showToast('Please sign in to upvote.')"
+                          class="upvote-caret-btn" onclick="showToast('Please sign in to upvote.', 'error')"
                         >
                           <i class="fa-solid fa-square-caret-up green"></i>
                         </button>
@@ -98,7 +95,7 @@
                         </form>
                       <% } else { %>
                         <button
-                          class="downvote-caret-btn" onclick="showToast('Please sign in to downvote.')"
+                          class="downvote-caret-btn" onclick="showToast('Please sign in to downvote.', 'error')"
                         >
                           <i class="fa-solid fa-square-caret-down red"></i>
                         </button>
