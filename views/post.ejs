@@ -91,7 +91,7 @@
         <h3>Comments</h3>
         <ul id="commentList">
           <% comments.forEach(comment => { %>
-            <li class="Comments">
+            <li id="list-comment-<%= comment._id %>" class="Comments">
               <div class="commentSection">
                 <div>
                   <p class="bold"><%= comment.user.firstName %>:</p>
@@ -100,13 +100,13 @@
                   </div>
                   <div class="commentLikes">
                     <% if (user) { %>
-                      <form action="/comments/<%= comment._id %>/like?_method=PUT" method="POST">
-                        <button type="submit"><i class="fas fa-heart"></i></button>
+                      <form class="likeComment" id="comment-<%= comment._id %>">
+                        <button type="submit"><i id="likeIcon-<%= comment._id %>" class="fas fa-heart <%= comment.likeBy.includes(user._id) ? 'red'  : ''  %>"></i></button>
                       </form>
                     <% } else { %>
                       <button onclick="showToast('Please sign in to like comments.', 'error')"><i class="fas fa-heart"></i></button>
                     <% } %>
-                    <p class="likes bold">Likes: <%= comment.likes %></p>
+                    <p class="likes bold">Likes: <span id="likeCount-<%= comment._id %>"><%= comment.likes %></span></p>
                     <% if (user && comment.user._id.toString() === user._id.toString()) { %>
                       <form action="/comments/<%= comment._id %>?_method=DELETE" method="POST">
                         <button type="submit"><i class="fas fa-trash-alt"></i></button>
@@ -153,7 +153,7 @@
           const data = await response.json();
           document.getElementById('upvoteCount').textContent = data.post.upvotes;
           document.getElementById('downvoteCount').textContent = data.post.downvotes;
-          showToast('Upvoted!' + 'success');
+          showToast('Upvoted!', 'success');
         } else {
           showToast('Failed to upvote: ' + data.message, 'error');
         }
@@ -204,7 +204,6 @@
     });
   }
 
-
   // Downvote handler
   const commentForm = document.getElementById('commentForm');
   if (commentForm) {
@@ -228,10 +227,10 @@
                       <p>"${ data.comment.commentText }"</p>
                     </div>
                     <div class="commentLikes">
-                      <form action="/comments/${ data.comment._id }/like?_method=PUT" method="POST">
-                        <button type="submit"><i class="fas fa-heart"></i></button>
+                      <form class="likeComment" id="comment-${ data.comment._id }">
+                        <button type="submit"><i id="likeIcon-${ data.comment._id }" class="fas fa-heart"></i></button>
                       </form>
-                      <p class="likes bold">Likes: ${ data.comment.likes }</p>
+                      <p class="likes bold">Likes: <span id="likeCount-${ data.comment._id }">${ data.comment.likes }</span></p>
                       <form action="/comments/${ data.comment._id }?_method=DELETE" method="POST">
                         <button type="submit"><i class="fas fa-trash-alt"></i></button>
                       </form>
@@ -244,6 +243,28 @@
             tempDiv.innerHTML = commHTML;
             const newCommentElement = tempDiv.firstElementChild;
             commentList.prepend(newCommentElement);
+            const newCommentForm = document.querySelector(`form#comment-${ data.comment._id }`);
+            newCommentForm.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const [route, id] = newCommentForm.id.split('-');
+              const response = await fetch(
+                `/comments/${id}/like?_method=PUT`,
+                {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' }
+                }
+              );
+              const data = await response.json();
+              if (response.ok) {
+                const likeCount = document.getElementById(`likeCount-${id}`);
+                likeCount.innerText = data.comment.likes;
+                const likeIcon = document.getElementById(`likeIcon-${id}`);
+                likeIcon.classList.toggle('red');
+              } else {
+                console.error(`Failed to like`, data);
+                showToast(data.message, 'error');
+              }
+            });
           });
         } else {
           response.json().then(data => {
@@ -256,7 +277,30 @@
     });
   }
 
-
+  const likeCommentForms = document.getElementsByClassName("likeComment");
+  for (const likeCommentForm of likeCommentForms) {
+    likeCommentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const [route, id] = likeCommentForm.id.split('-');
+      const response = await fetch(
+        `/comments/${id}/like?_method=PUT`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        const likeCount = document.getElementById(`likeCount-${id}`);
+        likeCount.innerText = data.comment.likes;
+        const likeIcon = document.getElementById(`likeIcon-${id}`);
+        likeIcon.classList.toggle('red');
+      } else {
+        console.error(`Failed to like`, data);
+        showToast(data.message, 'error');
+      }
+    });
+  };
 
 </script>
 

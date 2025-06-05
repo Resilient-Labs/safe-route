@@ -62,7 +62,8 @@ module.exports = {
 
       const updatedComment = await Comment.findByIdAndUpdate(
         commentID,
-        operation
+        operation,
+        { new: true }
       ).populate('user');
       res.json({
         message: 'Comment liked or unliked',
@@ -85,9 +86,11 @@ module.exports = {
     try {
       const comment = await Comment.findById(req.params.id);
       if (req.user.id === comment.user.toString()) {
-        const deletedComment = await Comment.findByIdAndUpdate(req.params.id, {
-          isHidden: true
-        }).populate('user');
+        const deletedComment = await Comment.findByIdAndUpdate(
+          req.params.id,
+          { isHidden: true },
+          { new: true }
+        ).populate('user');
 
         if (!deletedComment) {
           res.status(404).json({
@@ -95,11 +98,11 @@ module.exports = {
             error: err.message
           });
         };
-
-        res.json({
-          message: 'Comment successfully "deleted"',
+        req.flash("success", {
+          msg: "Successfully deleted comment",
           comment: deletedComment
         });
+        res.redirect(`/posts/${deletedComment.post.toString()}`);
       } else {
         res.status(401).json({
           message: 'You can only delete your own comments',
