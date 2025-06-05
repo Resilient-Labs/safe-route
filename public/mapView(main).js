@@ -54,12 +54,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 icon = accessibilityIcon;
                 break;
               case 'suspicious activity':
-              case 'safety':
-              case 'lighting':
+            
                 icon = warningIcon;
                 break;
               case 'motor accident':
-              case 'maintenance':
+             
               case 'infrastructure':
                 icon = cautionIcon;
                 break;
@@ -70,13 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const marker = L.marker([lat, lng], { icon: icon })
               .addTo(map)
-              .bindPopup(`
-                ${
-                  post.type?.charAt(0).toUpperCase() +
-                    post.type?.slice(1) || 'Info'
-                }
-                ${post.description || 'No description'}`
-              );
+              .bindPopup(`${ post.type?.charAt(0).toUpperCase() + post.type?.slice(1) || 'Info' } ${post.description || 'No description'}`);
             window.dynamicMarkers.push(marker);
           }
         });
@@ -130,12 +123,11 @@ document.addEventListener('DOMContentLoaded', function () {
             icon = accessibilityIcon;
             break;
           case 'suspicious activity':
-          case 'safety':
-          case 'lighting':
+          
             icon = warningIcon;
             break;
           case 'motor accident':
-          case 'maintenance':
+          
           case 'infrastructure':
             icon = cautionIcon;
             break;
@@ -168,10 +160,11 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   const alertForm = document.getElementById('alertForm');
+  
   // Form submission handler
   alertForm.addEventListener('submit', function (e) {
     e.preventDefault();
-
+console.log(alertForm)
     const formData = new FormData(alertForm);
 
     formData.append('incidentType', document.getElementById('type').value);
@@ -193,10 +186,11 @@ document.addEventListener('DOMContentLoaded', function () {
         limit: 1
       }
     });
-
+    
     geocoder.geocode(
-      formData.address,
+      formData.get('address'),
       function (results) {
+        
         if (results && results.length > 0) {
           const result = results[0];
           const lat = result.center.lat;
@@ -219,12 +213,11 @@ document.addEventListener('DOMContentLoaded', function () {
               icon = accessibilityIcon;
               break;
             case 'suspicious activity':
-            case 'safety':
-            case 'lighting':
+            
               icon = warningIcon;
               break;
             case 'motor accident':
-            case 'maintenance':
+           
             case 'infrastructure':
               icon = cautionIcon;
               break;
