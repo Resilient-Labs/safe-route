@@ -1,6 +1,7 @@
 * {
     box-sizing: border-box;
     font-family: "Plus Jakarta Sans", sans-serif;
+    margin: 0;
 }
 
 body {
@@ -8,10 +9,16 @@ body {
     color: #333;
 }
 
+h1 {
+    margin-top: 60px;
+    margin-bottom: 20px;
+}
+
 h1, h3 {
-    font-weight: 700;
+    /* font-weight: 700; */
     font-family: "Plus Jakarta Sans", sans-serif;
 }
+
 
 svg {
     width: 1.25rem;
@@ -147,6 +154,7 @@ svg {
     object-fit: cover;
     object-position: top center;
     border-radius: 0.5rem;
+    margin-top: 10px;
 }
 
 .downvote-caret-btn,
@@ -297,4 +305,9 @@ svg {
 /* Layout spacing for view */
 .view {
     margin-bottom: 5px;
+}
+
+.post-timestamp {
+    font-size: 14px; 
+    color:rgb(144, 144, 144)
 }
