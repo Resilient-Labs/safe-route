@@ -6,10 +6,10 @@ With a clean map view and accessible submission form, SafeRoute enables everyone
 
 **Project Link:** [SafeRoute](https://safe-route-6iqv.onrender.com/)
 
-<img width="400" alt="saferoute-home-page" src="https://github.com/user-attachments/assets/75424713-a6a6-4b95-8a2f-aebbf1d7fc4d" />
-<img width="400" alt="saferoute-maps-page" src="https://github.com/user-attachments/assets/8f1163fe-ba3c-43c5-b67e-009c5a4d26f2" />
-<img width="400" alt="saferoute-sightings-page" src="https://github.com/user-attachments/assets/bebdea88-4043-4de5-bb29-537fda629445" />
-<img width="400" alt="saferoute-resources-page" src="https://github.com/user-attachments/assets/f571bc2f-3ffa-48a3-ad99-88be7f47fe77" />
+<img width="350" alt="saferoute-home-page" src="https://github.com/user-attachments/assets/75424713-a6a6-4b95-8a2f-aebbf1d7fc4d" />
+<img width="350" alt="saferoute-maps-page" src="https://github.com/user-attachments/assets/8f1163fe-ba3c-43c5-b67e-009c5a4d26f2" />
+<img width="350" alt="saferoute-sightings-page" src="https://github.com/user-attachments/assets/bebdea88-4043-4de5-bb29-537fda629445" />
+<img width="350" alt="saferoute-resources-page" src="https://github.com/user-attachments/assets/f571bc2f-3ffa-48a3-ad99-88be7f47fe77" />
 
 ## 🌟 Key Features:
    - **Sighting Reporting**: Users can report harassment, hazards, and accessibility barriers in real time to improve community safety. Addresses along with a photo are displayed to ensure people are aware of specific sightings in their neighborhood.
