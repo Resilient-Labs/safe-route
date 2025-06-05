@@ -230,7 +230,8 @@ module.exports = {
       if (!checkUpVote) {
         const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
-          { $inc: { upvotes: 1 } }
+          { $inc: { upvotes: 1 } },
+          { new: true }
         );
         const upvote = await PostUserUpvoteSchema.create({
           user: req.user.id,
@@ -244,7 +245,8 @@ module.exports = {
       } else {
         const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
-          { $inc: { upvotes: -1 } }
+          { $inc: { upvotes: -1 } },
+          { new: true }
         );
         const upvote = await PostUserUpvoteSchema.findByIdAndDelete(upVoteHash);
         res.json({
@@ -274,7 +276,8 @@ module.exports = {
       if (!checkDownVote) {
         const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
-          { $inc: { downvotes: 1 } }
+          { $inc: { downvotes: 1 } },
+          { new: true }
         );
         const downvote = await PostUserDownvoteSchema.create({
           user: req.user.id,
@@ -288,7 +291,8 @@ module.exports = {
       } else {
         const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
-          { $inc: { downvotes: -1 } }
+          { $inc: { downvotes: -1 } },
+          { new: true }
         );
         const downvote = await PostUserDownvoteSchema.findByIdAndDelete(downVoteHash);
         res.json({

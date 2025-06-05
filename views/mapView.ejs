@@ -31,10 +31,10 @@
           <h3>Submit an Alert</h3>
           <p>Click the Map or Use the Form Below to Submit an Alert</p>
 
-          <form id="alertForm">
+          <form id="alertForm" novalidate>
             <div class="form-group">
               <label for="incidentType">Incident Type</label>
-              <select id="incidentType" name="incidentType">
+              <select id="incidentType" name="incidentType" required>
                 <option value="">Select Type</option>
                 <option value="accessibility">Accessibility</option>
                 <option value="suspiciousActivity">Suspicious Activity</option>
@@ -49,7 +49,8 @@
                 type="text"
                 id="address"
                 name="address"
-                placeholder="Enter Address" />
+                placeholder="Enter Address"
+                required />
             </div>
 
             <div class="form-group">
@@ -57,7 +58,8 @@
               <textarea
                 id="description"
                 name="description"
-                placeholder="Enter Incident Details"></textarea>
+                placeholder="Enter Incident Details"
+                required></textarea>
             </div>
 
             <div class="checkbox-group">
@@ -81,11 +83,16 @@
     <!-- Pass server data to JavaScript -->
 <script>
   window.serverData = {
-        mapCenter: <%- JSON.stringify(locals.mapCenter) %>
+        mapCenter: <%- JSON.stringify(locals.mapCenter) %>,
         markers: <%- JSON.stringify(locals.markers) %> };
 </script>
      
-
+  <!-- Your main Map JavaScript file - moved here and out of header to load only on this map page -->
+    <script src="mapView(main).js"></script>
+  <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet Control Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
 
     <!-- Footer -->
     <%- include('partials/footer') -%>

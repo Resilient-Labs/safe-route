@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Validate required fields
         if (!formData.incidentType || !formData.address) {
-            alert('Please fill in all required fields (Incident Type and Address).');
+            showToast('Please fill in all required fields (Incident Type and Address).', 'error');
             return;
         }
 
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Validate that result is within U.S. bounds
                 if (!isWithinUSBounds(lat, lng)) {
-                    alert('Please enter a valid U.S. address. International locations are not supported.');
+                    showToast('Please enter a valid U.S. address. International locations are not supported.', "error");
                     return;
                 }
 
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(data => {
                     console.log('Alert stored successfully:', data);
-                    alert('Alert submitted successfully and marker added to map!');
+                    showToast('Alert submitted successfully and marker added to map!');
                     
                     // Reset form
                     document.getElementById('alertForm').reset();
@@ -274,11 +274,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
             } else {
-                alert('Could not find the specified address. Please check the address and try again.');
+                showToast('Could not find the specified address. Please check the address and try again.', 'error');
             }
         }, function(error) {
             console.error('Geocoding error:', error);
-            alert('Error finding address location. Please try again.');
+            showToast('Error finding address location. Please try again.', 'error');
         });
     });
 
@@ -308,7 +308,7 @@ function searchAlerts() {
     const location = document.getElementById('searchLocation').value.trim();
 
     if (!location) {
-        alert('Please enter an address or zip code.');
+        showToast('Please enter an address or zip code.', 'error');
         return;
     }
 
@@ -338,7 +338,7 @@ function performGeocode(query, originalInput) {
             const lng = result.center.lng;
 
             if (!isWithinUSBounds(lat, lng)) {
-                alert('Please enter a valid U.S. address or zip code. International locations are not supported.');
+                showToast('Please enter a valid U.S. address or zip code. International locations are not supported.', "error");
                 return;
             }
 
@@ -361,13 +361,13 @@ function performGeocode(query, originalInput) {
 
         } else {
             if (isValidUSZipCode(originalInput)) {
-                alert('Zip code not found. Please check the zip code and try again.');
+                showToast('Zip code not found. Please check the zip code and try again.', 'error');
             } else {
-                alert('Location not found. Please try a different address.');
+                showToast('Location not found. Please try a different address.', 'error');
             }
         }
     }, function(error) {
         console.error('Geocoding error:', error);
-        alert('Error searching for location. Please try again.');
+        showToast('Error searching for location. Please try again.', 'error');
     });
 }
