@@ -2,7 +2,7 @@
 
 **About:** SafeRoute is a community-powered safety map designed for neighborhoods to come together and empower one another with knowledge and resources. It lets residents anonymously report sightings of broken streetlights, suspicious activity, dangerous infrastructure, and more.
 
-With a clean map view and accessible submission form, SafeRoute enables everyone— especially marginalized communities such as disabled folks, women, and elders— to move through their communities with confidence. SafeRoute is built for local awareness, fear reduction, and community solidarity through real-time, peer-sourced alerts.
+With a clean map view and accessible submission form, SafeRoute enables everyone— especially marginalized communities such as disabled folks, women, and elders— to move through their communities with confidence. SafeRoute is built for local awareness, fear reduction, and community solidarity through real-time, peer-sourced sightings.
 
 **Project Link:** [SafeRoute](https://safe-route-6iqv.onrender.com/)
 
@@ -12,9 +12,13 @@ With a clean map view and accessible submission form, SafeRoute enables everyone
 <img width="350" alt="saferoute-resources-page" src="https://github.com/user-attachments/assets/f571bc2f-3ffa-48a3-ad99-88be7f47fe77" />
 
 ## 🌟 Key Features:
-   - **Sighting Reporting**: Users can report harassment, hazards, and accessibility barriers in real time to improve community safety. Addresses along with a photo are displayed to ensure people are aware of specific sightings in their neighborhood.
-   - **Interactive Map**: Explore alerts posted by neighbors directly on our comprehensive, interactive map! Checkout sightings in your area with a view of nearby alerts.
-   - **Community Resources**: Our page empowers you with safety tips, support helplines, and accessibility services tailored to your city. Learn about ways to report safety concerns, request repairs to fix broken infrastructure, and more!
+
+   - **Safety Sightings**
+       Users can report harassment, hazards, and accessibility barriers in real time to improve community safety. Addresses along with a photo are displayed to ensure people are aware of specific sightings in their neighborhood.
+   - **Interactive Map**
+       Explore sightings posted by neighbors directly on our comprehensive, interactive map!
+   - **Community Resources**
+       Our page empowers you with safety tips, support helplines, and accessibility services tailored to your city. Learn about ways to report safety concerns, request repairs to fix broken infrastructure, and more!
 
 ## 🛠️ Tech Stack:
 | **Client-side:** | **Server-side:** | **Libraries/Databases:** |
