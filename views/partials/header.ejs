@@ -1,37 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SafeRoute</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeRoute</title>
 
-    <!-- External Stylesheets - DO NOT ADD MORE - ADD ALL FUTURE STYLESHEETS ON TOP LINE OF YOUR EJS FILE -->
-    <link rel="stylesheet" href="/css/headerFooter.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- Leaflet Control Geocoder CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.css" />
-  
-    <!-- Toastify CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+  <link rel="apple-touch-icon" sizes="180x180" href="\imgs\apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="\imgs\favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="\imgs\favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
 
-  </head>
-  <body>
+  <!-- External Stylesheets - DO NOT ADD MORE - ADD ALL FUTURE STYLESHEETS ON TOP LINE OF YOUR EJS FILE -->
+  <link rel="stylesheet" href="/css/headerFooter.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet Control Geocoder CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.css" />
 
-<!-- Header - had to add currentPage to reflect Theo;s code to avoid ref errors-->
-<header class="header">
-  <div class="logo">SafeRoute</div>
-  <nav class="nav-menu">
-    <a href="/" class="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">Home</a>
-    <a href="/map" class="<%= typeof currentPage !== 'undefined' && currentPage === 'map' ? 'active' : '' %>">Map</a>
-    <a href="/feed" class="<%= typeof currentPage !== 'undefined' && currentPage === 'sightings' ? 'active' : '' %>">Sightings</a>
-    <a href="/resources" class="<%= typeof currentPage !== 'undefined' && currentPage === 'resources' ? 'active' : '' %>">Resources</a>
+  <!-- Toastify CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
 
-    <% if (typeof user !== 'undefined' && user) { %>  
-      <button class="sign-in-btn" onclick="location.href='/signout'">Sign Out</button>
-    <% } else { %>
-      <button class="sign-up-btn" onclick="location.href='/signup'">Sign Up</button>
-      <button class="sign-in-btn" onclick="location.href='/signin'">Sign In</button>
-    <% } %>
-  </nav>
-</header>
+</head>
+
+<body>
+
+  <!-- Header - had to add currentPage to reflect Theo;s code to avoid ref errors-->
+  <header class="header">
+    <a href="/">
+      <img class="logo" src="\imgs\safe-route-oneline.png" alt="saferoute logo">
+    </a>
+    <nav class="nav-menu">
+      <a href="/" class="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">Home</a>
+      <a href="/map" class="<%= typeof currentPage !== 'undefined' && currentPage === 'map' ? 'active' : '' %>">Map</a>
+      <a href="/feed"
+        class="<%= typeof currentPage !== 'undefined' && currentPage === 'alert' ? 'active' : '' %>">Alerts</a>
+      <a href="/resources"
+        class="<%= typeof currentPage !== 'undefined' && currentPage === 'resources' ? 'active' : '' %>">Resources</a>
+
+      <% if (typeof user !=='undefined' && user) { %>
+        <button class="sign-in-btn" onclick="location.href='/signout'">Sign Out</button>
+        <% } else { %>
+          <button class="sign-up-btn" onclick="location.href='/signup'">Sign Up</button>
+          <button class="sign-in-btn" onclick="location.href='/signin'">Sign In</button>
+          <% } %>
+    </nav>
+  </header>
