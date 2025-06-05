@@ -59,6 +59,15 @@
   color: white;
 }
 
+
+.fa-bars{
+  color: #4a6fa5;
+}
+/*drop down menu */
+/* .dropbtn {
+  width: 30%
+} */
+
 /* Footer Styles */
 .footer {
   font-family: "Plus Jakarta Sans", sans-serif;
@@ -100,4 +109,98 @@
   text-decoration: none;
   color: #4a5568;
   font-size: 14px;
+}
+
+/* drop down removal */
+.dropdown {
+  display:none;
+}
+
+
+
+@media (max-width: 830px) {
+/*home*/
+a:nth-of-type(1) {
+  display: none;
+}
+
+a:nth-of-type(2) {
+  display: none;
+}
+
+a:nth-of-type(3) {
+  display: none;
+}
+
+a:nth-of-type(4) {
+  display: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  margin-top:15px;
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 10px;
+  z-index: 3;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 10px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:nth-of-type(5) {
+display:none;
+}
+
+.dropdown-content a:nth-of-type(6) {
+display:none;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+}
+
+
+@media (max-width: 500px) {
+
+button:nth-of-type(1) {
+  display: none;
+}
+
+button:nth-of-type(2) {
+  display: none;
+}
+
+.dropdown-content a:nth-of-type(5) {
+display:inline-block;
+}
+
+.dropdown-content a:nth-of-type(6) {
+display:inline-block;
+}
+
+.dropdown:hover {
+  direction: rtl;
+}
+.dropdown-content {
+  direction: ltr;
 }

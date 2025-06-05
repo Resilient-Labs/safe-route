@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -19,13 +20,34 @@
 
   <!-- Toastify CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-
 </head>
 
 <body>
 
   <!-- Header - had to add currentPage to reflect Theo;s code to avoid ref errors-->
   <header class="header">
+
+    <div class="logo">SafeRoute</div>
+    <nav class="nav-menu">
+
+      <div class="dropdown">
+        <i class="fa-solid fa-bars fa-xl dropbtn"></i>
+        <div class="dropdown-content">
+          <a href="/"
+            class="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">Home</a>
+          <a href="/map"
+            class="<%= typeof currentPage !== 'undefined' && currentPage === 'map' ? 'active' : '' %>">Map</a>
+          <a href="/feed"
+            class="<%= typeof currentPage !== 'undefined' && currentPage === 'alert' ? 'active' : '' %>">Sightings</a>
+          <a href="/resources"
+            class="<%= typeof currentPage !== 'undefined' && currentPage === 'resources' ? 'active' : '' %>">Resources</a>
+
+          <a href='/signup'"> Sign Up </a>
+          <a href='/signin'"> Sign In </a>
+
+        </div>
+      </div>
+
     <a href="/">
       <img class="logo" src="\imgs\safe-route-oneline.png" alt="saferoute logo">
     </a>
@@ -34,6 +56,7 @@
       <a href="/map" class="<%= typeof currentPage !== 'undefined' && currentPage === 'map' ? 'active' : '' %>">Map</a>
       <a href="/feed"
         class="<%= typeof currentPage !== 'undefined' && currentPage === 'alert' ? 'active' : '' %>">Sightings</a>
+
       <a href="/resources"
         class="<%= typeof currentPage !== 'undefined' && currentPage === 'resources' ? 'active' : '' %>">Resources</a>
 
