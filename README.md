@@ -1,4 +1,4 @@
-# SafeRoute📍 🗺️
+<h1 align="center"> 📍SafeRoute 🗺️ </h1>
 
 **About:** SafeRoute is a community-powered safety map designed for neighborhoods to come together and empower one another with knowledge and resources. It lets residents anonymously report sightings of broken streetlights, suspicious activity, dangerous infrastructure, and more.
 
@@ -12,9 +12,9 @@ With a clean map view and accessible submission form, SafeRoute enables everyone
 <img width="500" alt="saferoute-resources-page" src="https://github.com/user-attachments/assets/f571bc2f-3ffa-48a3-ad99-88be7f47fe77" />
 
 ## 🌟 Key Features:
-   - **Sighting Reporting**: Report harassment, hazards, and accessibility barriers in real time to improve local safety.
-   - **Interactive Map**: Explore alerts posted by neighbors directly on an easy-to-use interactive map.
-   - **Community Resources**: Access safety tips, support helplines, and accessibility services tailored to your city.
+   - **Sighting Reporting**: Users can report harassment, hazards, and accessibility barriers in real time to improve community safety. Addresses along with a photo are displayed to ensure people are aware of specific sightings in their neighborhood.
+   - **Interactive Map**: Explore alerts posted by neighbors directly on our comprehensive, interactive map! Checkout sightings in your area with a view of nearby alerts.
+   - **Community Resources**: Our page empowers you with safety tips, support helplines, and accessibility services tailored to your city. Learn about ways to report safety concerns, request repairs to fix broken infrastructure, and more!
 
 ## 🛠️ Tech Stack:
 | **Client-side:** | **Server-side:** | **Libraries/Databases:** |
@@ -24,19 +24,19 @@ With a clean map view and accessible submission form, SafeRoute enables everyone
 
 **Highlights:**
 - Passport.js: Authenticates users and ensures ability to stay logged in during different sessions.
-- Toastify.js: 
-- Leaflet.js:
-- Node-Geocoder:
+- Toastify.js: Presents consistent success and error alerts to inform users.
+- Leaflet.js: Displays an interactive and engaging map for users.
+- Node-Geocoder: Obtain coordinates of an address and attributes appropriate latitude and longitude coordinates for map plotting.
 
 ## 🏔️ Challenges:
 -
 -
 -
 
-## 🌱 Getting Started:
+## 🚞 Getting Started:
 1. Clone the SafeRoute repository.
-2. Go to config and set up your appropriate variables according to our .env.template file.
-3. Run the following lines of code:
+2. Go to config folder and set up variables according to our .env.template file.
+3. Run the following code:
 ```
 npm i
 npm start
@@ -56,4 +56,5 @@ Contributions are what make the open-source community an amazing place to learn,
 4. Push to the Branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-<h3 align="center">Thank you for checking out SafeRoute! We look forward to connecting.</h3>
+<h3 align="center">Thank you for checking out SafeRoute!</h3>
+<h3 align="center">We look forward to connecting 🚀</h3>
