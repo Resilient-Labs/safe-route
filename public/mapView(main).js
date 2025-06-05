@@ -126,11 +126,10 @@ document.addEventListener('DOMContentLoaded', function () {
           case 'accessibility':
             icon = accessibilityIcon;
             break;
-          case 'suspiciousActivity':
-          case 'motorAccident':
+          case 'suspicious activity':
+          case 'motor accident':
             icon = warningIcon;
             break;
-
           case 'infrastructure':
             icon = cautionIcon;
             break;
