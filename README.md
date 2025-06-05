@@ -51,7 +51,6 @@ npm start
 ```
 4. Check out SafeRoute on your local browser:
    Go to `http://localhost:2121`
-
 5. Contribute to your community with sightings! Explore our tailored safety resources!
 
 
