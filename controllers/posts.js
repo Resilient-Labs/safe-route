@@ -137,7 +137,9 @@ module.exports = {
           return res.redirect("back");
         };
       };
-      const comments = await Comment.find({ post: req.params.id, isHidden: false }).sort({ createdAt: -1 });
+      const comments = await Comment.find({
+        post: req.params.id, isHidden: false
+      }).sort({ createdAt: -1 }).populate('user');
 
       if (!req.user) {
         return res.render("post.ejs", {

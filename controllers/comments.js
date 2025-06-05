@@ -15,6 +15,7 @@ module.exports = {
         user: req.user.id,
         post: req.params.id
       });
+      comment.user = req.user;
       res.json({
         message: 'Successfully added comment',
         comment
@@ -62,7 +63,7 @@ module.exports = {
       const updatedComment = await Comment.findByIdAndUpdate(
         commentID,
         operation
-      );
+      ).populate('user');
       res.json({
         message: 'Comment liked or unliked',
         comment: updatedComment
@@ -86,7 +87,7 @@ module.exports = {
       if (req.user.id === comment.user.toString()) {
         const deletedComment = await Comment.findByIdAndUpdate(req.params.id, {
           isHidden: true
-        });
+        }).populate('user');
 
         if (!deletedComment) {
           res.status(404).json({
