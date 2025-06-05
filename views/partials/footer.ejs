@@ -23,7 +23,7 @@
     <script src="/js/toast.js"></script>
 
     <!-- If there’s at least one success, error on info message, this shows it on each ejs page w a diff color, catches errors in realtime display  -->
-     <script>
+    <script>
       <% if (messages.success && messages.success.length > 0) { %>
         showToast("<%= messages.success[0].msg %>", "success");
       <% } else if (messages.errors && messages.errors.length > 0) { %>

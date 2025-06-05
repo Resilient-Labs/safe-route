@@ -74,6 +74,12 @@ h2 {
 .postImage {
   text-align: center;
 }
+.green {
+  color: #227C10;
+}
+.red {
+  color: #D3171F;
+}
 
 .postImage img {
   width: 100%;

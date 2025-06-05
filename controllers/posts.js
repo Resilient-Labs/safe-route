@@ -125,16 +125,16 @@ module.exports = {
   getPostPage: async (req, res) => {
     const validationErrors = [];
     try {
-      const post = await Post.findById({
+      const post = await Post.findOne({
         _id: req.params.id,
         isHidden: false,
         isResolved: false
       });
       if (!post) {
-        validationErrors.push({ msg: "Unable to fetch post" })
+        validationErrors.push({ msg: "Unable to fetch post, it may have been deleted" })
         if (validationErrors.length) {
           req.flash("errors", validationErrors);
-          return res.redirect("back");
+          return res.redirect("/feed");
         };
       };
       const comments = await Comment.find({
@@ -166,7 +166,6 @@ module.exports = {
         hasCurrentUserDownvoted: !downvote ? false : true,
         hasCurrentUserBookmarked: !bookmark ? false : true,
       });
-      console.log(hasCurrentUserBookmarked)
     } catch (err) {
       console.log(err)
       res.redirect('back');
@@ -367,12 +366,16 @@ module.exports = {
         );
         await Post.findByIdAndUpdate(
           req.params.id,
-          { isHidden: true }
+          { isHidden: true },
+          { new: true }
         );
         // res.json({
         //   message: 'Post successfully deleted',
         //   post
         // });
+        req.flash("success", {
+          msg: "Sucessfully deleted post"
+        });
         res.redirect('/feed')
       } else {
         res.status(401).json({

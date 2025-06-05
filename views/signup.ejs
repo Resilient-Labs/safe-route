@@ -9,16 +9,6 @@
     <main class="container sign-main">
         <div class="row justify-content-center">
             <section class="col-6 mt-5">
-                <% if (locals.messages.errors) { %>
-                    <% messages.errors.forEach( el => { %>
-                        <div class="alert alert-danger"><%= el.msg %></div>
-                    <% }) %>    
-                <% } %>
-                <% if (locals.messages.info) { %>
-                    <% messages.info.forEach( el => { %>
-                        <div class="alert alert-info"><%= el.msg %></div>
-                    <% }) %>    
-                <% } %>
                 <section class="sign-intro">
                   <h2 class="sign-account">Sign Up to Share Sightings <i class="fa-solid fa-bell fa-shake fa-sm" style="color: #e72222;"></i></h2>
                 </section> 
