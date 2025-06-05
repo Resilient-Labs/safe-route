@@ -56,7 +56,7 @@
     flex-direction: column;
     width: 70%;
     margin: 0.5rem 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Plus Jakarta Sans", sans-serif;
     font-size: 0.9rem;
 }
 
@@ -76,7 +76,7 @@
 
 .sign-page-div input::placeholder{
    color: #B3B3B3;
-    font-family: 'Poppins', sans-serif;
+   font-family: "Plus Jakarta Sans", sans-serif;
     font-size: 0.7rem;
 }
 
@@ -106,7 +106,7 @@
     margin-bottom: 0.3rem;
 }
 
-p, .sign-link{
+.sign-end, .sign-link{
     font-family: 'Times New Roman', Times, serif;
     color: rgb(87, 85, 85);
 }
