@@ -7,27 +7,18 @@
   <div class="container">
     <h1 class="center navy-blue">Post Sightings</h1>
 
-    <h3 class="center black">View real-time incidents to help vulnerable communities</h3>
+    <h3 class="center black">View real-time sightings that improve accessibility and promote safer, walkable communities</h3>
     <!-- Filter types stored in data attribute -->
 
-    <div class="filter-bar">
-      <ul class="flex-4 post-category-container">
-        <li data-filter="all">All</li>
-        <li data-filter="accessibility"><i class="fa-brands fa-accessible-icon"></i> Accessibility</li>
-        <li data-filter="suspicious activity"><i class="fa-solid fa-person-harassing"></i> Suspicious Activity</li>
-        <li data-filter="motor accident"><i class="fa-solid fa-car-burst"></i> Motor Accidents</li>
-        <li data-filter="infrastructure"><i class="fa-solid fa-road-bridge"></i> Infrastructure</li>
-        <li data-filter="bookmarked"><i class="fa-solid fa-bookmark"></i> My Bookmarks</li>
-      </ul>
-    </div>
+   
 
     <div class="filter-bar">
       <ul class="flex-4 post-category-container">
-        <li data-filter="all">All</li>
-        <li data-filter="accessibility">Accessibility</li>
-        <li data-filter="suspicious">Suspicious Activity</li>
-        <li data-filter="Motor">Motor Accidents</li>
-        <li data-filter="Infrastructure">Infrastructure</li>
+        <li data-filter="all"><i class="fa-regular fa-bell"></i> All</li>
+        <li data-filter="accessibility"><i class="fa-brands fa-accessible-icon"></i> Accessibility</li>
+        <li data-filter="suspicious"><i class="fa-solid fa-exclamation"></i> Suspicious Activity</li>
+        <li data-filter="Motor"><i class="fa-solid fa-car-burst"></i> Motor Accidents</li>
+        <li data-filter="Infrastructure"><i class="fa-solid fa-person-digging"></i> Infrastructure</li>
       </ul>
     
       
@@ -35,23 +26,22 @@
 
     <div class="row justify-content-center mt-5">
       <ul class="row list-unstyled post-container flex-6 mbottom-3" id="posts-list">
-        <% for(let i = 0; i < posts.length; i++) {%>
-          <li
-            class="view col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item"
-            data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>"
-            data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>"
-            data-bookmarked="<%= posts[i].hasCurrentUserBookmarked ? 'bookmarked' : '' %>"
-          >
+        <% for(var i=0; i<posts.length; i++) {%>
+
+          <li class="view col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item"
+          data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>"
+          data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>">
+
             <div class="border-b-1 flex-1">
-              <h3>Location: <%= posts[i].city %></h3>
-              <p>Type: <%= posts[i].type.charAt(0).toUpperCase() + posts[i].type.slice(1) %></p>
+              <p><span class="font-bold">Location:</span> <br> <span class="font-thin"><%= posts[i].city %></span></p>
+              <p><span class="font-bold">Type:</span> <br> <span class="font-thin"><%= posts[i].type %></span></p>
               <div class="bookendTwo">
                 <% if (user) { %>
                   <form class="forms" id="bookmark-<%= posts[i]._id %>" style="display:inline;">
                     <button type="submit" class="bookmark-button" style="background:none; border:none; cursor:pointer;">
                       <i
                         id="bookmarkIcon-<%= posts[i]._id %>"
-                        class="<%= user && posts[i].hasCurrentUserBookmarked === true ? 'fa-solid' : 'fa-regular' %> fa-bookmark fa-lg mright-8"
+                        class="<%= user && posts[i].hasCurrentUserBookmarked === true ? 'fa-solid' : 'fa-regular' %> fa-bookmark fa-2xl mright-8"
                       ></i>
                     </button>
                   </form>
@@ -60,7 +50,7 @@
                     class="bookmark-button" onclick="alert('Please sign in to bookmark posts.')"
                     style="background:none; border:none; cursor:pointer;"
                   >
-                    <i class="fa-regular fa-bookmark mright-8"></i>
+                    <i class="fa-regular fa-2xl fa-bookmark mright-8"></i>
                   </button>
                 <% } %>
               </div>
@@ -90,7 +80,7 @@
                     </div>
 
                     <span id="voteCount-<%= posts[i]._id %>" class="center lh-0">
-                      <%= posts[i].upvotes - posts[i].downvotes %>
+                      <%= posts[i].upvotes + '|' + posts[i].downvotes %>
                     </span>
 
                     <div class="downvote">
@@ -121,8 +111,8 @@
             <a href="/posts/<%= posts[i]._id%>">
               <img class="img-fluid" src="<%= posts[i].image%>">
             </a>
-            <div class="mtop-12 mbottom-28 border-t-1 ptop-12 flex-5">
-              <span class="font-bold">Created: <%= posts[i].createdAt.toLocaleString() %></span>
+            <div class="mtop-12 mbottom-28 border-t-1 ptop-12 flex-5">              
+              <span class="post-timestamp font-thin"><span class="font-bold">Created:</span> <%= posts[i].createdAt.toLocaleString() %></span>
               <button class="view-now-btn">
                 <a class="view-link" href="/posts/<%= posts[i]._id%>">
                   View Now
@@ -155,28 +145,11 @@
           const data = await response.json();
           if (route === 'upvote' || route === 'downvote') {
             const voter = document.getElementById(`voteCount-${id}`);
-            voter.innerText = data.post.upvotes - data.post.downvotes;
+            voter.innerText = data.post.upvotes + '|' + data.post.downvotes;
             const voteIcon = document.getElementById(`${route}Icon-${id}`);
             voteIcon.classList.toggle('fa-regular');
             voteIcon.classList.toggle('fa-solid');
-            if (data.upvoteChanged) {
-              const upvoteIcon = document.getElementById(`upvoteIcon-${id}`);
-              upvoteIcon.classList.toggle('fa-regular');
-              upvoteIcon.classList.toggle('fa-solid');
-            } else if (data.downvoteChanged) {
-              const downvoteIcon = document.getElementById(`downvoteIcon-${id}`);
-              downvoteIcon.classList.toggle('fa-regular');
-              downvoteIcon.classList.toggle('fa-solid');
-            }
           } else if (route === 'bookmark') {
-            const parentLi = form.closest('li.post-item');
-            if (parentLi) {
-              parentLi.setAttribute(
-                'data-bookmarked',
-                parentLi.getAttribute('data-bookmarked') === 'bookmarked'
-                ? '' : 'bookmarked'
-              );
-            }
             const bookmarkIcon = document.getElementById(`bookmarkIcon-${id}`);
             bookmarkIcon.classList.toggle('fa-regular');
             bookmarkIcon.classList.toggle('fa-solid');
