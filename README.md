@@ -1,11 +1,11 @@
-# SafeRoute
+# SafeRoute📍 🗺️
 
 **About:** SafeRoute is a community-powered safety map designed for neighborhoods to come together and empower one another with knowledge and resources. It lets residents anonymously report sightings of broken streetlights, suspicious activity, dangerous infrastructure, and more.
 With a clean map view and accessible submission form, SafeRoute enables everyone— especially marginalized communities such as disabled folks, women, and elders— to move through their communities with confidence. SafeRoute is built for local awareness, fear reduction, and community solidarity through real-time, peer-sourced alerts.
 
 **Project Link:** [SafeRoute](https://safe-route-6iqv.onrender.com/)
 
-## Key Features:
+## 🌟 Key Features:
    - **Alert Reporting**
        Report harassment, hazards, and accessibility barriers in real time to improve local safety.
    - **Interactive Map**
@@ -13,7 +13,7 @@ With a clean map view and accessible submission form, SafeRoute enables everyone
    - **Community Resources**
        Access safety tips, support helplines, and accessibility services tailored to your city.
 
-## Tech Stack:
+## 🛠️ Tech Stack:
 Here's where you can go to town on how you actually built this thing. Write as much as you can here, it's totally fine if it's not too much just make sure you write something. If you don't have too much experience on your resume working on the front end that's totally fine. This is where you can really show off your passion and make up for that ten fold.
 
 **Client-side:**
@@ -33,15 +33,15 @@ Here's where you can go to town on how you actually built this thing. Write as m
 - Cloudinary
 - MongoDB
 
-##Optimizations:
+## ⚙️ Optimizations:
 You don't have to include this section but interviewers love that you can not only deliver a final product that looks great but also functions efficiently. Did you write something then refactor it later and the result was 5x faster than the original implementation? Did you cache your assets? Things that you write in this section are GREAT to bring up in interviews and you can use this section as reference when studying for technical interviews!
 
-##Challenges:
+## 🏔️ Challenges:
 - 
 -
 -
 
-## Getting Started:
+## 🌱 Getting Started:
 1. Clone the SafeRoute repository.
 2. Go to config and set up your appropriate variables according to our .env.template file.
    
@@ -56,12 +56,11 @@ npm start
 
 5. Contribute to your community with sightings! Explore our tailored safety resources!
 
-**Usage:**
 
-## Contact:
+## 📬 Contact:
 Project Lead: immanuelmonroe@gmail.com 
 
-## Contributions:
+## 🫱🏽‍🫲🏼 Contributions:
 Contributions are what make the open-source community an amazing place to learn, inspire, and create! Here's how you can contribute:
 1. Fork the Project
 2. Create your Feature Branch (git checkout -b feature/amazing-feature)
