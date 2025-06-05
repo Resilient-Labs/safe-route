@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
                 window.dynamicMarkers = [];
     
-                data.forEach(post => {
+                data.posts.forEach(post => {
                     if (post.location && post.location.coordinates) {
                         const lat = post.location.coordinates[1];
                         const lng = post.location.coordinates[0];

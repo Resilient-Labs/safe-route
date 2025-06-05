@@ -1,38 +1,38 @@
 /* Base styles */
 body {
   font-family: "Plus Jakarta Sans", sans-serif;
-  background-color: white;
+  background-color: #ffffff;
+  color: #1f2937;
   margin: 0;
   padding: 0;
-  color: #333;
 }
 
 .main-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px 20px;
+  padding: 3rem 1.5rem;
 }
 
 /* Page title */
 .page-title-container {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
 }
 
 .page-title-container h1 {
-  margin-bottom: 10px;
-  font-size: 2.5em;
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #1e3a8a;
 }
 
 .resource-description {
-  display: block;
-  margin: 0 auto 30px;
-  max-width: 1000px;
-  font-size: 1.1em;
-  line-height: 1.6;
-  color: #555;
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #4b5563;
   text-align: center;
-  white-space: normal;
 }
 
 /* Flex container */
@@ -40,25 +40,35 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 40px;
-  margin-bottom: 40px;
+  gap: 2.5rem;
+  margin-top: 3rem;
+  margin-bottom: 4rem;
 }
 
 /* Individual content blocks */
 .res-container-1,
 .res-container-2 {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 1.5rem;
   max-width: 500px;
-  text-align: left;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.res-container-1:hover,
+.res-container-2:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 /* Image box */
 .image-wrapper {
   width: 100%;
-  height: 300px;
+  height: 250px;
   overflow: hidden;
   border-radius: 8px;
-  margin-bottom: 15px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 1rem;
 }
 
 .image-wrapper img {
@@ -66,95 +76,93 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.3s ease;
 }
 
-/* Image hover + accessibility focus */
-.image-wrapper:hover,
-.image-wrapper:focus-within {
-  transform: scale(1.02);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  outline: none;
-}
-
-/* Paragraphs under headings */
-.line-breaks p {
-  white-space: pre-line;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  text-align: center;
+.image-wrapper:hover img {
+  transform: scale(1.03);
 }
 
 /* Headings */
 h2 {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  font-size: 1.5em;
-  color: #222;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Paragraphs and lists */
+.line-breaks p {
+  white-space: pre-line;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #374151;
   text-align: center;
 }
 
-/* Lists */
 ul {
   list-style: none;
-  padding-left: 0;
-  margin-top: 10px;
-  text-align: left;
+  padding: 0;
+  margin-top: 0.5rem;
+  text-align: center;
 }
 
 ul li {
-  margin-bottom: 10px;
-  line-height: 1.5;
-  text-align: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  color: #374151;
 }
 
-/* Links - accessible focus styles */
+/* Links */
 a {
-  color: #0077cc;
+  color: #1e3a8a;
   text-decoration: none;
+  font-weight: 500;
   transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
 a:hover,
 a:focus {
+  color: #3b82f6;
   text-decoration: underline;
-  color: #005fa3;
   outline: none;
 }
 
 a:visited {
-  color: #0077cc;
+  color: #1e3a8a;
 }
 
 /* Tips section */
 .tips {
-  margin-top: 50px;
   text-align: center;
+  margin-top: 3rem;
 }
 
 .tips h4 {
-  font-size: 1.3em;
-  margin-bottom: 10px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
 .tips p {
-  font-size: 1em;
-  line-height: 1.6;
+  font-size: 1rem;
+  color: #374151;
 }
 
-/* ----------------------------------------
-   ✅ Responsive Styles for Mobile
----------------------------------------- */
+/* Responsive styles */
 @media (max-width: 768px) {
   .main-container {
-    padding: 20px 15px;
+    padding: 2rem 1rem;
   }
 
   .page-title-container h1 {
-    font-size: 2em;
+    font-size: 2rem;
   }
 
   .resource-description {
-    font-size: 1em;
+    font-size: 1rem;
     padding: 0 10px;
   }
 
@@ -166,18 +174,14 @@ a:visited {
   .res-container-1,
   .res-container-2 {
     max-width: 100%;
-    padding: 0 10px;
-  }
-
-  .image-wrapper {
-    height: 250px;
+    padding: 1.5rem;
   }
 
   h2 {
-    font-size: 1.3em;
+    font-size: 1.2rem;
   }
 
-  .tips {
-    padding: 0 10px;
+  .image-wrapper {
+    height: 220px;
   }
 }

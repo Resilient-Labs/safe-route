@@ -4,52 +4,38 @@
 <link rel="stylesheet" href="/css/landing.css" />
 
 <%- include('partials/header') -%>
+
 <main class="container">
-  
-  <!-- NOTE: This is the Landing Page view; will be renamed to landing.ejs once routing updates -->
 
-  <!-- Hero Section/Main Content w Background Map Image and TWo Buttons -->
-
-  <section>
-    <div>
-      <!-- This will become the background image later w Tailwind -->
-    <img src="/imgs/static-map-landing.png" alt="Map background with pins" />
-
-      <h1>SafeRoute</h1>
-      <p>Designed to Make Communities Safer, More Walkable, and Accessible for All</p>
-
-      <!-- Add button class names later w Tailwind or keep vanilla CSS -->
-      <div class="buttons">
-        <a href="/map">View Map</a>
-        <a href="/signup">Sign Up</a>
+  <!-- Hero Section -->
+  <section class="hero">
+    <img src="/imgs/static-map-landing.png" alt="Map background with pins" class="hero-img" />
+    <div class="hero-content">
+      <h1 class="hero-title">SafeRoute</h1>
+      <p class="hero-subtitle">Making Communities Safer, More Walkable, and Accessible for All</p>
+      <div class="hero-buttons">
+        <a href="/map" class="btn btn-primary">View Map</a>
+        <a href="/signup" class="btn btn-outline">Sign Up</a>
       </div>
-
     </div>
   </section>
 
-
-  <!-- Core Feature Blocks -->
-
-  <section>
-
-    <div>
-        <h2>Alert Reporting</h2>
-        <p>Make your neighborhood safer by reporting harassment, hazards, and accessibility barriers in real time.</p>
+  <!-- Features Section -->
+  <section class="features">
+    <div class="feature">
+      <h2>Alert Reporting</h2>
+      <p>Report harassment, hazards, and accessibility barriers in real time to improve local safety.</p>
     </div>
-
-    <div>
+    <div class="feature">
       <h2>Interactive Map</h2>
-      <p>Browse safety and accessibility alerts posted by neighbors on an interactive map.</p>
+      <p>Explore alerts posted by neighbors directly on an easy-to-use interactive map.</p>
     </div>
-
-    <div>
-      <h2>Community</h2>
-      <p>Find local safety tips, support helplines, and city resources focused on accessibility and care.</p>
+    <div class="feature">
+      <h2>Community Resources</h2>
+      <p>Access safety tips, support helplines, and accessibility services tailored to your city.</p>
     </div>
-
   </section>
 
 </main>
-    
 
 <%- include('partials/footer') -%>
