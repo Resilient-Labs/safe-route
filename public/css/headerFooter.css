@@ -10,11 +10,8 @@
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 600;
-  color: #2c5282;
+  display: block;
+  width: 40%;
 }
 
 .logo::before {
@@ -75,7 +72,6 @@
   box-sizing: border-box;
   bottom: 0;
   width: 100%;
-  position: absolute;
 }
 
 .footer-left {
