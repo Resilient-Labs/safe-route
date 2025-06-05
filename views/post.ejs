@@ -20,7 +20,7 @@
                 </button>
               </form>
             <% } else { %>
-              <button class="bookmark-button" onclick="showToast('Please sign in to bookmark posts.')" style="background:none; border:none; cursor:pointer;">
+              <button class="bookmark-button" onclick="showToast('Please sign in to bookmark posts.', 'error')" style="background:none; border:none; cursor:pointer;">
                 <i class="far fa-bookmark fa-lg"></i>
               </button>
             <% } %>
@@ -47,7 +47,7 @@
                   <button class="upvote-button <%= user && hasCurrentUserUpvoted === true ? 'active-upvote' : '' %>" type="submit"><i class="fas fa-arrow-up"></i> Upvote</button>
                 </form>
                 <% } else { %>
-                  <button class="upvote-button" onclick="showToast('Please sign in to upvote.')">
+                  <button class="upvote-button" onclick="showToast('Please sign in to upvote.', 'error')">
                     <i class="fas fa-arrow-up"></i> Upvote
                   </button>
                 <% } %>
@@ -60,7 +60,7 @@
                     <button class="downvote-button <%= user && hasCurrentUserDownvoted === true ? 'active-downvote' : '' %>" type="submit"><i class="fas fa-arrow-down"></i> Downvote</button>
                   </form>
                 <% } else { %>
-                  <button class="downvote-button" onclick="showToast('Please sign in to downvote.')">
+                  <button class="downvote-button" onclick="showToast('Please sign in to downvote.', 'error')">
                     <i class="fas fa-arrow-down"></i> Downvote
                   </button>
                 <% } %>
@@ -90,7 +90,7 @@
                         <button type="submit"><i class="fas fa-heart"></i></button>
                       </form>
                     <% } else { %>
-                      <button onclick="showToast('Please sign in to like comments.')"><i class="fas fa-heart"></i></button>
+                      <button onclick="showToast('Please sign in to like comments.', 'error')"><i class="fas fa-heart"></i></button>
                     <% } %>
                     <p class="likes bold">Likes: <%= comment.likes %></p>
                     <% if (user && comment.user.toString() === user._id.toString()) { %>
