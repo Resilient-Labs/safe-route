@@ -1,17 +1,64 @@
 * {
     box-sizing: border-box;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    margin: 0px;
+}
+
+body {
+    background-color: #f7f9fc;
+    color: #333;
+}
+
+h1,
+h3 {
+    font-weight: 700;
+    font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 svg {
     width: 1.25rem;
 }
 
+.filter-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem auto;
+}
+
+
+#filter-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+    background-image: url("data:image/svg+xml,%3Csvg fill='black' height='18' viewBox='0 0 24 24' width='18' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    cursor: pointer;
+    min-width: 160px;
+}
+
+#filter-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
 .border-b-1 {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #ccc;
 }
 
 .border-t-1 {
-    border-top: 1px solid #000;
+    border-top: 1px solid #ccc;
 }
 
 .bradius-8 {
@@ -19,57 +66,102 @@ svg {
 }
 
 .bg-gray {
-    background-color: #DEE5ED;
+    background-color: #e2e8f0;
 }
 
 .center {
     text-align: center;
 }
 
-.downvote-caret-btn {
-    border: none;
-    background: none;
-}
-
 .font-bold {
     font-weight: bold;
 }
 
-.flex-1 {
+.navy-blue {
+    color: #1e3a8a;
+}
+
+.green {
+    color: #227C10;
+}
+
+.red {
+    color: #D3171F;
+}
+
+.flex-1,
+.flex-2,
+.flex-3,
+.flex-4,
+.flex-5,
+.flex-6 {
     display: flex;
+}
+
+.flex-1 {
     justify-content: space-between;
     align-items: center;
 }
 
 .flex-2 {
-    display: flex;
     align-items: center;
 }
 
 .flex-3 {
-    display: flex;
     flex-direction: column;
 }
 
 .flex-4 {
-    display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 1rem;
     list-style-type: none;
+    font-weight: bold;
+    color: #1e3a8a;
+    font-size: 1.1rem;
+    margin-top: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ccc;
+    flex-wrap: wrap;
 }
 
 .flex-5 {
-    display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .flex-6 {
-    display: flex;
     flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
 }
 
-.green {
-    color: #227C10;
+.post-category-container li {
+    background: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.post-category-container li:hover {
+    background: #1e3a8a;
+    color: white;
+}
+
+.post-container li {
+    width: 100%;
+    max-width: 360px;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-container li:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .img-fluid {
@@ -77,10 +169,44 @@ svg {
     height: 240px;
     object-fit: cover;
     object-position: top center;
+    border-radius: 0.5rem;
+}
+
+.downvote-caret-btn,
+.upvote-caret-btn,
+.bookmark-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.downvote-caret-btn:hover i,
+.upvote-caret-btn:hover i,
+.bookmark-button:hover i {
+    transform: scale(1.2);
+}
+
+.view-now-btn {
+    border: none;
+    background-color: #1e3a8a;
+    color: white;
+    padding: 0.4rem 1.2rem;
+    border-radius: 0.5rem;
+    transition: background 0.3s ease;
+}
+
+.view-now-btn:hover {
+    background-color: #3b82f6;
+}
+
+.view-link {
+    text-decoration: none;
+    color: white;
 }
 
 .lh-0 {
-    line-height: 0;
+    line-height: 1;
     margin-top: 8px;
     margin-bottom: 8px;
 }
@@ -105,164 +231,115 @@ svg {
     margin-top: 0.75rem;
 }
 
-.navy-blue {
-    color: #486284;
-}
-
-.post-category-container {
-    border-bottom: 1px solid #000;
-    padding: 0;
-}
-
-.post-category-container li {
-    text-align: center;
-    width: 100%;
-}
-
-.post-category-container li:hover {
-    border-bottom: 4px solid #000;
-}
-
-.post-container li {
-    width: 22%;
-    margin: 0 1.5%;
-}
-
 .ptop-12 {
     padding-top: 0.75rem;
 }
 
-.red {
-    color: #D3171F;
-}
-
 .searchbar {
-    /* fix later it's in the wrong div */
     display: flex;
     background-color: #ebe6f0;
-    box-shadow: none;
     border-radius: 1.5rem;
     max-width: 35%;
+    padding: 0.5rem 1rem;
+    align-items: center;
 }
 
-.upvote-caret-btn {
-    border: none;
-    background: none;
-}
-
-.view-link {
-    text-decoration: none;
-    color: #000;
-}
-
-.view-now-btn {
-    border: none;
-    background-color: #fff;
-    padding: 0.25rem 1rem;
-    border-radius: 0.25rem;
-    text-decoration: none;
-    color: #000;
-}
-
-.view-now-btn:hover {
-    background-color: #eaeaea;
-}
-
-
+/* Dropdown Styling */
 .select {
-  width: fit-content;
-  cursor: pointer;
-  position: relative;
-  transition: 300ms;
-  color: white;
-  overflow: hidden;
+    width: fit-content;
+    cursor: pointer;
+    position: relative;
+    transition: 300ms;
+    color: white;
+    overflow: hidden;
 }
 
 .selected {
-  background-color: #2a2f3b;
-  padding: 5px;
-  margin-bottom: 3px;
-  border-radius: 5px;
-  position: relative;
-  z-index: 100000;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    background-color: #2a2f3b;
+    padding: 5px;
+    margin-bottom: 3px;
+    border-radius: 5px;
+    z-index: 100000;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .arrow {
-  position: relative;
-  right: 0px;
-  height: 10px;
-  transform: rotate(-90deg);
-  width: 25px;
-  fill: white;
-  z-index: 100000;
-  transition: 300ms;
+    height: 10px;
+    width: 25px;
+    fill: white;
+    transform: rotate(-90deg);
+    transition: 300ms;
 }
 
 .options {
-  display: flex;
-  flex-direction: column;
-  border-radius: 5px;
-  padding: 5px;
-  background-color: #2a2f3b;
-  position: relative;
-  top: -100px;
-  opacity: 0;
-  transition: 300ms;
+    flex-direction: column;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #2a2f3b;
+    position: relative;
+    top: -100px;
+    opacity: 0;
+    transition: 300ms;
 }
 
-.select:hover > .options {
-  opacity: 1;
-  top: 0;
+.select:hover>.options {
+    opacity: 1;
+    top: 0;
 }
 
-.select:hover > .selected .arrow {
-  transform: rotate(0deg);
+.select:hover>.selected .arrow {
+    transform: rotate(0deg);
 }
 
 .option {
-  border-radius: 5px;
-  padding: 5px;
-  transition: 300ms;
-  background-color: #2a2f3b;
-  width: 150px;
-  font-size: 15px;
+    border-radius: 5px;
+    padding: 5px;
+    transition: 300ms;
+    background-color: #2a2f3b;
+    width: 150px;
+    font-size: 15px;
 }
+
 .option:hover {
-  background-color: #323741;
+    background-color: #323741;
 }
 
 .options input[type="radio"] {
-  display: none;
+    display: none;
 }
 
 .options label {
-  display: inline-block;
+    display: inline-block;
 }
+
 .options label::before {
-  content: attr(data-txt);
+    content: attr(data-txt);
 }
 
-.options input[type="radio"]:checked + label {
-  display: none;
-}
-
-.options input[type="radio"]#all:checked + label {
-  display: none;
+.options input[type="radio"]:checked+label {
+    display: none;
 }
 
 .select:has(.options input[type="radio"]#all:checked) .selected::before {
-  content: attr(data-default);
+    content: attr(data-default);
 }
+
 .select:has(.options input[type="radio"]#option-1:checked) .selected::before {
-  content: attr(data-one);
+    content: attr(data-one);
 }
+
 .select:has(.options input[type="radio"]#option-2:checked) .selected::before {
-  content: attr(data-two);
+    content: attr(data-two);
 }
+
 .select:has(.options input[type="radio"]#option-3:checked) .selected::before {
-  content: attr(data-three);
+    content: attr(data-three);
+}
+
+/* Layout spacing for view class */
+.view {
+    margin-bottom: 5px;
 }

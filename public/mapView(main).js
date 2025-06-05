@@ -53,11 +53,14 @@ document.addEventListener('DOMContentLoaded', function () {
               case 'accessibility':
                 icon = accessibilityIcon;
                 break;
+              case 'suspicious activity':
               case 'safety':
               case 'lighting':
                 icon = warningIcon;
                 break;
+              case 'motor accident':
               case 'maintenance':
+              case 'infrastructure':
                 icon = cautionIcon;
                 break;
               default:
@@ -65,15 +68,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 break;
             }
 
-            const marker = L.marker([lat, lng], { icon: icon }).addTo(map)
+            const marker = L.marker([lat, lng], { icon: icon })
+              .addTo(map)
               .bindPopup(`
-                                ${
-                                  post.type?.charAt(0).toUpperCase() +
-                                    post.type?.slice(1) || 'Info'
-                                }
-                                ${post.description || 'No description'}
-                            `);
-
+                ${
+                  post.type?.charAt(0).toUpperCase() +
+                    post.type?.slice(1) || 'Info'
+                }
+                ${post.description || 'No description'}`
+              );
             window.dynamicMarkers.push(marker);
           }
         });
@@ -127,9 +130,12 @@ document.addEventListener('DOMContentLoaded', function () {
             icon = accessibilityIcon;
             break;
           case 'suspicious activity':
-          case 'motor accident':
+          case 'safety':
+          case 'lighting':
             icon = warningIcon;
             break;
+          case 'motor accident':
+          case 'maintenance':
           case 'infrastructure':
             icon = cautionIcon;
             break;
@@ -176,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } Alert`);
 
     if (!formData.get('incidentType') || !formData.get('address')) {
-      alert('Please fill in all required fields (Incident Type and Address).');
+      showToast('Please fill in all required fields (Incident Type and Address).');
       return;
     };
 
@@ -193,7 +199,6 @@ document.addEventListener('DOMContentLoaded', function () {
       function (results) {
         if (results && results.length > 0) {
           const result = results[0];
-
           const lat = result.center.lat;
           const lng = result.center.lng;
 
@@ -203,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
           // Validate that result is within U.S. bounds
           if (!isWithinUSBounds(lat, lng)) {
-            alert('Please enter a valid U.S. address. International locations are not supported.');
+            showToast('Please enter a valid U.S. address. International locations are not supported.');
             return;
           }
 
@@ -213,11 +218,14 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'accessibility':
               icon = accessibilityIcon;
               break;
+            case 'suspicious activity':
             case 'safety':
             case 'lighting':
               icon = warningIcon;
               break;
+            case 'motor accident':
             case 'maintenance':
+            case 'infrastructure':
               icon = cautionIcon;
               break;
             default:
@@ -229,10 +237,11 @@ document.addEventListener('DOMContentLoaded', function () {
           const newMarker = L.marker([lat, lng], { icon: icon })
             .addTo(map)
             .bindPopup(`
-              <strong>${
-                formData.get('incidentType').charAt(0).toUpperCase() +
-                formData.get('incidentType').slice(1)
-              }</strong><br/>
+              <strong>
+              ${ formData.get('incidentType').charAt(0).toUpperCase() +
+                 formData.get('incidentType').slice(1)
+               }
+              </strong><br/>
               ${formData.get('address')}<br/>
               ${
                 formData.get('description')
@@ -257,8 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then((data) => {
               console.log('Alert stored successfully:', data);
-              alert('Alert submitted successfully and marker added to map!');
-
+              showToast('Sighting submitted successfully and marker added to map!');
               // Reset form
               document.getElementById('alertForm').reset();
             })
@@ -267,14 +275,12 @@ document.addEventListener('DOMContentLoaded', function () {
               document.getElementById('alertForm').reset();
             });
         } else {
-          alert(
-            'Could not find the specified address. Please check the address and try again.'
-          );
+          showToast('Could not find the specified address. Please check the address and try again.', 'error');
         }
       },
       function (error) {
         console.error('Geocoding error:', error);
-        alert('Error finding address location. Please try again.');
+        showToast('Error finding address location. Please try again with a different address or click a location on the map.');
       }
     );
   });
@@ -306,7 +312,7 @@ function searchAlerts() {
   const location = document.getElementById('searchLocation').value.trim();
 
   if (!location) {
-    alert('Please enter an address or zip code.');
+    showToast('Please enter an address or zip code.');
     return;
   }
 
@@ -338,12 +344,9 @@ function performGeocode(query, originalInput) {
         const lng = result.center.lng;
 
         if (!isWithinUSBounds(lat, lng)) {
-          alert(
-            'Please enter a valid U.S. address or zip code. International locations are not supported.'
-          );
+          showToast('Please enter a valid U.S. address or zip code. International locations are not supported.', "error");
           return;
         }
-
         // Make sure map is available
         if (window.map) {
           window.map.setView([lat, lng], 15);
@@ -364,15 +367,15 @@ function performGeocode(query, originalInput) {
         }
       } else {
         if (isValidUSZipCode(originalInput)) {
-          alert('Zip code not found. Please check the zip code and try again.');
+          showToast('Zip code not found. Please check the zip code and try again.');
         } else {
-          alert('Location not found. Please try a different address.');
+          showToast('Location not found. Please try a different address.');
         }
       }
     },
     function (error) {
       console.error('Geocoding error:', error);
-      alert('Error searching for location. Please try again.');
+      showToast('Error searching for location. Please try again.');
     }
   );
 }

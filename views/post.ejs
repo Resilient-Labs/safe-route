@@ -1,106 +1,222 @@
-<%- include('partials/header') -%>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="/css/post.css">
+
+<%- include('partials/header') -%>
+
 <section class="main">
   <section class="postViewContainer">
     <section class="postView">
 
-    <h2><%= post.title %></h2>
-    <div class="bookendImgContainer">
-
-      <div class="bookendContainer">
-        <div class="bookendOne">
+      <h2><%= post.title %></h2>
+      <div class="bookendImgContainer">
+        <div class="bookendContainer">
+          <div class="bookendOne">
             <p><i class="fas fa-map-marker-alt"></i> <%= post.city %> - <%= post.address %></p>
-        </div>
-        <div class="bookendTwo">
-            <i class="fa-regular fa-bookmark mright-8"></i>
-        </div>
-      </div>
-
-    <div class="postImage">
-      <% if (post.image) { %>
-        <img  src="<%= post.image %>" alt="Post image" />
-      <% } %>
-    </div>
-    <div>
-    <p class="postDesc bold">"<%= post.description %>"</p>
-
-    <div class="bookendContainer">
-
-      <div class="bookendOne">
-          <p class="postedAt"><i class="far fa-clock"></i> Posted on: <%= post.createdAt.toLocaleString() %></p>
-        </div>
-        <div class="bookendTwo ">
-
-          <div class="upvote">
-            <form action="/posts/<%= post._id %>/upvote/?_method=PUT" method="POST">
-              <button class="upvote-button <%= user && post.hasCurrentUserUpvoted ? 'active-upvote' : '' %>" type="submit"><i class="fas fa-arrow-up"></i> Upvote</button>
-            </form>
-            <p>Upvotes: <%= post.upvotes %></p>
           </div>
-          <div class="downvote">
-            <form action="/posts/<%= post._id %>/downvote/?_method=PUT" method="POST">
-              <button class="downvote-button <%= user && post.hasCurrentUserDownvoted ? 'active-downvote' : '' %>" type="submit"><i class="fas fa-arrow-down"></i> Downvote</button>
-            </form>
-            <p>Downvotes: <%= post.downvotes %></p>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-    <div class="postDeets">
-
-      <% if (user && post.postedBy.toString() === user._id.toString()) { %>
-        <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
-          <button type="submit"><i class="fas fa-trash"></i> Delete Post</button>
-        </form>
-      <% } %>
-
-
-      <h3>Comments</h3>
-      <ul>
-      <% comments.forEach(comment => { %>
-        <li class="Comments">
-          <div class="commentSection">
-            <div>
-            <p class="bold">User (<%= comment.user %>) Says:</p>
-            <div>
-            <div class="commentText">
-              <p>"<%= comment.commentText %>"</p>
-            </div>
-             <div class="commentLikes">
-               <form action="/comments/<%= comment._id %>/like?_method=PUT" method="POST">
-                <button type="submit"><i class="fas fa-heart"></i></button>
+          <div class="bookendTwo">
+            <% if (user) { %>
+              <form id="bookmarkForm" action="/posts/<%= post._id %>/bookmark?_method=PUT" method="POST" style="display:inline;">
+                <button type="submit" class="bookmark-button" style="background:none; border:none; cursor:pointer;">
+                  <i id="bookmarkIcon" class="<%= user && hasCurrentUserBookmarked === true ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark' %> fa-lg"></i>
+                </button>
               </form>
-            <p class="likes bold">Likes: <%= comment.likes %></p>
-            <% if (user && comment.user.toString() === user._id.toString()) { %>
-                <form action="/comments/<%= comment._id %>?_method=DELETE" method="POST">
-                    <button type="submit"><i class="fas fa-trash-alt"></i></button>
-                </form>
+            <% } else { %>
+              <button class="bookmark-button" onclick="alert('Please sign in to bookmark posts.')" style="background:none; border:none; cursor:pointer;">
+                <i class="far fa-bookmark fa-lg"></i>
+              </button>
             <% } %>
           </div>
-          </div>
-        </li>
-      <% }) %>
-      </ul>
-
-      <form action="/comments/<%= post._id %>" method="POST">
-        <label for="comment">Add a comment:</label>
-        <input type="text" id="comment" name="comment" required />
-        <div class="commentButton">
-
         </div>
-        <button  type="submit">Submit</button>
-      </form>
-    </div>
 
-    <div class="mapFeedButton">
-      <a href="/map"><i class="fas fa-map-marked-alt"></i> Return to Map</a>
-      <a href="/feed"><i class="fas fa-stream"></i> Return to Feed</a>
-    </div>
-    </section>
-  </section>
-</section>
-<script src="/js/votes.js"></script>
+        <div class="postImage">
+          <% if (post.image) { %>
+            <img src="<%= post.image %>" alt="Post image" />
+          <% } %>
+        </div>
+
+        <div>
+          <p class="postDesc bold">"<%= post.description %>"</p>
+
+          <div class="bookendContainer">
+            <div class="bookendOne">
+              <p class="postedAt"><i class="far fa-clock"></i> Posted on: <%= post.createdAt.toLocaleString() %></p>
+            </div>
+            <div class="bookendTwo">
+              <div class="upvote">
+                <% if (user) { %>
+                 <form id="upVoteForm" action="/post/<%= post._id %>/upvote/?_method=PUT" method="POST">
+                  <button class="upvote-button <%= user && hasCurrentUserUpvoted === true ? 'active-upvote' : '' %>" type="submit"><i class="fas fa-arrow-up"></i> Upvote</button>
+                </form>
+                <% } else { %>
+                  <button class="upvote-button" onclick="alert('Please sign in to upvote.')">
+                    <i class="fas fa-arrow-up"></i> Upvote
+                  </button>
+                <% } %>
+                <p>Upvotes: <span id="upvoteCount"><%= post.upvotes %></span></p>
+              </div>
+
+              <div class="downvote">
+                <% if (user) { %>
+                  <form id="downVoteForm" action="/post/<%= post._id %>/downvote/?_method=PUT" method="POST">
+                    <button class="downvote-button <%= user && hasCurrentUserDownvoted === true ? 'active-downvote' : '' %>" type="submit"><i class="fas fa-arrow-down"></i> Downvote</button>
+                  </form>
+                <% } else { %>
+                  <button class="downvote-button" onclick="alert('Please sign in to downvote.')">
+                    <i class="fas fa-arrow-down"></i> Downvote
+                  </button>
+                <% } %>
+                <p>Downvotes: <span id="downvoteCount"><%= post.downvotes %></span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="postDeets">
+
+        <h3>Comments</h3>
+        <ul>
+          <% comments.forEach(comment => { %>
+            <li class="Comments">
+              <div class="commentSection">
+                <div>
+                  <p class="bold">User (<%= comment.user %>) Says:</p>
+                  <div class="commentText">
+                    <p>"<%= comment.commentText %>"</p>
+                  </div>
+                  <div class="commentLikes">
+                    <% if (user) { %>
+                      <form action="/comments/<%= comment._id %>/like?_method=PUT" method="POST">
+                        <button type="submit"><i class="fas fa-heart"></i></button>
+                      </form>
+                    <% } else { %>
+                      <button onclick="alert('Please sign in to like comments.')"><i class="fas fa-heart"></i></button>
+                    <% } %>
+                    <p class="likes bold">Likes: <%= comment.likes %></p>
+                    <% if (user && comment.user.toString() === user._id.toString()) { %>
+                      <form action="/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                        <button type="submit"><i class="fas fa-trash-alt"></i></button>
+                      </form>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </li>
+          <% }) %>
+        </ul>
+
+        <% if (user) { %>
+          <form action="/comments/<%= post._id %>" method="POST">
+            <label for="comment">Add a comment:</label>
+            <textarea id="comment" name="comment" rows="1" required></textarea>
+            <div class="commentButton"></div>
+            <button type="submit">Submit</button>
+          </form>
+        <% } else { %>
+          <p><em><a href="/signin">Sign in</a> to add a comment.</em></p>
+        <% } %>
+
+        <div class="mapFeedButton">
+          <a href="/map"><i class="fas fa-map-marked-alt"></i> Return to Map</a>
+          <a href="/feed"><i class="fas fa-stream"></i> Return to Feed</a>
+        </div>
+      </div> 
+      <div class="delete">
+        <% if (user && post.postedBy.toString() === user._id.toString()) { %>
+          <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+            <button type="submit"><i class="fas fa-trash"></i> Delete Post</button>
+          </form>
+        <% } %>
+      </div>
+    </section> 
+  </section> 
+</section> 
+
+<!-- Voting and Bookmark Scripts -->
+<script>
+  const postId = "<%= post._id %>";
+
+  // Upvote handler
+  const upVoteForm = document.getElementById('upVoteForm');
+  if (upVoteForm) {
+    upVoteForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        const response = await fetch(`/posts/${postId}/upvote`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        window.location.reload();
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById('upvoteCount').textContent = data.post.upvotes;
+          document.getElementById('downvoteCount').textContent = data.post.downvotes;
+        } else {
+          console.error('Failed to upvote');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  }
+
+  // Downvote handler
+  const downVoteForm = document.getElementById('downVoteForm');
+  if (downVoteForm) {
+    downVoteForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        const response = await fetch(`/posts/${postId}/downvote`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        window.location.reload();
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById('upvoteCount').textContent = data.post.upvotes;
+          document.getElementById('downvoteCount').textContent = data.post.downvotes;
+        } else {
+          console.error('Failed to downvote');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  }
+
+  // Bookmark handler
+  const bookmarkForm = document.getElementById('bookmarkForm');
+  const bookmarkIcon = document.getElementById('bookmarkIcon');
+  if (bookmarkForm && bookmarkIcon) {
+    bookmarkForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        const response = await fetch(`/posts/${postId}/bookmark`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        window.location.reload();
+        // if (response.ok) {
+        //   const data = await response.json();
+        //   if (data.bookmarked) {
+        //     bookmarkIcon.classList.remove('fa-regular fa-bookmark');
+        //     bookmarkIcon.classList.add('fa-solid fa-bookmark');
+        //   } else {
+        //     bookmarkIcon.classList.remove('fa-regular fa-bookmark');
+        //     bookmarkIcon.classList.add('fa-solid fa-bookmark');
+        //   }
+        // } else {
+        //   console.error('Failed to toggle bookmark');
+        // }
+      } catch (err) {
+        console.error('Error toggling bookmark:', err);
+      }
+    });
+  }
+</script>
 
 <%- include('partials/footer') -%>
