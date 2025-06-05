@@ -27,7 +27,9 @@
   <!-- Header - had to add currentPage to reflect Theo;s code to avoid ref errors-->
   <header class="header">
 
-    <div class="logo">SafeRoute</div>
+    <a href="/">
+      <img class="logo" src="\imgs\safe-route-oneline.png" alt="saferoute logo">
+    </a>
     <nav class="nav-menu">
 
       <div class="dropdown">
@@ -48,10 +50,6 @@
         </div>
       </div>
 
-    <a href="/">
-      <img class="logo" src="\imgs\safe-route-oneline.png" alt="saferoute logo">
-    </a>
-    <nav class="nav-menu">
       <a href="/" class="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">Home</a>
       <a href="/map" class="<%= typeof currentPage !== 'undefined' && currentPage === 'map' ? 'active' : '' %>">Map</a>
       <a href="/feed"
