@@ -13,9 +13,9 @@
     <ul class="flex-4 post-category-container">
       <li data-filter="all">All</li>
       <li data-filter="accessibility">Accessibility</li>
-      <li data-filter="suspicious">Suspicious Activity</li>
-      <li data-filter="Motor">Motor Accidents</li>
-      <li data-filter="Infrastructure">Infrastructure</li>
+      <li data-filter="suspicious activity">Suspicious Activity</li>
+      <li data-filter="motor accident">Motor Accidents</li>
+      <li data-filter="infrastructure">Infrastructure</li>
     </ul>
 
     <select id="filter-select">
@@ -34,7 +34,12 @@
 
             <div class="border-b-1 flex-1">
               <h3>Location: <%= posts[i].city %></h3>
-              <p>Type: <%= posts[i].type %></p>
+              <p>Type: <%= posts[i].type 
+                  .replace(/([a-z])([A-Z])/g, '$1 $2') // insert space between camelCase
+                  .split(' ')                          // now you have words
+                  .map(w => w.charAt(0).toUpperCase() + w.slice(1)) // capitalize each
+                  .join(' ')
+                %></p>
               <div class="bookendTwo">
                 <% if (user) { %>
                   <form class="forms" id="bookmark-<%= posts[i]._id %>" style="display:inline;">
