@@ -1,10 +1,9 @@
 <%- include('partials/header') -%>
-<link rel="stylesheet" href="/css/feed.css" />
+  <link rel="stylesheet" href="/css/feed.css" />
 
   <div class="container">
     <h1 class="center navy-blue">Post Sightings</h1>
     <h2 class="center navy-blue">View real-time incidents to help vulnerable communities</h2>
-    <!-- Filter types stored in data attribute -->
     <ul class="flex-4 post-category-container">
       <li data-filter="all">All</li>
       <li data-filter="accessibility">Accessibility</li>
@@ -12,62 +11,93 @@
       <li data-filter="Motor">Motor Accidents</li>
       <li data-filter="Infrastructure">Infrastructure</li>
     </ul>
-    
+
     <select id="filter-select">
       <option value="">-- Select --</option>
       <!-- <option value="nearMe">Near me</option> -->
       <option value="recent">Recent</option>
     </select>
 
-    <!-- <div class="searchbar">
-      <div class="searchbar-wrapper">
-        <div class="searchbar-left">
-          <div class="search-icon-wrapper">
-            <i class="fa-solid fa-bars search-icon searchbar-icon"></i>
-          </div>
-        </div>
-        <div class="searchbar-center">
-          <div class="searchbar-input-spacer"></div>
-          <input type="text" placeholder="Hinted search text">
-        </div>
-        <i class="fa-solid fa-magnifying-glass searchbar-right"></i>
-      </div>
-    </div> -->
-
-    <!-- <button>Filter</button> -->
-
     <div class="row justify-content-center mt-5">
       <ul class="row list-unstyled post-container flex-6 mbottom-3" id="posts-list">
         <% for(var i=0; i<posts.length; i++) {%>
-          <li class="col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item" data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>" data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>">
+          <li
+            class="col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item"
+            data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>"
+            data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>"
+          >
             <div class="border-b-1 flex-1">
               <h3>Location: <%= posts[i].city %></h3>
               <p>Type: <%= posts[i].type %></p>
-              <!-- <p>Lat: <%= posts[i].latitude %></p> -->
-              <!-- <p>Lng: <%= posts[i].longitude %></p> -->
+              <div class="bookendTwo">
+                <% if (user) { %>
+                  <form class="forms" id="bookmark-<%= posts[i]._id %>" style="display:inline;">
+                    <button type="submit" class="bookmark-button" style="background:none; border:none; cursor:pointer;">
+                      <i
+                        id="bookmarkIcon-<%= posts[i]._id %>"
+                        class="<%= user && posts[i].hasCurrentUserBookmarked === true ? 'fa-solid' : 'fa-regular' %> fa-bookmark fa-lg mright-8"
+                      ></i>
+                    </button>
+                  </form>
+                <% } else { %>
+                  <button
+                    class="bookmark-button" onclick="alert('Please sign in to bookmark posts.')"
+                    style="background:none; border:none; cursor:pointer;"
+                  >
+                    <i class="fa-regular fa-bookmark mright-8"></i>
+                  </button>
+                <% } %>
+              </div>
               <div class="flex-2">
-                <i class="fa-regular fa-bookmark mright-8"></i>
                 <div>
                   <div class="flex-3">
+                    <div class="upvote">
+                      <% if (user) { %>
+                        <form class="forms" id="upvote-<%= posts[i]._id %>" method="POST">
+                          <button
+                            class="upvote-caret-btn <%= user && posts[i].hasCurrentUserUpvoted === true ? 'active-upvote' : '' %>"
+                            type="submit"
+                          >
+                            <i
+                              id="upvoteIcon-<%= posts[i]._id %>"
+                              class="<%= user && posts[i].hasCurrentUserUpvoted === true ? 'fa-solid' : 'fa-regular' %> fa-square-caret-up green"
+                            ></i>
+                          </button>
+                        </form>
+                      <% } else { %>
+                        <button
+                          class="upvote-caret-btn" onclick="alert('Please sign in to upvote.')"
+                        >
+                          <i class="fa-solid fa-square-caret-up green"></i>
+                        </button>
+                      <% } %>
+                    </div>
 
-
-                    <form action="/post/<%= posts[i]._id %>/upvote/?_method=PUT" method="POST">
-                      <button class="upvote-caret-btn" type="submit"><i class="fa-solid fa-caret-up green"></i></button>
-                    </form>
-                    <span class="center lh-0">
-                      <%= posts[i].upvotes - posts[i].downvotes %>
+                    <span id="voteCount-<%= posts[i]._id %>" class="center lh-0">
+                      <%= posts[i].upvotes + '|' + posts[i].downvotes %>
                     </span>
 
-                    <form action="/post/<%= posts[i]._id %>/downvote/?_method=PUT" method="POST">
-                      <button class="downvote-caret-btn" type="submit"><i class="fa-solid fa-caret-down red"></i></button>
-                    </form>
-                    <!-- Will be converted to ajax with this code later -->
-                    <!-- <i class="fa-solid fa-caret-up green vote-icon upvote" data-id="<%= posts[i]._id %>"></i>
-                    <span class="vote-count" id="vote-<%= posts[i]._id %>">
-                      <%= posts[i].upvotes - posts[i].downvotes %>
-                    </span>
-                    <i class="fa-solid fa-caret-down vote-icon downvote" data-id="<%= posts[i]._id %>"></i> -->
-
+                    <div class="downvote">
+                      <% if (user) { %>
+                        <form class="forms" id="downvote-<%= posts[i]._id %>">
+                          <button
+                            class="downvote-caret-btn <%= user && posts[i].hasCurrentUserDownvoted === true ? 'active-downvote' : '' %>"
+                            type="submit"
+                          >
+                            <i
+                              id="downvoteIcon-<%= posts[i]._id %>"
+                              class="<%= user && posts[i].hasCurrentUserDownvoted === true ? 'fa-solid' : 'fa-regular' %> fa-square-caret-down red"
+                            ></i>
+                          </button>
+                        </form>
+                      <% } else { %>
+                        <button
+                          class="downvote-caret-btn" onclick="alert('Please sign in to downvote.')"
+                        >
+                          <i class="fa-solid fa-square-caret-down red"></i>
+                        </button>
+                      <% } %>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -78,16 +108,52 @@
             <div class="mtop-12 mbottom-28 border-t-1 ptop-12 flex-5">
               <span class="font-bold">Created: <%= posts[i].createdAt.toLocaleString() %></span>
               <button class="view-now-btn">
-                <a class="view-link" href="/post/<%= posts[i]._id%>">
+                <a class="view-link" href="/posts/<%= posts[i]._id%>">
                   View Now
                 </a>
               </button>
             </div>
           </li>
-          <% } %>
+        <% } %>
       </ul>
     </div>
   </div>
-  <!-- Script file for filter logic -->
+
+
   <script src="filter.js"></script>
-  <%- include('partials/footer') -%>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const allForms = document.getElementsByTagName("form");
+    for (const form of allForms) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const [route, id] = form.id.split('-');
+        const response = await fetch(
+          `/posts/${id}/${route}`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          if (route === 'upvote' || route === 'downvote') {
+            const voter = document.getElementById(`voteCount-${id}`);
+            voter.innerText = data.post.upvotes + '|' + data.post.downvotes;
+            const voteIcon = document.getElementById(`${route}Icon-${id}`);
+            voteIcon.classList.toggle('fa-regular');
+            voteIcon.classList.toggle('fa-solid');
+          } else if (route === 'bookmark') {
+            const bookmarkIcon = document.getElementById(`bookmarkIcon-${id}`);
+            bookmarkIcon.classList.toggle('fa-regular');
+            bookmarkIcon.classList.toggle('fa-solid');
+          }
+        } else {
+          console.error(`Failed to ${route}`);
+        }
+      });
+    };
+  });
+  </script>
+
+<%- include('partials/footer') -%>
