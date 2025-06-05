@@ -33,12 +33,13 @@
 
           <form id="alertForm" novalidate>
             <div class="form-group">
-              <label for="incidentType">Incident Type</label>
-              <select id="incidentType" name="incidentType" required>
-                <option value="">Select Type</option>
+              <label for="type">Incident Type</label>
+              <select id="type" name="type" required>
+                <option value="default">Select Type</option>
+
                 <option value="accessibility">Accessibility</option>
-                <option value="suspiciousActivity">Suspicious Activity</option>
-                <option value="motorAccident">Motor Accidents</option>
+                <option value="suspicious activity">Suspicious Activity</option>
+                <option value="motor accident">Motor Accidents</option>
                 <option value="infrastructure">Infrastructure</option>
               </select>
             </div>
@@ -62,8 +63,8 @@
                 required></textarea>
             </div>
 
-            <div class="checkbox-group">
-              <input type="checkbox" id="uploadImage" name="uploadImage" />
+            <div class="form-group">
+              <input type="file" id="uploadImage" name="file" />
               <label for="uploadImage">Upload Image</label>
             </div>
 
@@ -81,11 +82,11 @@
     </main>
 
     <!-- Pass server data to JavaScript -->
-<script>
+<!-- <script>
   window.serverData = {
         mapCenter: <%- JSON.stringify(locals.mapCenter) %>,
         markers: <%- JSON.stringify(locals.markers) %> };
-</script>
+</script> -->
      
   <!-- Your main Map JavaScript file - moved here and out of header to load only on this map page -->
     <script src="mapView(main).js"></script>
