@@ -228,9 +228,10 @@ module.exports = {
       const upVoteHash = post.generateUserHash(req.user.id);
       const checkUpVote = await PostUserUpvoteSchema.findById(upVoteHash);
       if (!checkUpVote) {
+        const removeDownVote = await PostUserDownvoteSchema.findByIdAndDelete(upVoteHash);
         const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
-          { $inc: { upvotes: 1 } },
+          { $inc: { upvotes: 1, downvotes: removeDownVote ? -1 : 0 } },
           { new: true }
         );
         const upvote = await PostUserUpvoteSchema.create({
@@ -240,6 +241,7 @@ module.exports = {
         });
         res.json({
           message: 'Post successfully upvoted',
+          downvoteChanged: removeDownVote ? true : false,
           post
         });
       } else {
@@ -273,10 +275,11 @@ module.exports = {
       const post = await Post.findById(req.params.id)
       const downVoteHash = post.generateUserHash(req.user.id);
       const checkDownVote = await PostUserDownvoteSchema.findById(downVoteHash);
+      const removeUpVote = await PostUserUpvoteSchema.findByIdAndDelete(downVoteHash);
       if (!checkDownVote) {
         const post = await Post.findOneAndUpdate(
           { _id: req.params.id },
-          { $inc: { downvotes: 1 } },
+          { $inc: { downvotes: 1, upvotes: removeUpVote ? -1 : 0 } },
           { new: true }
         );
         const downvote = await PostUserDownvoteSchema.create({
@@ -286,6 +289,7 @@ module.exports = {
         });
         res.json({
           message: 'Post successfully downvoted',
+          upvoteChanged: removeUpVote ? true : false,
           post
         });
       } else {

@@ -1,41 +1,47 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/feed.css" />
 <%- include('partials/header') -%>
-  <link rel="stylesheet" href="/css/feed.css" />
 
   <div class="container">
-    <h1 class="center navy-blue">Post Sightings</h1>
-    <h2 class="center navy-blue">View real-time incidents to help vulnerable communities</h2>
-    <ul class="flex-4 post-category-container">
-      <li data-filter="all">All</li>
-      <li data-filter="accessibility">Accessibility</li>
-      <li data-filter="suspicious">Suspicious Activity</li>
-      <li data-filter="Motor">Motor Accidents</li>
-      <li data-filter="Infrastructure">Infrastructure</li>
-    </ul>
+    <h1 class="center navy-blue">Sightings</h1>
 
-    <select id="filter-select">
-      <option value="">-- Select --</option>
-      <!-- <option value="nearMe">Near me</option> -->
-      <option value="recent">Recent</option>
-    </select>
+    <h3 class="center black">View real-time sightings that improve accessibility and promote safer, walkable communities</h3>
+    <!-- Filter types stored in data attribute -->
+
+   
+
+    <div class="filter-bar">
+      <ul class="flex-4 post-category-container">
+        <li data-filter="all"><i class="fa-regular fa-bell"></i> All</li>
+        <li data-filter="accessibility"><i class="fa-brands fa-accessible-icon"></i> Accessibility</li>
+        <li data-filter="suspicious"><i class="fa-solid fa-exclamation"></i> Suspicious Activity</li>
+        <li data-filter="Motor"><i class="fa-solid fa-car-burst"></i> Motor Accidents</li>
+        <li data-filter="Infrastructure"><i class="fa-solid fa-person-digging"></i> Infrastructure</li>
+      </ul>
+    
+      
+    </div>
 
     <div class="row justify-content-center mt-5">
       <ul class="row list-unstyled post-container flex-6 mbottom-3" id="posts-list">
         <% for(var i=0; i<posts.length; i++) {%>
-          <li
-            class="col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item"
-            data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>"
-            data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>"
-          >
+
+          <li class="view col-6 justify-content-between mt-5 bg-gray bradius-8 list-none mbottom-3 post-item"
+          data-type="<%= posts[i].type %>" data-created="<%= posts[i].createdAt.getTime() %>"
+          data-lat="<%= posts[i].latitude %>" data-lng="<%= posts[i].longitude %>">
+
             <div class="border-b-1 flex-1">
-              <h3>Location: <%= posts[i].city %></h3>
-              <p>Type: <%= posts[i].type %></p>
+              <p><span class="font-bold">Location:</span> <br> <span class="font-thin"><%= posts[i].city %></span></p>
+              <p><span class="font-bold">Type:</span> <br> <span class="font-thin"><%= posts[i].type %></span></p>
               <div class="bookendTwo">
                 <% if (user) { %>
                   <form class="forms" id="bookmark-<%= posts[i]._id %>" style="display:inline;">
                     <button type="submit" class="bookmark-button" style="background:none; border:none; cursor:pointer;">
                       <i
                         id="bookmarkIcon-<%= posts[i]._id %>"
-                        class="<%= user && posts[i].hasCurrentUserBookmarked === true ? 'fa-solid' : 'fa-regular' %> fa-bookmark fa-lg mright-8"
+                        class="<%= user && posts[i].hasCurrentUserBookmarked === true ? 'fa-solid' : 'fa-regular' %> fa-bookmark fa-2xl mright-8"
                       ></i>
                     </button>
                   </form>
@@ -44,7 +50,7 @@
                     class="bookmark-button" onclick="showToast('Please sign in to bookmark posts.')"
                     style="background:none; border:none; cursor:pointer;"
                   >
-                    <i class="fa-regular fa-bookmark mright-8"></i>
+                    <i class="fa-regular fa-2xl fa-bookmark mright-8"></i>
                   </button>
                 <% } %>
               </div>
@@ -105,8 +111,8 @@
             <a href="/posts/<%= posts[i]._id%>">
               <img class="img-fluid" src="<%= posts[i].image%>">
             </a>
-            <div class="mtop-12 mbottom-28 border-t-1 ptop-12 flex-5">
-              <span class="font-bold">Created: <%= posts[i].createdAt.toLocaleString() %></span>
+            <div class="mtop-12 mbottom-28 border-t-1 ptop-12 flex-5">              
+              <span class="post-timestamp font-thin"><span class="font-bold">Created:</span> <%= posts[i].createdAt.toLocaleString() %></span>
               <button class="view-now-btn">
                 <a class="view-link" href="/posts/<%= posts[i]._id%>">
                   View Now
