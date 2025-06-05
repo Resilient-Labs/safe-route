@@ -12,38 +12,23 @@ With a clean map view and accessible submission form, SafeRoute enables everyone
 <img width="500" alt="saferoute-resources-page" src="https://github.com/user-attachments/assets/f571bc2f-3ffa-48a3-ad99-88be7f47fe77" />
 
 ## 🌟 Key Features:
-   - **Alert Reporting**
-       Report harassment, hazards, and accessibility barriers in real time to improve local safety.
-   - **Interactive Map**
-       Explore alerts posted by neighbors directly on an easy-to-use interactive map.
-   - **Community Resources**
-       Access safety tips, support helplines, and accessibility services tailored to your city.
+   - **Sighting Reporting**: Report harassment, hazards, and accessibility barriers in real time to improve local safety.
+   - **Interactive Map**: Explore alerts posted by neighbors directly on an easy-to-use interactive map.
+   - **Community Resources**: Access safety tips, support helplines, and accessibility services tailored to your city.
 
-## 🛠️ Tech Stack:
-Here's where you can go to town on how you actually built this thing. Write as much as you can here, it's totally fine if it's not too much just make sure you write something. If you don't have too much experience on your resume working on the front end that's totally fine. This is where you can really show off your passion and make up for that ten fold.
+## 🛠️ Built with:
+| **Client-side:** | **Server-side:** | **Libraries/Databases:** |
+| --- | --- | --- |
+| EJS, CSS, JavaScript | Node.js, Express, Passport.js, Leaflet.js, Toastify.js | Node-Geocoder, Cloudinary, MongoDB |
 
-**Client-side:**
-- EJS
-- CSS
-- JavaScript
-
-**Server-side:**
-- Node.js
-- Express
-- Passport.js
-- Leaflet.js
-- Toastify.js
-
-**Libraries/Databases:**
-- Node-Geocoder
-- Cloudinary
-- MongoDB
-
-## ⚙️ Optimizations:
-You don't have to include this section but interviewers love that you can not only deliver a final product that looks great but also functions efficiently. Did you write something then refactor it later and the result was 5x faster than the original implementation? Did you cache your assets? Things that you write in this section are GREAT to bring up in interviews and you can use this section as reference when studying for technical interviews!
+**Tech Highlights:**
+- Passport.js: Authenticates users and ensures ability to stay logged in during different sessions.
+- Toastify.js: 
+- Leaflet.js:
+- Node-Geocoder:
 
 ## 🏔️ Challenges:
-- 
+-
 -
 -
 
@@ -59,9 +44,8 @@ npm start
    Go to `http://localhost:2121`
 5. Contribute to your community with sightings! Explore our tailored safety resources!
 
-
 ## 📬 Contact:
-Project Lead: immanuelmonroe@gmail.com 
+Project Lead: immanuelmonroe@gmail.com
 
 ## 🫱🏽‍🫲🏼 Contributions:
 Contributions are what make the open-source community an amazing place to learn, inspire, and create! Here's how you can contribute:
@@ -69,6 +53,6 @@ Contributions are what make the open-source community an amazing place to learn,
 2. Create your Feature Branch (`git checkout -b feature/amazing-feature`)
 3. Commit your Changes (`git commit -m 'Add some amazing feature`)
 4. Push to the Branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request 
+5. Open a Pull Request
 
-Thank you for checking out SafeRoute! We look forward to connecting.
+<h3 align="center">Thank you for checking out SafeRoute! We look forward to connecting.</h3>
