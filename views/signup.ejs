@@ -22,11 +22,11 @@
                 <section class="sign-intro">
                   <h2 class="sign-account">Sign Up to Create Alerts <i class="fa-solid fa-bell fa-shake fa-sm" style="color: #e72222;"></i></h2>
                 </section> 
-                <form class="sign-page-form" action="/signup" method="POST">
+                <form class="sign-page-form" action="/signup" method="POST" novalidate >
                     <div class="mb-3 sign-page-div">
                       <span class="sign-welcome">Welcome!</span>
                       <label for="email" class="form-label">Email:</label>
-                      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="Enter email address" required>
+                      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="user@email.com" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                     </div>
                     <div class="mb-3 sign-page-div">
                         <label for="firstName" class="form-label">First Name:</label>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="mb-3 sign-page-div">
                       <label for="password" class="form-label">Password:</label>
-                      <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                      <input type="password" class="form-control" id="password" name="password" placeholder="At least 8 characters" required>
                     </div>
                     <div class="mb-3 sign-page-div">
                       <label for="confirmPassword" class="form-label">Confirm Password:</label>
@@ -46,7 +46,7 @@
                     </div>
                     <div class="mb-3 sign-page-div">
                       <label for="zipCode" class="form-label sign-zip-code">Zip Code:</label>
-                      <input type="text" class="form-control sign-zip-code" pattern="[0-9]{5}" title="Please enter a 5-digit zip code" id="zipCode" name="zipCode" placeholder="Enter zip code" required>
+                      <input type="text" class="form-control sign-zip-code" pattern="[0-9]{5}" title="Please enter a 5-digit zip code" id="zipCode" name="zipCode" placeholder="5-digit zip code" required>
                     </div>
                     <button class="sign-button" type="submit" class="btn btn-primary">Sign Up</button>
                     <p>Already have an account? <a class="sign-link" href="/signin">Sign In.</a></p>
