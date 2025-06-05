@@ -12,13 +12,9 @@ With a clean map view and accessible submission form, SafeRoute enables everyone
 <img width="350" alt="saferoute-resources-page" src="https://github.com/user-attachments/assets/f571bc2f-3ffa-48a3-ad99-88be7f47fe77" />
 
 ## 🌟 Key Features:
-
-   - **Safety Sightings**
-       Users can report harassment, hazards, and accessibility barriers in real time to improve community safety. Addresses along with a photo are displayed to ensure people are aware of specific sightings in their neighborhood.
-   - **Interactive Map**
-       Explore sightings posted by neighbors directly on our comprehensive, interactive map!
-   - **Community Resources**
-       Our page empowers you with safety tips, support helplines, and accessibility services tailored to your city. Learn about ways to report safety concerns, request repairs to fix broken infrastructure, and more!
+   - **Safety Sightings**: Users can report harassment, hazards, and accessibility barriers in real time to improve community safety. Addresses along with a photo are displayed to ensure people are aware of specific sightings in their neighborhood.
+   - **Interactive Map**: Explore sightings posted by neighbors directly on our comprehensive, interactive map!
+   - **Community Resources**: Our page empowers you with safety tips, support helplines, and accessibility services tailored to your city. Learn about ways to report safety concerns, request repairs to fix broken infrastructure, and more!
 
 ## 🛠️ Tech Stack:
 | **Client-side:** | **Server-side:** | **Libraries/Databases:** |
