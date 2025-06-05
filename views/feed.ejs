@@ -21,11 +21,17 @@
       </ul>
     </div>
 
-    <select id="filter-select">
-      <option value="">-- Select --</option>
-      <!-- <option value="nearMe">Near me</option> -->
-      <option value="recent">Recent</option>
-    </select>
+    <div class="filter-bar">
+      <ul class="flex-4 post-category-container">
+        <li data-filter="all">All</li>
+        <li data-filter="accessibility">Accessibility</li>
+        <li data-filter="suspicious">Suspicious Activity</li>
+        <li data-filter="Motor">Motor Accidents</li>
+        <li data-filter="Infrastructure">Infrastructure</li>
+      </ul>
+    
+      
+    </div>
 
     <div class="row justify-content-center mt-5">
       <ul class="row list-unstyled post-container flex-6 mbottom-3" id="posts-list">
