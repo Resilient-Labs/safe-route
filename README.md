@@ -16,12 +16,13 @@ With a clean map view and accessible submission form, SafeRoute enables everyone
    - **Interactive Map**: Explore alerts posted by neighbors directly on an easy-to-use interactive map.
    - **Community Resources**: Access safety tips, support helplines, and accessibility services tailored to your city.
 
-## 🛠️ Built with:
+## 🛠️ Tech Stack:
 | **Client-side:** | **Server-side:** | **Libraries/Databases:** |
 | --- | --- | --- |
 | EJS, CSS, JavaScript | Node.js, Express, Passport.js, Leaflet.js, Toastify.js | Node-Geocoder, Cloudinary, MongoDB |
 
-**Tech Highlights:**
+
+**Highlights:**
 - Passport.js: Authenticates users and ensures ability to stay logged in during different sessions.
 - Toastify.js: 
 - Leaflet.js:
