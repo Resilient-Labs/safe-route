@@ -44,8 +44,6 @@ You don't have to include this section but interviewers love that you can not on
 ## 🌱 Getting Started:
 1. Clone the SafeRoute repository.
 2. Go to config and set up your appropriate variables according to our .env.template file.
-   
-**Installation & Server Setup:**
 3. Run the following lines of code:
 ```
 npm i
