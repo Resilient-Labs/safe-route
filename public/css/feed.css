@@ -339,7 +339,7 @@ svg {
     content: attr(data-three);
 }
 
-/* Layout spacing for view */
+/* Layout spacing for view class */
 .view {
     margin-bottom: 5px;
 }
