@@ -29,9 +29,9 @@ With a clean map view and accessible submission form, SafeRoute enables everyone
 - Node-Geocoder: Obtain coordinates of an address and attributes appropriate latitude and longitude coordinates for map plotting.
 
 ## 🏔️ Challenges:
--
--
--
+- **Performance Optimization:**
+- **Merge Conflict Resolution:**
+- **Communication & Guidelines:**
 
 ## 🚞 Getting Started:
 1. Clone the SafeRoute repository.
@@ -45,9 +45,6 @@ npm start
    Go to `http://localhost:2121`
 5. Contribute to your community with sightings! Explore our tailored safety resources!
 
-## 📬 Contact:
-Project Lead: immanuelmonroe@gmail.com
-
 ## 🫱🏽‍🫲🏼 Contributions:
 Contributions are what make the open-source community an amazing place to learn, inspire, and create! Here's how you can contribute:
 1. Fork the Project
@@ -55,6 +52,9 @@ Contributions are what make the open-source community an amazing place to learn,
 3. Commit your Changes (`git commit -m 'Add some amazing feature`)
 4. Push to the Branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+## 📬 Contact:
+Project Lead: immanuelmonroe@gmail.com
 
 <h3 align="center">Thank you for checking out SafeRoute!</h3>
 <h3 align="center">We look forward to connecting 🚀</h3>
