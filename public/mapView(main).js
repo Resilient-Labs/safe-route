@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Form submission handler
   alertForm.addEventListener('submit', function (e) {
     e.preventDefault();
-console.log(alertForm)
+    console.log(alertForm)
     const formData = new FormData(alertForm);
 
     formData.append('incidentType', document.getElementById('type').value);
@@ -172,7 +172,7 @@ console.log(alertForm)
     formData.append('title', `${
       formData.get('incidentType').charAt(0).toUpperCase() +
       formData.get('incidentType').slice(1)
-    } Alert`);
+    } Sighting`);
 
     if (!formData.get('incidentType') || !formData.get('address')) {
       showToast('Please fill in all required fields (Incident Type and Address).');
@@ -249,7 +249,7 @@ console.log(alertForm)
           // Open the popup
           newMarker.openPopup();
 
-          // Store alert in database via fetch POST
+          // Store Sighting in database via fetch POST
           fetch('/posts', { method: 'POST', body: formData })
             .then((response) => {
               if (!response.ok) {
@@ -258,13 +258,11 @@ console.log(alertForm)
               return response.json();
             })
             .then((data) => {
-              console.log('Alert stored successfully:', data);
+              console.log('Sighting stored successfully:', data);
               showToast('Sighting submitted successfully and marker added to map!');
-              // Reset form
               document.getElementById('alertForm').reset();
             })
             .catch((error) => {
-              // Still reset form even if database save failed
               document.getElementById('alertForm').reset();
             });
         } else {
@@ -300,7 +298,7 @@ function isWithinUSBounds(lat, lng) {
   return continentalUS || alaska || hawaii || puertoRico;
 }
 
-// Search alerts function using Leaflet Control Geocoder
+// Search Sightings function using Leaflet Control Geocoder
 function searchAlerts() {
   const location = document.getElementById('searchLocation').value.trim();
 

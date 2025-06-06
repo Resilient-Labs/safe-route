@@ -12,9 +12,9 @@ const mainRoutes     = require("./routes/main");
 const postRoutes     = require("./routes/posts");
 const commentRoutes  = require("./routes/comments");
 
-
 require("dotenv").config({ path: "./config/.env" });
 require("./config/passport")(passport);
+
 
 connectDB();
 
@@ -40,23 +40,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-//Adding a 1 Liner middleware to make flash messages available in all views
-// app.use((req, res, next) => {
-//   res.locals.messages = req.flash();
-//   next();
-// });
-
-
-//could use this for every view page / DRY. DON'T DELETE!  Will test when front end functionality is completed./ able to test a user requirment.
-// app.use((req, res, next) => {
-//   res.locals.user = req.user;
-//   next();
-// }); 
-
 app.use("/", mainRoutes);
 app.use("/posts", postRoutes);
 app.use("/comments", commentRoutes);
 
 app.listen(process.env.PORT, () => {
-  console.log("Server is running, you better catch it!");
+  console.log(`Server is running, you better catch it at http://localhost:${process.env.PORT}!`);
 });

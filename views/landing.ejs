@@ -15,7 +15,9 @@
       <p class="hero-subtitle">Making Communities Safer, More Walkable, and Accessible for All</p>
       <div class="hero-buttons">
         <a href="/map" class="btn btn-primary">View Map</a>
-        <a href="/signup" class="btn btn-outline">Sign Up</a>
+        <% if (!user) { %>
+          <a href="/signup" class="btn btn-outline">Sign Up</a>
+        <% } %>
       </div>
     </div>
   </section>

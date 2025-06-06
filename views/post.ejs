@@ -42,7 +42,7 @@
 
           <div class="bookendContainer">
             <div class="bookendOne">
-              <p class="postedAt"><i class="far fa-clock"></i> Posted on: <%= post.createdAt.toLocaleString() %></p>
+              <p class="postedAt"><i class="far fa-clock"></i> Posted on: <%= post.createdAt.toLocaleString("en-US", {timeZone: "America/New_York"}) %></p>
             </div>
             <div class="bookendTwo">
               <div class="upvote">
