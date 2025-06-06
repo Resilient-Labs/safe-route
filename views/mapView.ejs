@@ -8,89 +8,81 @@
 <!-- Leaflet CSS -->
 
 <!-- Main Content -->
-    <main class="main-container">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <h2>Map View Page</h2>
+  <main class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Map View Page</h2>
 
-        <!-- View Nearby Alerts Section -->
-        <section class="section">
-          <h3>View Nearby Alerts</h3>
-          <p>No Sign-In Needed</p>
+      <!-- View Nearby Sightings Section -->
+      <section class="section">
+        <h3>View Nearby Sightings</h3>
+        <p>No Sign-In Needed</p>
+        <div class="form-group">
+          <input
+            type="text"
+            placeholder="Enter Address or Zip Code"
+            id="searchLocation" />
+        </div>
+        <button class="submit-btn" onclick="searchAlerts()">Submit</button>
+      </section>
+
+      <!-- Submit an Sighting Section -->
+      <section class="section">
+        <h3>Submit a Sighting</h3>
+        <p>Click the Map or Use the Form Below to Submit an Sighting</p>
+
+        <form id="alertForm" novalidate>
           <div class="form-group">
+            <label for="type">Incident Type</label>
+            <select id="type" name="type" required>
+              <option value="default">Select Type</option>
+
+              <option value="accessibility">Accessibility</option>
+              <option value="suspicious activity">Suspicious Activity</option>
+              <option value="motor accident">Motor Accidents</option>
+              <option value="infrastructure">Infrastructure</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address</label>
             <input
               type="text"
-              placeholder="Enter Address or Zip Code"
-              id="searchLocation" />
+              id="address"
+              name="address"
+              placeholder="Enter Address"
+              required />
           </div>
-          <button class="submit-btn" onclick="searchAlerts()">Submit</button>
-        </section>
 
-        <!-- Submit an Alert Section -->
-        <section class="section">
-          <h3>Submit an Alert</h3>
-          <p>Click the Map or Use the Form Below to Submit an Alert</p>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              placeholder="Enter Incident Details"
+              required></textarea>
+          </div>
 
-          <form id="alertForm" novalidate>
-            <div class="form-group">
-              <label for="type">Incident Type</label>
-              <select id="type" name="type" required>
-                <option value="default">Select Type</option>
+          <div class="form-group">
+            <input type="file" id="uploadImage" name="file" />
+            <label for="uploadImage">Upload Image</label>
+          </div>
 
-                <option value="accessibility">Accessibility</option>
-                <option value="suspicious activity">Suspicious Activity</option>
-                <option value="motor accident">Motor Accidents</option>
-                <option value="infrastructure">Infrastructure</option>
-              </select>
-            </div>
+          <button type="submit" class="submit-btn">Submit Sighting</button>
+        </form>
+      </section>
+    </aside>
 
-            <div class="form-group">
-              <label for="address">Address</label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                placeholder="Enter Address"
-                required />
-            </div>
+    <!-- Map Container -->
+    <div class="map-container">
+      <h1 class="map-title">Your Neighborhood Safety Map</h1>
+      <div id="map"></div>
+      
+    </div>
+  </main>
 
-            <div class="form-group">
-              <label for="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                placeholder="Enter Incident Details"
-                required></textarea>
-            </div>
+  <script src="mapView(main).js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
 
-            <div class="form-group">
-              <input type="file" id="uploadImage" name="file" />
-              <label for="uploadImage">Upload Image</label>
-            </div>
-
-            <button type="submit" class="submit-btn">Submit Alert</button>
-          </form>
-        </section>
-      </aside>
-
-      <!-- Map Container -->
-      <div class="map-container">
-        <h1 class="map-title">Your Neighborhood Safety Map</h1>
-        <div id="map"></div>
-        
-      </div>
-    </main>
-     
-  <!-- Your main Map JavaScript file - moved here and out of header to load only on this map page -->
-    <script src="mapView(main).js"></script>
-  <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <!-- Leaflet Control Geocoder JS -->
-    <script src="https://unpkg.com/leaflet-control-geocoder@2.4.0/dist/Control.Geocoder.js"></script>
-
-    <!-- Footer -->
-    <%- include('partials/footer') -%>
-
-
-   
-   
+  <%- include('partials/footer') -%>
