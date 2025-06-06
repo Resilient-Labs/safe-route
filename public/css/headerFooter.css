@@ -120,7 +120,7 @@
 
 @media (max-width: 830px) {
 /*home*/
-a:nth-of-type(1) {
+.navHome {
   display: none;
 }
 
@@ -203,4 +203,5 @@ display:inline-block;
 }
 .dropdown-content {
   direction: ltr;
+}
 }
